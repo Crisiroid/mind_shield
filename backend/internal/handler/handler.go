@@ -32,11 +32,13 @@ func (h *BaseHandler) GetUserRole(c echo.Context) string {
 
 func (h *BaseHandler) BindAndValidate(c echo.Context, req interface{}) error {
 	if err := c.Bind(req); err != nil {
-		return response.BadRequest(c, "بدنه درخواست نامعتبر است", err.Error())
+		_ = response.BadRequest(c, "بدنه درخواست نامعتبر است", err.Error())
+		return err
 	}
 
 	if err := c.Validate(req); err != nil {
-		return response.BadRequest(c, "اعتبارسنجی ناموفق بود", err.Error())
+		_ = response.BadRequest(c, "اعتبارسنجی ناموفق بود", err.Error())
+		return err
 	}
 
 	return nil

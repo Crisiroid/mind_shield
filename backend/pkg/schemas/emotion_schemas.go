@@ -3,7 +3,7 @@ package schemas
 import "time"
 
 type EmotionInteractionCreateRequest struct {
-	UserID                string   `json:"user_id" validate:"required"`
+	UserID                string   `json:"user_id"`
 	SideClicked           string   `json:"side_clicked" validate:"required,oneof=thought body behavior"`
 	ThoughtAccountsViewed []string `json:"thought_accounts_viewed,omitempty"`
 	VibrationTriggered    bool     `json:"vibration_triggered,omitempty"`
@@ -39,7 +39,7 @@ type EmotionInteractionListResponse struct {
 }
 
 type StressEventCreateRequest struct {
-	UserID               string `json:"user_id" validate:"required"`
+	UserID               string `json:"user_id"`
 	SituationType        string `json:"situation_type" validate:"required"`
 	SituationDescription string `json:"situation_description,omitempty"`
 	IntensityLevel       int    `json:"intensity_level" validate:"required,min=1,max=10"`
@@ -78,7 +78,7 @@ type StressEventListResponse struct {
 }
 
 type BodyTensionCreateRequest struct {
-	UserID           string `json:"user_id" validate:"required"`
+	UserID           string `json:"user_id"`
 	BodyRegions      string `json:"body_regions" validate:"required"`
 	OverallIntensity *int   `json:"overall_intensity,omitempty" validate:"omitempty,min=1,max=10"`
 	SeverityColor    string `json:"severity_color,omitempty"`

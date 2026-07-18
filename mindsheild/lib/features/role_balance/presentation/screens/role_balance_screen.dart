@@ -36,96 +36,112 @@ class _RoleBalanceScreenState extends State<RoleBalanceScreen> {
       appBar: AppBar(title: const Text(AppStrings.roleBalanceTitle)),
       body: vm.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: AppSizes.paddingScreen,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.roleBalanceSubtitle,
-                    style: PersianFonts.Vazir.copyWith(
-                      fontSize: AppSizes.fontMd,
-                      color: AppColors.textSecondary,
-                      height: 1.8,
-                    ),
-                  ),
-                  SizedBox(height: AppSizes.lg),
-
-                  // Two overlapping circles (Venn diagram)
-                  AspectRatio(
-                    aspectRatio: 1.4,
-                    child: CustomPaint(
-                      painter: _RoleValueVennPainter(
-                        overlap: vm.overlapIntensity,
-                        roleCount: vm.roles.length,
-                        valueCount: vm.values.length,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: AppSizes.md),
-
-                  if (vm.hasTension)
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(AppSizes.md),
-                      decoration: BoxDecoration(
-                        color: AppColors.warning.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                        border: Border.all(color: AppColors.warning),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.balance,
-                            color: AppColors.warning,
-                            size: 26,
+          : Column(
+              children: [
+                // Scrollable top section (no Row with unbounded-width issues)
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSizes.paddingScreen,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppStrings.roleBalanceSubtitle,
+                          style: PersianFonts.Vazir.copyWith(
+                            fontSize: AppSizes.fontMd,
+                            color: AppColors.textSecondary,
+                            height: 1.8,
                           ),
-                          SizedBox(width: AppSizes.sm),
-                          Expanded(
-                            child: Text(
-                              AppStrings.roleBalanceTensionMessage,
-                              style: PersianFonts.Vazir.copyWith(
-                                fontSize: AppSizes.fontSm,
-                                color: AppColors.textPrimary,
-                                height: 1.8,
-                              ),
+                        ),
+                        SizedBox(height: AppSizes.lg),
+
+                        // Two overlapping circles (Venn diagram)
+                        AspectRatio(
+                          aspectRatio: 1.4,
+                          child: CustomPaint(
+                            painter: _RoleValueVennPainter(
+                              overlap: vm.overlapIntensity,
+                              roleCount: vm.roles.length,
+                              valueCount: vm.values.length,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: AppSizes.md),
+
+                        if (vm.hasTension)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(AppSizes.md),
+                            decoration: BoxDecoration(
+                              color: AppColors.warning.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(
+                                AppSizes.radiusMd,
+                              ),
+                              border: Border.all(color: AppColors.warning),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.balance,
+                                  color: AppColors.warning,
+                                  size: 26,
+                                ),
+                                SizedBox(width: AppSizes.sm),
+                                Expanded(
+                                  child: Text(
+                                    AppStrings.roleBalanceTensionMessage,
+                                    style: PersianFonts.Vazir.copyWith(
+                                      fontSize: AppSizes.fontSm,
+                                      color: AppColors.textPrimary,
+                                      height: 1.8,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
                     ),
-                  SizedBox(height: AppSizes.xl),
-
-                  // Organizational role section
-                  _EntrySection(
-                    title: AppStrings.organizationalRole,
-                    hint: AppStrings.addRoleHint,
-                    buttonText: AppStrings.addRoleButton,
-                    emptyText: AppStrings.noRolesYet,
-                    color: AppColors.primary,
-                    icon: Icons.work_outline,
-                    entries: vm.roles,
-                    isSaving: vm.isSaving,
-                    onSubmit: (text) =>
-                        vm.addEntry(entryType: 'role', text: text),
                   ),
-                  SizedBox(height: AppSizes.xl),
+                ),
+                // Entry sections — outside SingleChildScrollView for bounded width
+                Padding(
+                  padding: AppSizes.paddingScreen,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Organizational role section
+                      _EntrySection(
+                        title: AppStrings.organizationalRole,
+                        hint: AppStrings.addRoleHint,
+                        buttonText: AppStrings.addRoleButton,
+                        emptyText: AppStrings.noRolesYet,
+                        color: AppColors.primary,
+                        icon: Icons.work_outline,
+                        entries: vm.roles,
+                        isSaving: vm.isSaving,
+                        onSubmit: (text) =>
+                            vm.addEntry(entryType: 'role', text: text),
+                      ),
+                      SizedBox(height: AppSizes.md),
 
-                  // Personal values section
-                  _EntrySection(
-                    title: AppStrings.personalValues,
-                    hint: AppStrings.addValueHint,
-                    buttonText: AppStrings.addValueButton,
-                    emptyText: AppStrings.noValuesYet,
-                    color: AppColors.secondary,
-                    icon: Icons.favorite_outline,
-                    entries: vm.values,
-                    isSaving: vm.isSaving,
-                    onSubmit: (text) =>
-                        vm.addEntry(entryType: 'value', text: text),
+                      // Personal values section
+                      _EntrySection(
+                        title: AppStrings.personalValues,
+                        hint: AppStrings.addValueHint,
+                        buttonText: AppStrings.addValueButton,
+                        emptyText: AppStrings.noValuesYet,
+                        color: AppColors.secondary,
+                        icon: Icons.favorite_outline,
+                        entries: vm.values,
+                        isSaving: vm.isSaving,
+                        onSubmit: (text) =>
+                            vm.addEntry(entryType: 'value', text: text),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
     );
   }
@@ -236,6 +252,12 @@ class _EntrySectionState extends State<_EntrySection> {
               onPressed: widget.isSaving ? null : _submit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: widget.color,
+                // Override the global full-width `minimumSize`
+                // (Size(double.infinity, ...)) from the app theme. Inside a
+                // Row the button gets an unbounded max width, so an infinite
+                // minimum width would force invalid constraints and crash
+                // layout. Constrain it to a bounded square instead.
+                minimumSize: Size.square(AppSizes.buttonHeight),
                 padding: EdgeInsets.symmetric(
                   horizontal: AppSizes.md,
                   vertical: AppSizes.md,

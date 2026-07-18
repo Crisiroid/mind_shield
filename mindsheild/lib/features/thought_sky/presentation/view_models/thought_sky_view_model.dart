@@ -39,15 +39,29 @@ class ThoughtSkyViewModel extends ChangeNotifier with SubmissionFlow {
     _isLoading = true;
     notifyListeners();
 
+    await _fetchActiveClouds();
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  /// Silently re-fetch the authoritative clouds from the server and refresh
+  /// the UI in place — used after a write so the sky reflects the server
+  /// without flashing the full-screen loading spinner.
+  Future<void> _reloadSilently() async {
+    await _fetchActiveClouds();
+    notifyListeners();
+  }
+
+  /// Fetch the not-yet-swiped thoughts into [_clouds]. Shared by [load] and
+  /// [_reloadSilently] (DRY).
+  Future<void> _fetchActiveClouds() async {
     final result = await _repository.listSkyThoughts(pageSize: 50);
     result.fold((failure) {}, (thoughts) {
       _clouds
         ..clear()
         ..addAll(thoughts.where((t) => !t.cloudSwiped));
     });
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   /// Turn a typed thought into a drifting cloud and persist it.
@@ -64,7 +78,7 @@ class ThoughtSkyViewModel extends ChangeNotifier with SubmissionFlow {
       dayNumber: _currentDayNumber,
     );
 
-    await submit<SkyThoughtModel>(
+    final saved = await submit<SkyThoughtModel>(
       action: () => _repository.createSkyThought(thought: thought),
       onSuccess: (outcome) {
         final saved = outcome.data;
@@ -76,6 +90,10 @@ class ThoughtSkyViewModel extends ChangeNotifier with SubmissionFlow {
       },
       fallbackSuccessMessage: 'فکر شما به ابر تبدیل شد',
     );
+
+    // Reconcile with the server so the sky always mirrors the backend
+    // (real-time reload after the optimistic in-place update).
+    if (saved) await _reloadSilently();
   }
 
   /// Swipe a cloud away — remove it from the sky and mark it swiped on the

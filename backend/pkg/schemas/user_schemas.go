@@ -52,7 +52,7 @@ type UserListResponse struct {
 }
 
 type CalendarCreateRequest struct {
-	UserID              string   `json:"user_id" validate:"required"`
+	UserID              string   `json:"user_id"`
 	DayNumber           int      `json:"day_number" validate:"required,min=1,max=56"`
 	CalendarDate        string   `json:"calendar_date" validate:"required"`
 	ActivitiesCompleted []string `json:"activities_completed,omitempty"`

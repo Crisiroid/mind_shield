@@ -106,7 +106,7 @@ type IntensityStatsResponse struct {
 }
 
 type WeeklyReportCreateRequest struct {
-	UserID                 string  `json:"user_id" validate:"required"`
+	UserID                 string  `json:"user_id"`
 	WeekNumber             int     `json:"week_number" validate:"required,min=1,max=8"`
 	StartDate              string  `json:"start_date" validate:"required"`
 	EndDate                string  `json:"end_date" validate:"required"`

@@ -3,7 +3,7 @@ package schemas
 import "time"
 
 type MindfulTimerCreateRequest struct {
-	UserID    string `json:"user_id" validate:"required"`
+	UserID    string `json:"user_id"`
 	DayNumber *int   `json:"day_number,omitempty"`
 }
 
@@ -38,7 +38,7 @@ type MindfulTimerListResponse struct {
 }
 
 type AcceptanceExerciseCreateRequest struct {
-	UserID    string `json:"user_id" validate:"required"`
+	UserID    string `json:"user_id"`
 	DayNumber *int   `json:"day_number,omitempty"`
 }
 

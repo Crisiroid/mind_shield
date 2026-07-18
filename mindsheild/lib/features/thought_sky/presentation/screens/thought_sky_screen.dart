@@ -109,12 +109,11 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
                     const Center(child: CircularProgressIndicator()),
 
                   // Drifting clouds
-                  for (var i = 0; i < vm.clouds.length; i++)
+                  for (final cloud in vm.clouds)
                     _DriftingCloud(
-                      key: ValueKey(vm.clouds[i]),
-                      cloud: vm.clouds[i],
-                      lane: i,
-                      onSwipe: () => vm.swipeAway(vm.clouds[i]),
+                      key: ValueKey(cloud.id.isNotEmpty ? cloud.id : cloud),
+                      cloud: cloud,
+                      onSwipe: () => vm.swipeAway(cloud),
                     ),
                 ],
               ),
@@ -137,15 +136,9 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
 /// swiped away to dismiss it.
 class _DriftingCloud extends StatefulWidget {
   final SkyThoughtModel cloud;
-  final int lane;
   final VoidCallback onSwipe;
 
-  const _DriftingCloud({
-    super.key,
-    required this.cloud,
-    required this.lane,
-    required this.onSwipe,
-  });
+  const _DriftingCloud({super.key, required this.cloud, required this.onSwipe});
 
   @override
   State<_DriftingCloud> createState() => _DriftingCloudState();
@@ -153,22 +146,42 @@ class _DriftingCloud extends StatefulWidget {
 
 class _DriftingCloudState extends State<_DriftingCloud>
     with SingleTickerProviderStateMixin {
+  // Fixed vertical lanes in the upper sky the clouds travel along.
+  static const List<double> _lanes = [-0.78, -0.58, -0.38, -0.18, 0.02, 0.22];
+
   late final AnimationController _controller;
   late final double _verticalAlign;
+  late final double _phaseOffset;
 
   @override
   void initState() {
     super.initState();
+
+    // Derive every visual property from a stable seed tied to the cloud's
+    // identity — never from its position in the list. This keeps each cloud
+    // on the same lane at the same speed even as other clouds are added or
+    // swiped away, so nothing "jumps" when the list changes.
+    final seed =
+        (widget.cloud.id.isNotEmpty
+                ? widget.cloud.id
+                : widget.cloud.thoughtText)
+            .hashCode
+            .abs();
+
+    _verticalAlign = _lanes[seed % _lanes.length];
+
+    // Stagger the starting position across the visible sky so freshly added
+    // clouds appear immediately, fully in view, instead of starting off the
+    // right edge and slowly drifting in. Mapped through the x formula below
+    // this range keeps every cloud's initial position on-screen.
+    _phaseOffset = 0.28 + (seed % 1000) / 1000 * 0.44;
+
     // Vary the drift speed a little so clouds don't move in lockstep.
-    final seconds = 16 + (widget.lane % 5) * 3;
+    final seconds = 22 + (seed % 6) * 4;
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: seconds),
     )..repeat();
-
-    // Spread clouds across five vertical lanes in the upper sky.
-    final lanes = [-0.75, -0.5, -0.25, 0.0, 0.25];
-    _verticalAlign = lanes[widget.lane % lanes.length];
   }
 
   @override
@@ -183,12 +196,14 @@ class _DriftingCloudState extends State<_DriftingCloud>
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
-          // Drift from right (1.2) to left (-1.2) for an RTL "passing" feel.
-          final x = 1.2 - 2.4 * _controller.value;
+          // Loop the phase so the cloud continuously enters from the right
+          // (x = 1.3, off-screen) and exits to the left (x = -1.3).
+          final phase = (_controller.value + _phaseOffset) % 1.0;
+          final x = 1.3 - 2.6 * phase;
           return Align(alignment: Alignment(x, _verticalAlign), child: child);
         },
         child: Dismissible(
-          key: ValueKey('cloud-${widget.cloud.id}-${widget.lane}'),
+          key: ObjectKey(widget.cloud),
           direction: DismissDirection.horizontal,
           onDismissed: (_) => widget.onSwipe(),
           child: _CloudBubble(text: widget.cloud.thoughtText),
@@ -198,7 +213,8 @@ class _DriftingCloudState extends State<_DriftingCloud>
   }
 }
 
-/// The visual cloud bubble carrying a thought's text.
+/// The visual cloud bubble carrying a thought's text, painted as a soft,
+/// fluffy cloud silhouette rather than a plain rounded box.
 class _CloudBubble extends StatelessWidget {
   final String text;
 
@@ -206,55 +222,105 @@ class _CloudBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 220),
-      margin: EdgeInsets.symmetric(horizontal: AppSizes.sm),
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.lg,
-        vertical: AppSizes.md,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(40),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 12,
-            offset: Offset(0, 4),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 240),
+      child: CustomPaint(
+        painter: const _CloudPainter(),
+        // Generous padding keeps the text within the fluffy silhouette,
+        // clear of the top bumps and rounded base.
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            AppSizes.xl,
+            AppSizes.xl,
+            AppSizes.xl,
+            AppSizes.lg,
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontSm,
-              color: AppColors.textPrimary,
-              height: 1.6,
-            ),
-          ),
-          SizedBox(height: AppSizes.xs),
-          Row(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.swipe, size: 14, color: AppColors.textHint),
-              SizedBox(width: 4),
               Text(
-                AppStrings.swipeToPass,
+                text,
+                textAlign: TextAlign.center,
                 style: PersianFonts.Vazir.copyWith(
-                  fontSize: AppSizes.fontXs,
-                  color: AppColors.textHint,
+                  fontSize: AppSizes.fontSm,
+                  color: AppColors.textPrimary,
+                  height: 1.6,
                 ),
+              ),
+              SizedBox(height: AppSizes.xs),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.swipe, size: 14, color: AppColors.textHint),
+                  SizedBox(width: 4),
+                  Text(
+                    AppStrings.swipeToPass,
+                    style: PersianFonts.Vazir.copyWith(
+                      fontSize: AppSizes.fontXs,
+                      color: AppColors.textHint,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
+}
+
+/// Paints a soft, multi-lobed cloud silhouette that fills the given size.
+class _CloudPainter extends CustomPainter {
+  const _CloudPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+
+    // Build the cloud as the union of a rounded base body plus several
+    // overlapping circular puffs. A non-zero fill merges them into one
+    // smooth silhouette with no internal seams.
+    final path = Path()..fillType = PathFillType.nonZero;
+
+    final bodyRect = Rect.fromLTWH(w * 0.05, h * 0.34, w * 0.90, h * 0.60);
+    path.addRRect(
+      RRect.fromRectAndRadius(bodyRect, Radius.circular(bodyRect.height / 2)),
+    );
+    // Top fluffy bumps.
+    path.addOval(
+      Rect.fromCircle(center: Offset(w * 0.30, h * 0.36), radius: h * 0.28),
+    );
+    path.addOval(
+      Rect.fromCircle(center: Offset(w * 0.52, h * 0.24), radius: h * 0.34),
+    );
+    path.addOval(
+      Rect.fromCircle(center: Offset(w * 0.72, h * 0.36), radius: h * 0.28),
+    );
+    // Side puffs.
+    path.addOval(
+      Rect.fromCircle(center: Offset(w * 0.14, h * 0.64), radius: h * 0.24),
+    );
+    path.addOval(
+      Rect.fromCircle(center: Offset(w * 0.86, h * 0.64), radius: h * 0.24),
+    );
+
+    // Soft drop shadow beneath the cloud.
+    canvas.drawShadow(path, Colors.black.withValues(alpha: 0.30), 6, false);
+
+    // Fill with a gentle top-to-bottom white -> pale-blue gradient for depth.
+    final fill = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.white, Color(0xFFEAF3FB)],
+      ).createShader(Offset.zero & size);
+    canvas.drawPath(path, fill);
+  }
+
+  @override
+  bool shouldRepaint(_CloudPainter oldDelegate) => false;
 }
 
 /// The bottom input bar for typing and releasing a new thought.
@@ -316,23 +382,27 @@ class _ThoughtInputBar extends StatelessWidget {
               ),
             ),
             SizedBox(width: AppSizes.sm),
-            ElevatedButton(
-              onPressed: isSaving ? null : onSubmit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.info,
-                shape: const CircleBorder(),
-                padding: EdgeInsets.all(AppSizes.md),
+            SizedBox(
+              width: 48,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: isSaving ? null : onSubmit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.info,
+                  shape: const CircleBorder(),
+                  padding: EdgeInsets.all(AppSizes.md),
+                ),
+                child: isSaving
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.send, color: Colors.white),
               ),
-              child: isSaving
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Icon(Icons.send, color: Colors.white),
             ),
           ],
         ),

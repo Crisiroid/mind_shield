@@ -147,7 +147,7 @@ func (s *RoleValueService) toRoleValueResponse(roleValue *models.RoleAndValue) *
 		UserID:      roleValue.UserID,
 		EntryType:   roleValue.EntryType,
 		EntryText:   roleValue.EntryText,
-		CreatedDate: roleValue.CreatedDate,
+		CreatedDate: roleValue.CreatedDate.Format("2006-01-02"),
 		DayNumber:   roleValue.DayNumber,
 		CreatedAt:   roleValue.CreatedAt,
 		UpdatedAt:   roleValue.UpdatedAt,

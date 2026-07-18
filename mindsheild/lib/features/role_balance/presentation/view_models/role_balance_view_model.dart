@@ -53,6 +53,23 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
     _isLoading = true;
     notifyListeners();
 
+    await _fetchAndSplit();
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  /// Silently re-fetch the authoritative list from the server and refresh the
+  /// UI in place — used after a write so the screen reflects the server
+  /// without flashing the full-screen loading spinner.
+  Future<void> _reloadSilently() async {
+    await _fetchAndSplit();
+    notifyListeners();
+  }
+
+  /// Fetch the entries and split them into the role/value groups. Shared by
+  /// [load] and [_reloadSilently] (DRY).
+  Future<void> _fetchAndSplit() async {
     final result = await _repository.listRolesValues(pageSize: 100);
     result.fold((failure) {}, (entries) {
       _roles
@@ -62,9 +79,6 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
         ..clear()
         ..addAll(entries.where((e) => e.isValue));
     });
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   /// Add a new role or value entry and persist it.
@@ -85,7 +99,7 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
       dayNumber: _currentDayNumber,
     );
 
-    await submit<RoleValueModel>(
+    final saved = await submit<RoleValueModel>(
       action: () => _repository.createRoleValue(entry: entry),
       onSuccess: (outcome) {
         final saved = outcome.data;
@@ -101,5 +115,9 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
       },
       fallbackSuccessMessage: 'مورد جدید اضافه شد',
     );
+
+    // Reconcile with the server so the list always mirrors the backend
+    // (real-time reload after the optimistic in-place update).
+    if (saved) await _reloadSilently();
   }
 }

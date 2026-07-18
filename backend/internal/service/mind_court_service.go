@@ -165,7 +165,7 @@ func (s *MindCourtService) toMindCourtResponse(mindCourt *models.MindCourtEviden
 		ContradictingEvidence: mindCourt.ContradictingEvidence,
 		GuideHelperUsed:       mindCourt.GuideHelperUsed,
 		AlternativeThought:    mindCourt.AlternativeThought,
-		CreatedDate:           mindCourt.CreatedDate,
+		CreatedDate:           mindCourt.CreatedDate.Format("2006-01-02"),
 		DayNumber:             mindCourt.DayNumber,
 		CreatedAt:             mindCourt.CreatedAt,
 		UpdatedAt:             mindCourt.UpdatedAt,

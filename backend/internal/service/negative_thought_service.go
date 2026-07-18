@@ -167,7 +167,7 @@ func (s *NegativeThoughtService) toNegativeThoughtResponse(thought *models.Negat
 		Situation:          thought.Situation,
 		CognitiveErrorType: thought.CognitiveErrorType,
 		ImpactLevel:        thought.ImpactLevel,
-		RecordedAt:         thought.RecordedAt,
+		RecordedAt:         thought.RecordedAt.Format("2006-01-02"),
 		DayNumber:          thought.DayNumber,
 		CreatedAt:          thought.CreatedAt,
 		UpdatedAt:          thought.UpdatedAt,

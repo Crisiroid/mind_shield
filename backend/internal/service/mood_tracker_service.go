@@ -29,9 +29,14 @@ func (s *MoodTrackerService) CreateMoodTracker(ctx context.Context, req *schemas
 		return nil, errors.New("شناسه کاربر الزامی است")
 	}
 
+	var activityID *string
+	if req.ActivityID != "" {
+		activityID = &req.ActivityID
+	}
+
 	tracker := &models.MoodTracker{
 		UserID:       req.UserID,
-		ActivityID:   req.ActivityID,
+		ActivityID:   activityID,
 		ActivityName: req.ActivityName,
 		MoodBefore:   req.MoodBefore,
 		MoodAfter:    req.MoodAfter,
@@ -166,15 +171,20 @@ func (s *MoodTrackerService) GetActivityEffectiveness(ctx context.Context, userI
 }
 
 func (s *MoodTrackerService) toMoodTrackerResponse(tracker *models.MoodTracker) *schemas.MoodTrackerResponse {
+	var activityID string
+	if tracker.ActivityID != nil {
+		activityID = *tracker.ActivityID
+	}
+
 	return &schemas.MoodTrackerResponse{
 		ID:           tracker.ID.String(),
 		UserID:       tracker.UserID,
-		ActivityID:   tracker.ActivityID,
+		ActivityID:   activityID,
 		ActivityName: tracker.ActivityName,
 		MoodBefore:   tracker.MoodBefore,
 		MoodAfter:    tracker.MoodAfter,
 		MoodDelta:    tracker.MoodAfter - tracker.MoodBefore,
-		ActivityDate: tracker.ActivityDate,
+		ActivityDate: tracker.ActivityDate.Format("2006-01-02"),
 		Notes:        tracker.Notes,
 		DayNumber:    tracker.DayNumber,
 		CreatedAt:    tracker.CreatedAt,

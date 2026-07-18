@@ -3,7 +3,7 @@ package schemas
 import "time"
 
 type BreathingSessionCreateRequest struct {
-	UserID           string `json:"user_id" validate:"required"`
+	UserID           string `json:"user_id"`
 	BreathingPattern string `json:"breathing_pattern,omitempty"`
 	DayNumber        *int   `json:"day_number,omitempty"`
 }
@@ -40,7 +40,7 @@ type BreathingSessionListResponse struct {
 }
 
 type CognitiveGameCreateRequest struct {
-	UserID           string `json:"user_id" validate:"required"`
+	UserID           string `json:"user_id"`
 	ScenarioID       int    `json:"scenario_id" validate:"required"`
 	ScenarioType     string `json:"scenario_type,omitempty"`
 	Score            *int   `json:"score,omitempty"`
@@ -81,7 +81,7 @@ type CognitiveGameListResponse struct {
 }
 
 type MentalMustCreateRequest struct {
-	UserID    string `json:"user_id" validate:"required"`
+	UserID    string `json:"user_id"`
 	MustText  string `json:"must_text" validate:"required"`
 	DayNumber *int   `json:"day_number,omitempty"`
 }
@@ -113,7 +113,7 @@ type MentalMustListResponse struct {
 }
 
 type NegativeThoughtCreateRequest struct {
-	UserID             string `json:"user_id" validate:"required"`
+	UserID             string `json:"user_id"`
 	ThoughtText        string `json:"thought_text" validate:"required"`
 	Situation          string `json:"situation,omitempty"`
 	CognitiveErrorType string `json:"cognitive_error_type,omitempty"`
@@ -153,7 +153,7 @@ type NegativeThoughtListResponse struct {
 }
 
 type MindCourtCreateRequest struct {
-	UserID                string `json:"user_id" validate:"required"`
+	UserID                string `json:"user_id"`
 	NegativeThoughtID     string `json:"negative_thought_id" validate:"required"`
 	SupportingEvidence    string `json:"supporting_evidence,omitempty"`
 	ContradictingEvidence string `json:"contradicting_evidence,omitempty"`
@@ -194,7 +194,7 @@ type MindCourtListResponse struct {
 }
 
 type ConflictExerciseCreateRequest struct {
-	UserID           string `json:"user_id" validate:"required"`
+	UserID           string `json:"user_id"`
 	ScenarioID       int    `json:"scenario_id" validate:"required"`
 	PerformanceScore *int   `json:"performance_score,omitempty"`
 	DayNumber        *int   `json:"day_number,omitempty"`
@@ -228,7 +228,7 @@ type ConflictExerciseListResponse struct {
 }
 
 type MoodTrackerCreateRequest struct {
-	UserID       string `json:"user_id" validate:"required"`
+	UserID       string `json:"user_id"`
 	ActivityID   string `json:"activity_id,omitempty"`
 	ActivityName string `json:"activity_name,omitempty"`
 	MoodBefore   int    `json:"mood_before" validate:"required,min=1,max=10"`
@@ -270,7 +270,7 @@ type MoodTrackerListResponse struct {
 }
 
 type RoleValueCreateRequest struct {
-	UserID    string `json:"user_id" validate:"required"`
+	UserID    string `json:"user_id"`
 	EntryType string `json:"entry_type" validate:"required,oneof=role value"`
 	EntryText string `json:"entry_text" validate:"required"`
 	DayNumber *int   `json:"day_number,omitempty"`
@@ -302,7 +302,7 @@ type RoleValueListResponse struct {
 }
 
 type SkyThoughtCreateRequest struct {
-	UserID      string `json:"user_id" validate:"required"`
+	UserID      string `json:"user_id"`
 	ThoughtText string `json:"thought_text" validate:"required"`
 	DayNumber   *int   `json:"day_number,omitempty"`
 }

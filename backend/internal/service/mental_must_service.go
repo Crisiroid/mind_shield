@@ -145,7 +145,7 @@ func (s *MentalMustService) toMentalMustResponse(mentalMust *models.MentalMust) 
 		ID:           mentalMust.ID.String(),
 		UserID:       mentalMust.UserID,
 		MustText:     mentalMust.MustText,
-		CreatedDate:  mentalMust.CreatedDate,
+		CreatedDate:  mentalMust.CreatedDate.Format("2006-01-02"),
 		IsReleased:   mentalMust.IsReleased,
 		ReleasedDate: mentalMust.ReleasedDate,
 		DayNumber:    mentalMust.DayNumber,

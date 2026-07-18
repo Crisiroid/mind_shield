@@ -126,7 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // ─── Current Week Tools ─────────────────────────────
               Text(
-                '${AppStrings.weekTools} ${homeVM.currentWeek}',
+                homeVM.isAllUnlocked
+                    ? '${AppStrings.weekTools} (همه – دیباگ)'
+                    : '${AppStrings.weekTools} ${homeVM.currentWeek}',
                 style: PersianFonts.Vazir.copyWith(
                   fontSize: AppSizes.fontXl,
                   fontWeight: FontWeight.bold,

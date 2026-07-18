@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/config/app_config.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/weekly_media_model.dart';
@@ -45,6 +46,9 @@ class HomeViewModel extends ChangeNotifier {
   int get currentDay => _currentDay;
   double get progress => _progress;
 
+  /// Whether all weekly features are unlocked (debug mode only).
+  bool get isAllUnlocked => AppConfig.isDebug;
+
   /// Initialize home screen data.
   Future<void> init() async {
     _loadProgress();
@@ -63,14 +67,16 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   /// Load weekly media content for current week.
+  ///
+  /// In debug mode, loads ALL media across all weeks.
   Future<void> _loadWeeklyMedia() async {
     _isLoadingMedia = true;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _homeRepository.getMediaByWeek(
-      weekNumber: _currentWeek,
-    );
+    final result = AppConfig.isDebug
+        ? await _homeRepository.getAllMedia()
+        : await _homeRepository.getMediaByWeek(weekNumber: _currentWeek);
 
     result.fold(
       (failure) {
@@ -94,8 +100,16 @@ class HomeViewModel extends ChangeNotifier {
 
   /// Get tools for current week based on application flow.
   ///
+  /// In debug mode ([AppConfig.isDebug] == true), returns ALL tools from
+  /// every week so developers can access every feature without waiting.
+  /// In production, only the current week's tools are returned.
+  ///
   /// Accepts a [BuildContext] for navigation to feature screens.
   List<ToolItem> getCurrentWeekTools(BuildContext? context) {
+    if (AppConfig.isDebug) {
+      return _getAllTools(context);
+    }
+
     switch (_currentWeek) {
       case 1:
         return [
@@ -236,6 +250,124 @@ class HomeViewModel extends ChangeNotifier {
       default:
         return [];
     }
+  }
+
+  /// Returns all tools from every week combined (used in debug mode).
+  List<ToolItem> _getAllTools(BuildContext? context) {
+    return [
+      // Week 1
+      ToolItem(
+        label: 'مثلث هیجان',
+        icon: Icons.change_history,
+        color: const Color(0xFF6C63FF),
+        onTap: () => Navigator.of(context!).pushNamed('/emotion-triangle'),
+      ),
+      ToolItem(
+        label: 'نقشه تنش بدنی',
+        icon: Icons.accessibility_new,
+        color: const Color(0xFFFF6584),
+        onTap: () => Navigator.of(context!).pushNamed('/body-tension-map'),
+      ),
+      ToolItem(
+        label: 'ثبت استرس شغلی',
+        icon: Icons.work_outline,
+        color: const Color(0xFFFFC107),
+        onTap: () => Navigator.of(context!).pushNamed('/stress-registration'),
+      ),
+      // Week 2
+      ToolItem(
+        label: 'تنفس آگاهانه',
+        icon: Icons.air,
+        color: const Color(0xFF4CAF50),
+        onTap: () => Navigator.of(context!).pushNamed('/breathing'),
+      ),
+      ToolItem(
+        label: 'انعطاف‌پذیری روانی',
+        icon: Icons.nature,
+        color: const Color(0xFF8BC34A),
+        onTap: () => Navigator.of(context!).pushNamed('/resilience-education'),
+      ),
+      // Week 3
+      ToolItem(
+        label: 'خطاهای شناختی',
+        icon: Icons.psychology_outlined,
+        color: const Color(0xFF9C27B0),
+        onTap: () => Navigator.of(context!).pushNamed('/cognitive-game'),
+      ),
+      ToolItem(
+        label: 'بایدهای ذهنی',
+        icon: Icons.backpack_outlined,
+        color: const Color(0xFFFF9800),
+        onTap: () => Navigator.of(context!).pushNamed('/mental-musts'),
+      ),
+      // Week 4
+      ToolItem(
+        label: 'رادار افکار منفی',
+        icon: Icons.radar,
+        color: const Color(0xFFE91E63),
+        onTap: () =>
+            Navigator.of(context!).pushNamed('/negative-thought-radar'),
+      ),
+      ToolItem(
+        label: 'سنجش اثر فکر',
+        icon: Icons.trending_down,
+        color: const Color(0xFFFF5722),
+        onTap: () =>
+            Navigator.of(context!).pushNamed('/negative-thought-radar'),
+      ),
+      // Week 5
+      ToolItem(
+        label: 'دادگاه ذهن',
+        icon: Icons.gavel,
+        color: const Color(0xFF3F51B5),
+        onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
+      ),
+      ToolItem(
+        label: 'فکر جایگزین',
+        icon: Icons.lightbulb_outline,
+        color: const Color(0xFFFFC107),
+        onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
+      ),
+      // Week 6
+      ToolItem(
+        label: 'تمرین تعارض',
+        icon: Icons.forum,
+        color: const Color(0xFF009688),
+        onTap: () => Navigator.of(context!).pushNamed('/conflict-exercise'),
+      ),
+      // Week 7
+      ToolItem(
+        label: 'چرخه انزوا',
+        icon: Icons.loop,
+        color: const Color(0xFF795548),
+        onTap: () => Navigator.of(context!).pushNamed('/isolation-cycle'),
+      ),
+      ToolItem(
+        label: 'فعالیت‌های خرد',
+        icon: Icons.checklist_outlined,
+        color: const Color(0xFF2196F3),
+        onTap: () => Navigator.of(context!).pushNamed('/micro-activities'),
+      ),
+      ToolItem(
+        label: 'ردیاب خلق',
+        icon: Icons.mood_outlined,
+        color: const Color(0xFF4CAF50),
+        onTap: () => Navigator.of(context!).pushNamed('/mood-tracker'),
+      ),
+      // Week 8
+      ToolItem(
+        label: 'تعادل نقش‌ها',
+        icon: Icons.balance,
+        color: const Color(0xFF673AB7),
+        onTap: () => Navigator.of(context!).pushNamed('/role-balance'),
+      ),
+      ToolItem(
+        label: 'آسمان افکار',
+        icon: Icons.cloud_outlined,
+        color: const Color(0xFF03A9F4),
+        onTap: () => Navigator.of(context!).pushNamed('/thought-sky'),
+      ),
+    ];
   }
 
   /// Get permanent tools available throughout the program.

@@ -147,7 +147,7 @@ func (s *SkyThoughtService) toSkyThoughtResponse(skyThought *models.SkyThought) 
 		ThoughtText: skyThought.ThoughtText,
 		CloudSwiped: skyThought.CloudSwiped,
 		SwipedAt:    skyThought.SwipedAt,
-		CreatedDate: skyThought.CreatedDate,
+		CreatedDate: skyThought.CreatedDate.Format("2006-01-02"),
 		DayNumber:   skyThought.DayNumber,
 		CreatedAt:   skyThought.CreatedAt,
 		UpdatedAt:   skyThought.UpdatedAt,
