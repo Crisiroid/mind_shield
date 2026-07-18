@@ -3,6 +3,8 @@ import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/weekly_media_model.dart';
 import '../../data/repositories/home_repository.dart';
+import '../widgets/mindful_timer_sheet.dart';
+import '../widgets/weekly_report_sheet.dart';
 
 /// Tool item model for quick access grid.
 class ToolItem {
@@ -237,23 +239,70 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   /// Get permanent tools available throughout the program.
-  List<ToolItem> getPermanentTools() {
+  ///
+  /// Accepts a [BuildContext] for showing bottom sheets.
+  List<ToolItem> getPermanentTools([BuildContext? context]) {
     return [
       ToolItem(
         label: 'تایمر آگاهانه',
         icon: Icons.timer_outlined,
         color: const Color(0xFF00BCD4),
-      ),
-      ToolItem(
-        label: 'تقویم ۵۶ روزه',
-        icon: Icons.calendar_today_outlined,
-        color: const Color(0xFF6C63FF),
+        onTap: () {
+          if (context != null) {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => const MindfulTimerSheet(),
+            );
+          }
+        },
       ),
       ToolItem(
         label: 'گزارش هفتگی',
         icon: Icons.assessment_outlined,
         color: const Color(0xFFFF6584),
+        onTap: () {
+          if (context != null) {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => WeeklyReportSheet(
+                currentWeek: _currentWeek,
+                currentDay: _currentDay,
+                progress: _progress,
+              ),
+            );
+          }
+        },
       ),
     ];
+  }
+
+  /// Get the navigation route for the first tool of the current week.
+  ///
+  /// Used by the "شروع تمرین" button on the today's exercise card.
+  String? getStartExerciseRoute() {
+    switch (_currentWeek) {
+      case 1:
+        return '/emotion-triangle';
+      case 2:
+        return '/breathing';
+      case 3:
+        return '/cognitive-game';
+      case 4:
+        return '/negative-thought-radar';
+      case 5:
+        return '/mind-court';
+      case 6:
+        return '/conflict-exercise';
+      case 7:
+        return '/mood-tracker';
+      case 8:
+        return '/role-balance';
+      default:
+        return null;
+    }
   }
 }

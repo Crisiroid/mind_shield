@@ -70,6 +70,10 @@ import 'features/thought_sky/data/datasources/sky_thought_remote_datasource.dart
 import 'features/thought_sky/data/repositories/sky_thought_repository.dart';
 import 'features/thought_sky/presentation/view_models/thought_sky_view_model.dart';
 import 'features/thought_sky/presentation/screens/thought_sky_screen.dart';
+import 'features/profile/data/datasources/profile_remote_datasource.dart';
+import 'features/profile/data/repositories/profile_repository.dart';
+import 'features/profile/presentation/view_models/profile_view_model.dart';
+import 'features/profile/presentation/screens/profile_screen.dart';
 // Offline-first: sync orchestration + per-feature local datasources
 import 'core/services/sync_manager.dart';
 import 'core/sync/syncable_repository.dart';
@@ -190,6 +194,10 @@ class MindShieldApp extends StatelessWidget {
       SkyThoughtLocalDataSource(),
     );
 
+    // Create profile dependencies
+    final profileDataSource = ProfileRemoteDataSourceImpl();
+    final profileRepository = ProfileRepository(profileDataSource);
+
     // Offline-first sync orchestration: every offline-capable repository
     // registers itself as a [SyncableRepository]. Adding a feature just
     // appends here (OCP). SyncManager drives pull-on-login + push-on-reconnect.
@@ -272,6 +280,10 @@ class MindShieldApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ThoughtSkyViewModel(skyThoughtRepository),
         ),
+        // Profile provider
+        ChangeNotifierProvider(
+          create: (_) => ProfileViewModel(profileRepository),
+        ),
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,
@@ -315,6 +327,7 @@ class MindShieldApp extends StatelessWidget {
           '/mood-tracker': (context) => const MoodTrackerScreen(),
           '/role-balance': (context) => const RoleBalanceScreen(),
           '/thought-sky': (context) => const ThoughtSkyScreen(),
+          '/profile': (context) => const ProfileScreen(),
         },
       ),
     );

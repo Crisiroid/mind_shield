@@ -58,6 +58,15 @@ class UserModel {
   final DateTime? lastLogin;
   final int loginCount;
   final bool agreementAccepted;
+  final DateTime? agreementAcceptedAt;
+  final bool cloudSyncEnabled;
+  final bool doNotDisturbEnabled;
+  final DateTime? dndStartTime;
+  final DateTime? dndEndTime;
+  final String? androidVersion;
+  final String? appVersion;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const UserModel({
     required this.id,
@@ -66,6 +75,15 @@ class UserModel {
     this.lastLogin,
     this.loginCount = 0,
     this.agreementAccepted = false,
+    this.agreementAcceptedAt,
+    this.cloudSyncEnabled = false,
+    this.doNotDisturbEnabled = false,
+    this.dndStartTime,
+    this.dndEndTime,
+    this.androidVersion,
+    this.appVersion,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -80,6 +98,25 @@ class UserModel {
           : null,
       loginCount: json['login_count'] as int? ?? 0,
       agreementAccepted: json['agreement_accepted'] as bool? ?? false,
+      agreementAcceptedAt: json['agreement_accepted_at'] != null
+          ? DateTime.tryParse(json['agreement_accepted_at'] as String)
+          : null,
+      cloudSyncEnabled: json['cloud_sync_enabled'] as bool? ?? false,
+      doNotDisturbEnabled: json['do_not_disturb_enabled'] as bool? ?? false,
+      dndStartTime: json['dnd_start_time'] != null
+          ? DateTime.tryParse(json['dnd_start_time'] as String)
+          : null,
+      dndEndTime: json['dnd_end_time'] != null
+          ? DateTime.tryParse(json['dnd_end_time'] as String)
+          : null,
+      androidVersion: json['android_version'] as String?,
+      appVersion: json['app_version'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'] as String)
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'] as String)
+          : null,
     );
   }
 }

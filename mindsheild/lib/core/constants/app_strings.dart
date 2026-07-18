@@ -546,4 +546,35 @@ class AppStrings {
   static const String thoughtReleased = 'فکر رها شد';
   static const String skyEmptyMessage =
       'آسمان ذهن شما صاف است. هر فکری که آمد، آن را به ابری بسپارید.';
+
+  // ─── Profile ─────────────────────────────────────────────────────
+  static const String profileTitle = 'پروفایل من';
+  static const String accountInfo = 'اطلاعات حساب';
+  static const String phoneNumberLabel = 'شماره تلفن';
+  static const String registrationDateLabel = 'تاریخ ثبت‌نام';
+  static const String lastLoginLabel = 'آخرین ورود';
+  static const String loginCountLabel = 'تعداد ورودها';
+  static const String agreementStatusLabel = 'وضعیت میثاق‌نامه';
+  static const String agreementAccepted = 'پذیرفته شده';
+  static const String agreementNotAccepted = 'هنوز نپذیرفته‌اید';
+  static const String appSettings = 'تنظیمات برنامه';
+  static const String cloudSyncLabel = 'همگام‌سازی ابری';
+  static const String cloudSyncDesc =
+      'ذخیره و همگام‌سازی خودکار داده‌ها در فضای ابری';
+  static const String doNotDisturbLabel = 'حالت مزاحم نشوید';
+  static const String doNotDisturbDesc =
+      'غیرفعال‌سازی اعلان‌ها در بازه زمانی مشخص';
+  static const String dndStartTime = 'ساعت شروع';
+  static const String dndEndTime = 'ساعت پایان';
+  static const String securitySection = 'امنیت';
+  static const String changePassword = 'تغییر رمز عبور';
+  static const String currentPassword = 'رمز عبور فعلی';
+  static const String newPassword = 'رمز عبور جدید';
+  static const String passwordChanged = 'رمز عبور با موفقیت تغییر کرد';
+  static const String deviceInfo = 'اطلاعات دستگاه';
+  static const String androidVersionLabel = 'نسخه اندروید';
+  static const String appVersionLabel = 'نسخه برنامه';
+  static const String profileUpdated = 'پروفایل با موفقیت بروزرسانی شد';
+  static const String notAvailable = 'نامشخص';
+  static const String timeFormat = 'HH:mm';
 }

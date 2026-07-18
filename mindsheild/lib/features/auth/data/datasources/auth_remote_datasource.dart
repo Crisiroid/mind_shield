@@ -24,6 +24,12 @@ abstract class AuthRemoteDataSource {
 
   /// Accept the digital therapy agreement on the server.
   Future<void> acceptAgreement();
+
+  /// Send device/app version info to the server.
+  Future<void> updateLoginInfo({
+    required String androidVersion,
+    required String appVersion,
+  });
 }
 
 /// Implementation using Dio HTTP client.
@@ -96,5 +102,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> acceptAgreement() async {
     await _dio.post(ApiConstants.acceptAgreement);
+  }
+
+  @override
+  Future<void> updateLoginInfo({
+    required String androidVersion,
+    required String appVersion,
+  }) async {
+    await _dio.post(
+      ApiConstants.updateLoginInfo,
+      data: {'android_version': androidVersion, 'app_version': appVersion},
+    );
   }
 }

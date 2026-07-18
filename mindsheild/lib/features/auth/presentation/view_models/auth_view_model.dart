@@ -1,4 +1,6 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../core/services/token_service.dart';
 import '../../data/models/auth_response_model.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -158,5 +160,26 @@ class AuthViewModel extends ChangeNotifier {
     // A fresh authentication (possibly on a new device) should rebuild the
     // local mirror from the server on first entry — flag the initial sync.
     await TokenService.setNeedsInitialSync(true);
+
+    // Send device/app version info to the server (best-effort, fire-and-forget)
+    _sendDeviceInfo();
+  }
+
+  /// Send Android version and app version to the backend so the profile
+  /// can display them. Errors are silently ignored.
+  void _sendDeviceInfo() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final androidVersion = Platform.operatingSystemVersion;
+      final appVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+
+      // Best-effort: ignore the result
+      await _authRepository.updateLoginInfo(
+        androidVersion: androidVersion,
+        appVersion: appVersion,
+      );
+    } catch (_) {
+      // Silently ignore — device info is non-critical
+    }
   }
 }

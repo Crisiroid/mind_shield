@@ -92,6 +92,24 @@ class AuthRepository {
     }
   }
 
+  /// Send device/app version info to the server (best-effort).
+  Result<void> updateLoginInfo({
+    required String androidVersion,
+    required String appVersion,
+  }) async {
+    try {
+      await _remoteDataSource.updateLoginInfo(
+        androidVersion: androidVersion,
+        appVersion: appVersion,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(_mapExceptionToFailure(e));
+    } catch (e) {
+      return Left(_mapExceptionToFailure(e));
+    }
+  }
+
   /// Maps any exception to the appropriate [Failure].
   Failure _mapExceptionToFailure(dynamic error) {
     if (error is DioException) {

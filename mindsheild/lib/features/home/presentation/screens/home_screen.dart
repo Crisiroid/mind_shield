@@ -71,6 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(width: AppSizes.sm),
           IconButton(
+            icon: const Icon(Icons.person_outline, color: AppColors.primary),
+            tooltip: AppStrings.profile,
+            onPressed: () => Navigator.of(context).pushNamed('/profile'),
+          ),
+          IconButton(
             icon: const Icon(Icons.logout, color: AppColors.error),
             tooltip: AppStrings.logout,
             onPressed: () => _onLogout(context),
@@ -105,7 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 currentWeek: homeVM.currentWeek,
                 currentDay: homeVM.currentDay,
                 onStartExercise: () {
-                  // TODO: Navigate to exercise screen
+                  final route = homeVM.getStartExerciseRoute();
+                  if (route != null) {
+                    Navigator.of(context).pushNamed(route);
+                  }
                 },
               ),
 
@@ -140,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               SizedBox(height: AppSizes.md),
-              _buildToolsGrid(homeVM.getPermanentTools()),
+              _buildToolsGrid(homeVM.getPermanentTools(context)),
 
               SizedBox(height: AppSizes.xl),
             ],

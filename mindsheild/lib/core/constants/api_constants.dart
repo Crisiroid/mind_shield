@@ -8,7 +8,7 @@ class ApiConstants {
 
   // ─── Base URL ───────────────────────────────────────────────
   static const String baseUrl =
-      'http://192.168.1.102:8080'; // Android emulator → localhost
+      'http://192.168.1.100:8080'; // Android emulator → localhost
   // static const String baseUrl = 'http://YOUR_SERVER_IP:8080'; // Physical device
 
   // ─── Timeouts (milliseconds) ────────────────────────────────
@@ -27,7 +27,9 @@ class ApiConstants {
 
   // User
   static const String users = '$apiPrefix/users';
-  static const String profile = '$apiPrefix/users/profile';
+  static const String profile = '$apiPrefix/users/me';
+  static const String updateLoginInfo = '$apiPrefix/users/update-login-info';
+  static const String changePassword = '$apiPrefix/auth/user/change-password';
   static const String acceptAgreement = '$apiPrefix/users/me/agreement';
 
   // Emotion Triangle
