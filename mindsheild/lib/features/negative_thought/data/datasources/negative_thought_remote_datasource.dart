@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/negative_thought_model.dart';
 
 /// Contract for negative thought remote operations.
 abstract class NegativeThoughtRemoteDataSource {
   /// Create a new negative thought entry.
-  Future<NegativeThoughtModel> createNegativeThought({
+  Future<WriteResult<NegativeThoughtModel>> createNegativeThought({
     required NegativeThoughtModel thought,
   });
 
@@ -26,7 +27,7 @@ class NegativeThoughtRemoteDataSourceImpl
   NegativeThoughtRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<NegativeThoughtModel> createNegativeThought({
+  Future<WriteResult<NegativeThoughtModel>> createNegativeThought({
     required NegativeThoughtModel thought,
   }) async {
     final response = await _dio.post(
@@ -38,7 +39,10 @@ class NegativeThoughtRemoteDataSourceImpl
       response.data as Map<String, dynamic>,
     );
 
-    return NegativeThoughtModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      NegativeThoughtModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

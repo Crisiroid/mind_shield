@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/dialog_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../../../core/services/token_service.dart';
@@ -9,12 +10,11 @@ import '../../data/repositories/stress_repository.dart';
 ///
 /// Follows the Single Responsibility Principle: only handles stress
 /// event registration logic.
-class StressViewModel extends ChangeNotifier {
+class StressViewModel extends ChangeNotifier with SubmissionFlow {
   final StressRepository _repository;
 
   StressViewModel(this._repository);
 
-  bool _isSaving = false;
   bool _isLoading = false;
   String? _errorMessage;
   String? _selectedSituation;
@@ -22,7 +22,8 @@ class StressViewModel extends ChangeNotifier {
   String _description = '';
   List<StressEventModel> _history = [];
 
-  bool get isSaving => _isSaving;
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   String? get selectedSituation => _selectedSituation;
@@ -53,7 +54,9 @@ class StressViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _history = [];
+        // Keep any previously loaded history so a failed refresh never blanks
+        // the list; only surface the error message.
+        _errorMessage = failure.message;
       },
       (data) {
         _history = data;
@@ -100,9 +103,6 @@ class StressViewModel extends ChangeNotifier {
       return false;
     }
 
-    _isSaving = true;
-    notifyListeners();
-
     final stressEvent = StressEventModel(
       id: '',
       userId: '',
@@ -113,30 +113,15 @@ class StressViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createStressEvent(
-      stressEvent: stressEvent,
-    );
-
-    bool success = false;
-
-    result.fold(
-      (failure) {
-        _errorMessage = failure.message;
-        DialogService.showError(title: 'خطا', message: failure.message);
-      },
-      (saved) {
-        _history.insert(0, saved);
+    return submit<StressEventModel>(
+      action: () => _repository.createStressEvent(stressEvent: stressEvent),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        // Show the confirmed record immediately (dedupe by id) and clear form.
+        _history = [saved, ..._history.where((e) => e.id != saved.id)];
         resetForm();
-        DialogService.showSuccess(
-          title: 'موفق',
-          message: 'رویداد استرس ثبت شد',
-        );
-        success = true;
       },
+      fallbackSuccessMessage: 'رویداد استرس ثبت شد',
     );
-
-    _isSaving = false;
-    notifyListeners();
-    return success;
   }
 }

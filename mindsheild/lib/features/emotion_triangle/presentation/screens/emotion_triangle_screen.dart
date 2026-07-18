@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/emotion_triangle_view_model.dart';
 
 /// Emotion Triangle screen — interactive triangle with 3 tappable sides.
@@ -396,7 +397,7 @@ class _InteractionHistoryTile extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
+          PersianDateFormatter.time(date),
           style: PersianFonts.Vazir.copyWith(
             fontSize: AppSizes.fontSm,
             color: AppColors.textHint,

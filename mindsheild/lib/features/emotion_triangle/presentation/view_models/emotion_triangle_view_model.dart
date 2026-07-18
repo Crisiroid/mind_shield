@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/services/dialog_service.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../../../core/services/token_service.dart';
 import '../../data/models/emotion_interaction_model.dart';
@@ -9,19 +9,20 @@ import '../../data/repositories/emotion_triangle_repository.dart';
 ///
 /// Follows the Single Responsibility Principle: only handles emotion
 /// triangle logic. UI observes this provider and reacts to state changes.
-class EmotionTriangleViewModel extends ChangeNotifier {
+class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
   final EmotionTriangleRepository _repository;
 
   EmotionTriangleViewModel(this._repository);
 
   bool _isLoading = false;
-  bool _isSaving = false;
   String? _errorMessage;
   String? _lastClickedSide;
   List<EmotionInteractionModel> _interactions = [];
 
   bool get isLoading => _isLoading;
-  bool get isSaving => _isSaving;
+
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   String? get errorMessage => _errorMessage;
   String? get lastClickedSide => _lastClickedSide;
   List<EmotionInteractionModel> get interactions => _interactions;
@@ -49,7 +50,8 @@ class EmotionTriangleViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _interactions = [];
+        // Keep any previously loaded interactions on a failed refresh.
+        _errorMessage = failure.message;
       },
       (data) {
         _interactions = data;
@@ -65,7 +67,6 @@ class EmotionTriangleViewModel extends ChangeNotifier {
   /// [side] is one of: 'thought', 'body', 'behavior'.
   /// Returns the side clicked for navigation decisions.
   Future<String?> recordInteraction(String side) async {
-    _isSaving = true;
     _lastClickedSide = side;
     notifyListeners();
 
@@ -78,26 +79,18 @@ class EmotionTriangleViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createInteraction(
-      interaction: interaction,
-    );
-
-    result.fold(
-      (failure) {
-        _errorMessage = failure.message;
-        DialogService.showError(title: 'خطا', message: failure.message);
+    await submit<EmotionInteractionModel>(
+      action: () => _repository.createInteraction(interaction: interaction),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        // Show the confirmed record immediately (dedupe by id).
+        _interactions = [
+          saved,
+          ..._interactions.where((e) => e.id != saved.id),
+        ];
       },
-      (saved) {
-        _interactions.insert(0, saved);
-        DialogService.showSuccess(
-          title: 'موفق',
-          message: 'تعامل هیجانی ثبت شد',
-        );
-      },
+      fallbackSuccessMessage: 'تعامل هیجانی ثبت شد',
     );
-
-    _isSaving = false;
-    notifyListeners();
     return side;
   }
 }

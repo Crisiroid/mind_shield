@@ -95,10 +95,10 @@ class TokenService {
     await _prefs?.setBool(_keyOnboardingComplete, value);
   }
 
-  /// Retrieve the last login timestamp (Persian calendar string).
+  /// Retrieve the last login timestamp (raw ISO-8601 string).
   static String? getLastLogin() => _prefs?.getString(_keyLastLogin);
 
-  /// Store the last login timestamp.
+  /// Store the last login timestamp (raw ISO-8601 string).
   static Future<void> setLastLogin(String value) async {
     await _prefs?.setString(_keyLastLogin, value);
   }

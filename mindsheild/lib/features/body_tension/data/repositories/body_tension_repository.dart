@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/body_tension_local_datasource.dart';
 import '../datasources/body_tension_remote_datasource.dart';
 import '../models/body_tension_model.dart';
@@ -23,11 +24,11 @@ class BodyTensionRepository extends OfflineFirstRepository<BodyTensionModel> {
       _remoteDataSource.listBodyTensions(page: 1, pageSize: 200);
 
   @override
-  Future<BodyTensionModel> pushCreate(BodyTensionModel item) =>
-      _remoteDataSource.createBodyTension(bodyTension: item);
+  Future<BodyTensionModel> pushCreate(BodyTensionModel item) async =>
+      (await _remoteDataSource.createBodyTension(bodyTension: item)).data;
 
   /// Create a new body tension map entry (offline-first).
-  Result<BodyTensionModel> createBodyTension({
+  Result<WriteResult<BodyTensionModel>> createBodyTension({
     required BodyTensionModel bodyTension,
   }) {
     return writeCreate(

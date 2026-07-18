@@ -122,7 +122,8 @@ class CognitiveGameViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _history = [];
+        // Keep any previously loaded history on a failed refresh.
+        _errorMessage = failure.message;
       },
       (data) {
         _history = data;
@@ -205,14 +206,13 @@ class CognitiveGameViewModel extends ChangeNotifier {
 
     final result = await _repository.createCognitiveGame(game: game);
 
-    result.fold(
-      (failure) {
-        // Silently fail — game data is saved locally in state
-      },
-      (saved) {
-        _history.insert(0, saved);
-      },
-    );
+    // Reflect the confirmed record immediately (dedupe by id) without a
+    // destructive re-fetch. This write fires automatically per in-game
+    // answer, so it stays silent — the game already gives instant feedback.
+    result.fold((failure) {}, (outcome) {
+      final saved = outcome.data;
+      _history = [saved, ..._history.where((e) => e.id != saved.id)];
+    });
 
     _isSaving = false;
     notifyListeners();

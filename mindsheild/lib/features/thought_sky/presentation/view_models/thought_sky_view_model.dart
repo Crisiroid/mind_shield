@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/sky_thought_model.dart';
@@ -10,19 +11,20 @@ import '../../data/repositories/sky_thought_repository.dart';
 ///
 /// Follows the Single Responsibility Principle: only handles sky-thought
 /// logic. UI observes this provider and reacts to state changes.
-class ThoughtSkyViewModel extends ChangeNotifier {
+class ThoughtSkyViewModel extends ChangeNotifier with SubmissionFlow {
   final SkyThoughtRepository _repository;
 
   ThoughtSkyViewModel(this._repository);
 
   final List<SkyThoughtModel> _clouds = [];
   bool _isLoading = false;
-  bool _isSaving = false;
 
   /// The active (not-yet-swiped) clouds currently drifting in the sky.
   List<SkyThoughtModel> get clouds => List.unmodifiable(_clouds);
   bool get isLoading => _isLoading;
-  bool get isSaving => _isSaving;
+
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
 
   /// Get the current day number from the stored registration date.
   int get _currentDayNumber {
@@ -50,13 +52,10 @@ class ThoughtSkyViewModel extends ChangeNotifier {
 
   /// Turn a typed thought into a drifting cloud and persist it.
   ///
-  /// Fails silently (offline-first) — the cloud still appears locally.
+  /// Shows the server's confirmation and adds the saved cloud to the sky.
   Future<void> addThought(String text) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty) return;
-
-    _isSaving = true;
-    notifyListeners();
 
     final thought = SkyThoughtModel(
       id: '',
@@ -65,12 +64,18 @@ class ThoughtSkyViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createSkyThought(thought: thought);
-    final saved = result.fold((failure) => thought, (created) => created);
-    _clouds.add(saved);
-
-    _isSaving = false;
-    notifyListeners();
+    await submit<SkyThoughtModel>(
+      action: () => _repository.createSkyThought(thought: thought),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        if (!saved.cloudSwiped) {
+          _clouds
+            ..removeWhere((c) => c.id.isNotEmpty && c.id == saved.id)
+            ..add(saved);
+        }
+      },
+      fallbackSuccessMessage: 'فکر شما به ابر تبدیل شد',
+    );
   }
 
   /// Swipe a cloud away — remove it from the sky and mark it swiped on the

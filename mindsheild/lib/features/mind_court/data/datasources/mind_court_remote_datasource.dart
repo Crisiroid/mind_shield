@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/mind_court_model.dart';
 
 /// Contract for mind court remote operations.
 abstract class MindCourtRemoteDataSource {
   /// Create a new mind court evidence entry.
-  Future<MindCourtModel> createMindCourt({required MindCourtModel evidence});
+  Future<WriteResult<MindCourtModel>> createMindCourt({
+    required MindCourtModel evidence,
+  });
 
   /// List mind court evidence entries for the current user.
   Future<List<MindCourtModel>> listMindCourt({int page = 1, int pageSize = 20});
@@ -20,7 +23,7 @@ class MindCourtRemoteDataSourceImpl implements MindCourtRemoteDataSource {
   MindCourtRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<MindCourtModel> createMindCourt({
+  Future<WriteResult<MindCourtModel>> createMindCourt({
     required MindCourtModel evidence,
   }) async {
     final response = await _dio.post(
@@ -32,7 +35,10 @@ class MindCourtRemoteDataSourceImpl implements MindCourtRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return MindCourtModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      MindCourtModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

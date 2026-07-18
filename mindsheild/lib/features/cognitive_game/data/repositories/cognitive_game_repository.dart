@@ -1,12 +1,14 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/cognitive_game_local_datasource.dart';
 import '../datasources/cognitive_game_remote_datasource.dart';
 import '../models/cognitive_game_model.dart';
 
 /// Cognitive game repository — offline-first bridge between the data sources
 /// and the domain layer.
-class CognitiveGameRepository extends OfflineFirstRepository<CognitiveGameModel> {
+class CognitiveGameRepository
+    extends OfflineFirstRepository<CognitiveGameModel> {
   final CognitiveGameRemoteDataSource _remoteDataSource;
   final CognitiveGameLocalDataSource _localDataSource;
 
@@ -23,11 +25,11 @@ class CognitiveGameRepository extends OfflineFirstRepository<CognitiveGameModel>
       _remoteDataSource.listCognitiveGames(page: 1, pageSize: 200);
 
   @override
-  Future<CognitiveGameModel> pushCreate(CognitiveGameModel item) =>
-      _remoteDataSource.createCognitiveGame(game: item);
+  Future<CognitiveGameModel> pushCreate(CognitiveGameModel item) async =>
+      (await _remoteDataSource.createCognitiveGame(game: item)).data;
 
   /// Create a new cognitive game result (offline-first).
-  Result<CognitiveGameModel> createCognitiveGame({
+  Result<WriteResult<CognitiveGameModel>> createCognitiveGame({
     required CognitiveGameModel game,
   }) {
     return writeCreate(
@@ -42,7 +44,8 @@ class CognitiveGameRepository extends OfflineFirstRepository<CognitiveGameModel>
     int pageSize = 20,
   }) {
     return readList(
-      () => _remoteDataSource.listCognitiveGames(page: page, pageSize: pageSize),
+      () =>
+          _remoteDataSource.listCognitiveGames(page: page, pageSize: pageSize),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/mood_tracker_model.dart';
@@ -31,7 +32,7 @@ enum MoodPhase { before, doing, after, done }
 ///
 /// Follows the Single Responsibility Principle: only handles mood-tracking
 /// logic. UI observes this provider and reacts to state changes.
-class MoodTrackerViewModel extends ChangeNotifier {
+class MoodTrackerViewModel extends ChangeNotifier with SubmissionFlow {
   final MoodTrackerRepository _repository;
 
   MoodTrackerViewModel(this._repository);
@@ -40,7 +41,6 @@ class MoodTrackerViewModel extends ChangeNotifier {
   MoodPhase _phase = MoodPhase.before;
   int _moodBefore = 5;
   int _moodAfter = 5;
-  bool _isSaving = false;
   bool _isLoadingHistory = false;
   List<MoodTrackerModel> _history = [];
   MoodTrackerModel? _lastSaved;
@@ -49,7 +49,9 @@ class MoodTrackerViewModel extends ChangeNotifier {
   MoodPhase get phase => _phase;
   int get moodBefore => _moodBefore;
   int get moodAfter => _moodAfter;
-  bool get isSaving => _isSaving;
+
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   bool get isLoadingHistory => _isLoadingHistory;
   List<MoodTrackerModel> get history => _history;
   MoodTrackerModel? get lastSaved => _lastSaved;
@@ -155,14 +157,12 @@ class MoodTrackerViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Persist the completed before/after record and refresh history.
+  /// Persist the completed before/after record and reflect it immediately.
   ///
-  /// Fails silently (offline-first) — the flow still completes locally.
-  Future<void> submit() async {
-    if (_selectedActivity == null) return;
-
-    _isSaving = true;
-    notifyListeners();
+  /// Shows the server's confirmation, prepends the saved record to history
+  /// and advances the flow to its "done" phase.
+  Future<bool> submitMood() async {
+    if (_selectedActivity == null) return false;
 
     final mood = MoodTrackerModel(
       id: '',
@@ -174,14 +174,16 @@ class MoodTrackerViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createMoodTracker(mood: mood);
-    result.fold((failure) {}, (saved) => _lastSaved = saved);
-
-    _phase = MoodPhase.done;
-    _isSaving = false;
-    notifyListeners();
-
-    await loadHistory();
+    return submit<MoodTrackerModel>(
+      action: () => _repository.createMoodTracker(mood: mood),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        _lastSaved = saved;
+        _history = [saved, ..._history.where((e) => e.id != saved.id)];
+        _phase = MoodPhase.done;
+      },
+      fallbackSuccessMessage: 'حال شما ثبت شد',
+    );
   }
 
   /// Load recent mood records to show the trend / proof of effect.

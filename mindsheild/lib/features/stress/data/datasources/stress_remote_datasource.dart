@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/stress_event_model.dart';
 
 /// Contract for stress event remote operations.
 abstract class StressRemoteDataSource {
   /// Create a new stress event.
-  Future<StressEventModel> createStressEvent({
+  Future<WriteResult<StressEventModel>> createStressEvent({
     required StressEventModel stressEvent,
   });
 
@@ -25,7 +26,7 @@ class StressRemoteDataSourceImpl implements StressRemoteDataSource {
   StressRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<StressEventModel> createStressEvent({
+  Future<WriteResult<StressEventModel>> createStressEvent({
     required StressEventModel stressEvent,
   }) async {
     final response = await _dio.post(
@@ -37,7 +38,10 @@ class StressRemoteDataSourceImpl implements StressRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return StressEventModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      StressEventModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

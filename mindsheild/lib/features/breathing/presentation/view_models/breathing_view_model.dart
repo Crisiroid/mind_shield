@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../../../core/services/dialog_service.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../../../core/services/token_service.dart';
 import '../../data/models/breathing_session_model.dart';
@@ -13,14 +13,13 @@ enum BreathingPhase { inhale, hold, exhale, holdAfter }
 ///
 /// Follows the Single Responsibility Principle: handles breathing
 /// session logic, timer, and phase management.
-class BreathingViewModel extends ChangeNotifier {
+class BreathingViewModel extends ChangeNotifier with SubmissionFlow {
   final BreathingRepository _repository;
 
   BreathingViewModel(this._repository);
 
   // Session state
   bool _isActive = false;
-  bool _isSaving = false;
   BreathingPhase _currentPhase = BreathingPhase.inhale;
   String _selectedPattern = 'box'; // 'box' or 'deep'
   int _elapsedSeconds = 0;
@@ -36,7 +35,9 @@ class BreathingViewModel extends ChangeNotifier {
   };
 
   bool get isActive => _isActive;
-  bool get isSaving => _isSaving;
+
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   BreathingPhase get currentPhase => _currentPhase;
   String get selectedPattern => _selectedPattern;
   int get elapsedSeconds => _elapsedSeconds;
@@ -102,7 +103,7 @@ class BreathingViewModel extends ChangeNotifier {
         // Continue locally even if server fails
       },
       (saved) {
-        _sessionId = saved.id;
+        _sessionId = saved.data.id;
       },
     );
 
@@ -168,9 +169,6 @@ class BreathingViewModel extends ChangeNotifier {
     _phaseTimer = null;
 
     if (_sessionId != null) {
-      _isSaving = true;
-      notifyListeners();
-
       final updateData = {
         'session_end': DateTime.now().toIso8601String(),
         'duration_seconds': _elapsedSeconds,
@@ -178,21 +176,12 @@ class BreathingViewModel extends ChangeNotifier {
         'calendar_ticked': _elapsedSeconds >= 60,
       };
 
-      final result = await _repository.updateSession(
-        id: _sessionId!,
-        data: updateData,
+      await submit<BreathingSessionModel>(
+        action: () =>
+            _repository.updateSession(id: _sessionId!, data: updateData),
+        onSuccess: (_) {},
+        fallbackSuccessMessage: 'جلسه تنفس ثبت شد',
       );
-
-      result.fold(
-        (failure) {
-          DialogService.showError(title: 'خطا', message: failure.message);
-        },
-        (_) {
-          DialogService.showSuccess(title: 'موفق', message: 'جلسه تنفس ثبت شد');
-        },
-      );
-
-      _isSaving = false;
     }
 
     _sessionId = null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/dialog_service.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
@@ -15,13 +16,12 @@ import '../../data/repositories/mind_court_repository.dart';
 /// Follows the Single Responsibility Principle: only handles Mind Court
 /// logic. Reuses [NegativeThoughtRepository] to source the thoughts that
 /// can be put on trial (Dependency Inversion — depends on the abstraction).
-class MindCourtViewModel extends ChangeNotifier {
+class MindCourtViewModel extends ChangeNotifier with SubmissionFlow {
   final MindCourtRepository _repository;
   final NegativeThoughtRepository _negativeThoughtRepository;
 
   MindCourtViewModel(this._repository, this._negativeThoughtRepository);
 
-  bool _isSaving = false;
   bool _isLoading = false;
   String? _errorMessage;
   List<NegativeThoughtModel> _thoughts = [];
@@ -33,7 +33,8 @@ class MindCourtViewModel extends ChangeNotifier {
   bool _guideHelperUsed = false;
   String _alternativeThought = '';
 
-  bool get isSaving => _isSaving;
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   List<NegativeThoughtModel> get thoughts => _thoughts;
@@ -67,7 +68,8 @@ class MindCourtViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _thoughts = [];
+        // Keep any previously loaded thoughts on a failed refresh.
+        _errorMessage = failure.message;
       },
       (data) {
         _thoughts = data;
@@ -126,9 +128,6 @@ class MindCourtViewModel extends ChangeNotifier {
       return false;
     }
 
-    _isSaving = true;
-    notifyListeners();
-
     final evidence = MindCourtModel(
       id: '',
       userId: '',
@@ -144,31 +143,13 @@ class MindCourtViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createMindCourt(evidence: evidence);
-
-    bool success = false;
-
-    result.fold(
-      (failure) {
-        _errorMessage = failure.message;
-        DialogService.showError(
-          title: AppStrings.error,
-          message: failure.message,
-        );
-      },
-      (saved) {
+    return submit<MindCourtModel>(
+      action: () => _repository.createMindCourt(evidence: evidence),
+      onSuccess: (outcome) {
         _resetForm();
-        DialogService.showSuccess(
-          title: AppStrings.success,
-          message: AppStrings.mindCourtSaved,
-        );
-        success = true;
       },
+      fallbackSuccessMessage: AppStrings.mindCourtSaved,
     );
-
-    _isSaving = false;
-    notifyListeners();
-    return success;
   }
 
   /// Reset the trial form after a successful submission.

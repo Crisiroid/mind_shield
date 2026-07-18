@@ -43,8 +43,8 @@ class AuthViewModel extends ChangeNotifier {
       password: password,
     );
 
-    result.fold(
-      (failure) {
+    await result.fold(
+      (failure) async {
         _errorMessage = failure.message;
         _isAuthenticated = false;
       },
@@ -73,8 +73,8 @@ class AuthViewModel extends ChangeNotifier {
       password: password,
     );
 
-    result.fold(
-      (failure) {
+    await result.fold(
+      (failure) async {
         _errorMessage = failure.message;
         _isAuthenticated = false;
       },
@@ -137,10 +137,11 @@ class AuthViewModel extends ChangeNotifier {
       userId: tokenData.user.id,
     );
 
-    // Store last login timestamp for splash screen display
+    // Store last login timestamp (raw ISO-8601) for splash screen display.
+    // The presentation layer converts it to Shamsi at render time.
     if (tokenData.user.lastLogin != null) {
       await TokenService.setLastLogin(
-        _formatPersianDateTime(tokenData.user.lastLogin!),
+        tokenData.user.lastLogin!.toIso8601String(),
       );
     }
 
@@ -157,26 +158,5 @@ class AuthViewModel extends ChangeNotifier {
     // A fresh authentication (possibly on a new device) should rebuild the
     // local mirror from the server on first entry — flag the initial sync.
     await TokenService.setNeedsInitialSync(true);
-  }
-
-  /// Format a DateTime to a readable Persian string.
-  String _formatPersianDateTime(DateTime date) {
-    final months = [
-      'فروردین',
-      'اردیبهشت',
-      'خرداد',
-      'تیر',
-      'مرداد',
-      'شهریور',
-      'مهر',
-      'آبان',
-      'آذر',
-      'دی',
-      'بهمن',
-      'اسفند',
-    ];
-    final monthName = months[date.month - 1];
-    return '${date.day} $monthName ${date.year} '
-        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 }

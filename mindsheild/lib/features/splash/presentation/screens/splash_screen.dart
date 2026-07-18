@@ -6,6 +6,7 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/providers/app_provider.dart';
 import '../../../../core/services/token_service.dart';
+import '../../../../core/utils/persian_date_formatter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// Splash screen — Phase Zero, Screen 1.
@@ -72,9 +73,10 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _loadLastLogin() async {
-    final lastLogin = TokenService.getLastLogin();
+    // Stored as a raw ISO-8601 timestamp; convert to Shamsi for display.
+    final lastLogin = DateTime.tryParse(TokenService.getLastLogin() ?? '');
     if (lastLogin != null && mounted) {
-      setState(() => _lastLoginTime = lastLogin);
+      setState(() => _lastLoginTime = PersianDateFormatter.dateTime(lastLogin));
     }
   }
 

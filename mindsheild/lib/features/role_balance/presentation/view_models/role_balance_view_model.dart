@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/role_value_model.dart';
@@ -9,7 +10,7 @@ import '../../data/repositories/role_value_repository.dart';
 ///
 /// Follows the Single Responsibility Principle: only handles role/value
 /// logic. UI observes this provider and reacts to state changes.
-class RoleBalanceViewModel extends ChangeNotifier {
+class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
   final RoleValueRepository _repository;
 
   RoleBalanceViewModel(this._repository);
@@ -17,12 +18,13 @@ class RoleBalanceViewModel extends ChangeNotifier {
   final List<RoleValueModel> _roles = [];
   final List<RoleValueModel> _values = [];
   bool _isLoading = false;
-  bool _isSaving = false;
 
   List<RoleValueModel> get roles => List.unmodifiable(_roles);
   List<RoleValueModel> get values => List.unmodifiable(_values);
   bool get isLoading => _isLoading;
-  bool get isSaving => _isSaving;
+
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
 
   /// Overlap/tension intensity (0.0 - 1.0) derived from how balanced the
   /// counts of roles and values are. The more entries on both sides, the
@@ -67,13 +69,13 @@ class RoleBalanceViewModel extends ChangeNotifier {
 
   /// Add a new role or value entry and persist it.
   ///
-  /// Fails silently (offline-first) — the entry is still shown locally.
-  Future<void> addEntry({required String entryType, required String text}) async {
+  /// Shows the server's confirmation and adds the saved entry locally.
+  Future<void> addEntry({
+    required String entryType,
+    required String text,
+  }) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty) return;
-
-    _isSaving = true;
-    notifyListeners();
 
     final entry = RoleValueModel(
       id: '',
@@ -83,16 +85,21 @@ class RoleBalanceViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createRoleValue(entry: entry);
-    final saved = result.fold((failure) => entry, (created) => created);
-
-    if (entryType == 'role') {
-      _roles.add(saved);
-    } else {
-      _values.add(saved);
-    }
-
-    _isSaving = false;
-    notifyListeners();
+    await submit<RoleValueModel>(
+      action: () => _repository.createRoleValue(entry: entry),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        if (saved.isRole) {
+          _roles
+            ..removeWhere((e) => e.id.isNotEmpty && e.id == saved.id)
+            ..add(saved);
+        } else if (saved.isValue) {
+          _values
+            ..removeWhere((e) => e.id.isNotEmpty && e.id == saved.id)
+            ..add(saved);
+        }
+      },
+      fallbackSuccessMessage: 'مورد جدید اضافه شد',
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/emotion_interaction_model.dart';
 
@@ -10,7 +11,7 @@ import '../models/emotion_interaction_model.dart';
 /// on the methods it needs, not the full HTTP implementation.
 abstract class EmotionTriangleRemoteDataSource {
   /// Create a new emotion triangle interaction.
-  Future<EmotionInteractionModel> createInteraction({
+  Future<WriteResult<EmotionInteractionModel>> createInteraction({
     required EmotionInteractionModel interaction,
   });
 
@@ -31,7 +32,7 @@ class EmotionTriangleRemoteDataSourceImpl
   EmotionTriangleRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<EmotionInteractionModel> createInteraction({
+  Future<WriteResult<EmotionInteractionModel>> createInteraction({
     required EmotionInteractionModel interaction,
   }) async {
     final response = await _dio.post(
@@ -43,7 +44,10 @@ class EmotionTriangleRemoteDataSourceImpl
       response.data as Map<String, dynamic>,
     );
 
-    return EmotionInteractionModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      EmotionInteractionModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

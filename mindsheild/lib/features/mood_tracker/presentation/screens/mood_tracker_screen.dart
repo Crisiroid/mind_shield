@@ -194,7 +194,7 @@ class _PhaseContent extends StatelessWidget {
           buttonText: AppStrings.submitMood,
           buttonIcon: Icons.check,
           isBusy: vm.isSaving,
-          onPressed: vm.submit,
+          onPressed: vm.submitMood,
         );
       case MoodPhase.done:
         return _ResultStep(vm: vm);
@@ -375,7 +375,10 @@ class _ResultStep extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _MoodStat(label: AppStrings.moodBefore, value: '${vm.moodBefore}'),
+              _MoodStat(
+                label: AppStrings.moodBefore,
+                value: '${vm.moodBefore}',
+              ),
               Icon(Icons.arrow_back, color: accent),
               _MoodStat(label: AppStrings.moodAfter, value: '${vm.moodAfter}'),
               _MoodStat(

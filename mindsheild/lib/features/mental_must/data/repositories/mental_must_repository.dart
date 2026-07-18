@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/mental_must_local_datasource.dart';
 import '../datasources/mental_must_remote_datasource.dart';
 import '../models/mental_must_model.dart';
@@ -23,18 +24,20 @@ class MentalMustRepository extends OfflineFirstRepository<MentalMustModel> {
       _remoteDataSource.listMentalMusts(page: 1, pageSize: 200);
 
   @override
-  Future<MentalMustModel> pushCreate(MentalMustModel item) =>
-      _remoteDataSource.createMentalMust(must: item);
+  Future<MentalMustModel> pushCreate(MentalMustModel item) async =>
+      (await _remoteDataSource.createMentalMust(must: item)).data;
 
   @override
-  Future<MentalMustModel> pushUpdate(MentalMustModel item) =>
-      _remoteDataSource.updateMentalMust(
+  Future<MentalMustModel> pushUpdate(MentalMustModel item) async =>
+      (await _remoteDataSource.updateMentalMust(
         id: item.id,
         data: item.toUpdateJson(isReleased: item.isReleased),
-      );
+      )).data;
 
   /// Create a new mental must entry (offline-first).
-  Result<MentalMustModel> createMentalMust({required MentalMustModel must}) {
+  Result<WriteResult<MentalMustModel>> createMentalMust({
+    required MentalMustModel must,
+  }) {
     return writeCreate(
       must,
       (i) => _remoteDataSource.createMentalMust(must: i),
@@ -42,7 +45,7 @@ class MentalMustRepository extends OfflineFirstRepository<MentalMustModel> {
   }
 
   /// Update a mental must entry, e.g. release it (offline-first).
-  Result<MentalMustModel> updateMentalMust({
+  Result<WriteResult<MentalMustModel>> updateMentalMust({
     required String id,
     required Map<String, dynamic> data,
   }) async {

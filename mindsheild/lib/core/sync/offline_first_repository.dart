@@ -1,11 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
+import '../constants/app_strings.dart';
 import '../database/syncable_local_data_source.dart';
 import '../errors/exceptions.dart';
 import '../errors/failures.dart';
 import '../utils/uuid_generator.dart';
 import 'syncable_repository.dart';
+import 'write_result.dart';
 
 /// Common result type alias (kept identical to the one in auth_repository so
 /// feature repositories can migrate without signature changes).
@@ -66,24 +68,27 @@ abstract class OfflineFirstRepository<T> implements SyncableRepository {
 
   /// Persist [item] optimistically, then attempt [remoteCreate].
   ///
-  /// Returns the server model on success, the optimistic local model when
-  /// offline (kept pending as an outbox entry), or a [Failure] for genuine
-  /// server rejections (the optimistic row is rolled back in that case).
-  Future<Either<Failure, T>> writeCreate(
+  /// Returns the server [WriteResult] on success, an optimistic [WriteResult]
+  /// (with the local model and an offline message) when offline — the pending
+  /// row is the outbox entry — or a [Failure] for genuine server rejections
+  /// (the optimistic row is rolled back in that case).
+  Future<Either<Failure, WriteResult<T>>> writeCreate(
     T item,
-    Future<T> Function(T) remoteCreate,
+    Future<WriteResult<T>> Function(T) remoteCreate,
   ) async {
     final optimistic = await local.savePending(item);
     final localId = local.idOf(optimistic);
     try {
       final saved = await remoteCreate(item);
       await local.deleteById(localId);
-      await local.saveSynced(saved);
+      await local.saveSynced(saved.data);
       return Right(saved);
     } catch (e) {
       if (_isConnectivityError(e)) {
         // Stay offline: the pending row is the outbox entry.
-        return Right(optimistic);
+        return Right(
+          WriteResult(optimistic, AppStrings.dataWillSync, fromServer: false),
+        );
       }
       // Genuine server rejection — undo the optimistic write.
       await local.deleteById(localId);
@@ -97,19 +102,21 @@ abstract class OfflineFirstRepository<T> implements SyncableRepository {
   /// Mirrors [writeCreate] semantics: returns the server copy on success, the
   /// optimistic copy when offline (kept pending as an outbox entry), or a
   /// [Failure] on genuine server rejection.
-  Future<Either<Failure, T>> writeUpdate(
+  Future<Either<Failure, WriteResult<T>>> writeUpdate(
     T item,
-    Future<T> Function(T) remoteUpdate,
+    Future<WriteResult<T>> Function(T) remoteUpdate,
   ) async {
     final optimistic = await local.savePending(item);
     try {
       final saved = await remoteUpdate(item);
-      await local.saveSynced(saved);
+      await local.saveSynced(saved.data);
       return Right(saved);
     } catch (e) {
       if (_isConnectivityError(e)) {
         // Stay offline: the pending row is the outbox entry.
-        return Right(optimistic);
+        return Right(
+          WriteResult(optimistic, AppStrings.dataWillSync, fromServer: false),
+        );
       }
       return Left(mapExceptionToFailure(e));
     }

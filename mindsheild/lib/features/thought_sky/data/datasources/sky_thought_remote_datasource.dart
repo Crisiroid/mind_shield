@@ -1,16 +1,19 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/sky_thought_model.dart';
 
 /// Contract for sky thought remote operations.
 abstract class SkyThoughtRemoteDataSource {
   /// Create a new sky thought (a negative thought turned into a cloud).
-  Future<SkyThoughtModel> createSkyThought({required SkyThoughtModel thought});
+  Future<WriteResult<SkyThoughtModel>> createSkyThought({
+    required SkyThoughtModel thought,
+  });
 
   /// Update a sky thought (e.g., mark its cloud as swiped away).
-  Future<SkyThoughtModel> updateSkyThought({
+  Future<WriteResult<SkyThoughtModel>> updateSkyThought({
     required String id,
     required bool cloudSwiped,
   });
@@ -29,7 +32,7 @@ class SkyThoughtRemoteDataSourceImpl implements SkyThoughtRemoteDataSource {
   SkyThoughtRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<SkyThoughtModel> createSkyThought({
+  Future<WriteResult<SkyThoughtModel>> createSkyThought({
     required SkyThoughtModel thought,
   }) async {
     final response = await _dio.post(
@@ -41,11 +44,14 @@ class SkyThoughtRemoteDataSourceImpl implements SkyThoughtRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return SkyThoughtModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      SkyThoughtModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override
-  Future<SkyThoughtModel> updateSkyThought({
+  Future<WriteResult<SkyThoughtModel>> updateSkyThought({
     required String id,
     required bool cloudSwiped,
   }) async {
@@ -58,7 +64,10 @@ class SkyThoughtRemoteDataSourceImpl implements SkyThoughtRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return SkyThoughtModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      SkyThoughtModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

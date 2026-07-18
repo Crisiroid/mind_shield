@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/stress_local_datasource.dart';
 import '../datasources/stress_remote_datasource.dart';
 import '../models/stress_event_model.dart';
@@ -23,11 +24,11 @@ class StressRepository extends OfflineFirstRepository<StressEventModel> {
       _remoteDataSource.listStressEvents(page: 1, pageSize: 200);
 
   @override
-  Future<StressEventModel> pushCreate(StressEventModel item) =>
-      _remoteDataSource.createStressEvent(stressEvent: item);
+  Future<StressEventModel> pushCreate(StressEventModel item) async =>
+      (await _remoteDataSource.createStressEvent(stressEvent: item)).data;
 
   /// Create a new stress event (offline-first).
-  Result<StressEventModel> createStressEvent({
+  Result<WriteResult<StressEventModel>> createStressEvent({
     required StressEventModel stressEvent,
   }) {
     return writeCreate(

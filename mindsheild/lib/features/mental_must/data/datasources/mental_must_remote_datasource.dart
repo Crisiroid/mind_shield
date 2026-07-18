@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/mental_must_model.dart';
 
 /// Contract for mental must remote operations.
 abstract class MentalMustRemoteDataSource {
   /// Create a new mental must entry.
-  Future<MentalMustModel> createMentalMust({required MentalMustModel must});
+  Future<WriteResult<MentalMustModel>> createMentalMust({
+    required MentalMustModel must,
+  });
 
   /// List mental must entries for the current user.
   Future<List<MentalMustModel>> listMentalMusts({
@@ -16,7 +19,7 @@ abstract class MentalMustRemoteDataSource {
   });
 
   /// Update a mental must entry (e.g., release it).
-  Future<MentalMustModel> updateMentalMust({
+  Future<WriteResult<MentalMustModel>> updateMentalMust({
     required String id,
     required Map<String, dynamic> data,
   });
@@ -29,7 +32,7 @@ class MentalMustRemoteDataSourceImpl implements MentalMustRemoteDataSource {
   MentalMustRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<MentalMustModel> createMentalMust({
+  Future<WriteResult<MentalMustModel>> createMentalMust({
     required MentalMustModel must,
   }) async {
     final response = await _dio.post(
@@ -41,7 +44,10 @@ class MentalMustRemoteDataSourceImpl implements MentalMustRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return MentalMustModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      MentalMustModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override
@@ -70,7 +76,7 @@ class MentalMustRemoteDataSourceImpl implements MentalMustRemoteDataSource {
   }
 
   @override
-  Future<MentalMustModel> updateMentalMust({
+  Future<WriteResult<MentalMustModel>> updateMentalMust({
     required String id,
     required Map<String, dynamic> data,
   }) async {
@@ -83,6 +89,9 @@ class MentalMustRemoteDataSourceImpl implements MentalMustRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return MentalMustModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      MentalMustModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 }

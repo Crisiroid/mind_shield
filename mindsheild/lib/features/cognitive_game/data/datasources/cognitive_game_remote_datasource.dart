@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/cognitive_game_model.dart';
 
 /// Contract for cognitive game remote operations.
 abstract class CognitiveGameRemoteDataSource {
   /// Create a new cognitive game result.
-  Future<CognitiveGameModel> createCognitiveGame({
+  Future<WriteResult<CognitiveGameModel>> createCognitiveGame({
     required CognitiveGameModel game,
   });
 
@@ -26,7 +27,7 @@ class CognitiveGameRemoteDataSourceImpl
   CognitiveGameRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<CognitiveGameModel> createCognitiveGame({
+  Future<WriteResult<CognitiveGameModel>> createCognitiveGame({
     required CognitiveGameModel game,
   }) async {
     final response = await _dio.post(
@@ -38,7 +39,10 @@ class CognitiveGameRemoteDataSourceImpl
       response.data as Map<String, dynamic>,
     );
 
-    return CognitiveGameModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      CognitiveGameModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

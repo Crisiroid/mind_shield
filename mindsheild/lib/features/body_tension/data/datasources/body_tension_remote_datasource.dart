@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/body_tension_model.dart';
 
 /// Contract for body tension map remote operations.
 abstract class BodyTensionRemoteDataSource {
   /// Create a new body tension map entry.
-  Future<BodyTensionModel> createBodyTension({
+  Future<WriteResult<BodyTensionModel>> createBodyTension({
     required BodyTensionModel bodyTension,
   });
 
@@ -25,7 +26,7 @@ class BodyTensionRemoteDataSourceImpl implements BodyTensionRemoteDataSource {
   BodyTensionRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<BodyTensionModel> createBodyTension({
+  Future<WriteResult<BodyTensionModel>> createBodyTension({
     required BodyTensionModel bodyTension,
   }) async {
     final response = await _dio.post(
@@ -37,7 +38,10 @@ class BodyTensionRemoteDataSourceImpl implements BodyTensionRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return BodyTensionModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      BodyTensionModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

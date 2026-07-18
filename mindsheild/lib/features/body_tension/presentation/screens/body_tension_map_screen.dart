@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/body_tension_view_model.dart';
 
 /// Body Tension Map screen — anatomical body figure for tension tracking.
@@ -520,7 +521,7 @@ class _TensionHistoryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${date.year}/${date.month}/${date.day}',
+                  PersianDateFormatter.date(date),
                   style: PersianFonts.Vazir.copyWith(
                     fontSize: AppSizes.fontSm,
                     color: AppColors.textHint,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/dialog_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../../../core/services/token_service.dart';
@@ -8,14 +9,14 @@ import '../../data/repositories/body_tension_repository.dart';
 /// Body Tension ViewModel — manages body tension map screen state.
 ///
 /// Follows the Single Responsibility Principle: only handles body
-/// tension map logic.
-class BodyTensionViewModel extends ChangeNotifier {
+/// tension map logic. The post-write flow (server dialog, optimistic list
+/// update, form reset) is delegated to [SubmissionFlow].
+class BodyTensionViewModel extends ChangeNotifier with SubmissionFlow {
   final BodyTensionRepository _repository;
 
   BodyTensionViewModel(this._repository);
 
   bool _isLoading = false;
-  bool _isSaving = false;
   String? _errorMessage;
   List<BodyTensionModel> _history = [];
 
@@ -25,7 +26,9 @@ class BodyTensionViewModel extends ChangeNotifier {
   String _notes = '';
 
   bool get isLoading => _isLoading;
-  bool get isSaving => _isSaving;
+
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   String? get errorMessage => _errorMessage;
   List<BodyTensionModel> get history => _history;
   Set<String> get selectedRegions => _selectedRegions;
@@ -55,7 +58,9 @@ class BodyTensionViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _history = [];
+        // Keep any previously loaded history so a failed refresh never blanks
+        // the list; only surface the error message.
+        _errorMessage = failure.message;
       },
       (data) {
         _history = data;
@@ -113,9 +118,6 @@ class BodyTensionViewModel extends ChangeNotifier {
       return false;
     }
 
-    _isSaving = true;
-    notifyListeners();
-
     final bodyTension = BodyTensionModel(
       id: '',
       userId: '',
@@ -127,30 +129,15 @@ class BodyTensionViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createBodyTension(
-      bodyTension: bodyTension,
-    );
-
-    bool success = false;
-
-    result.fold(
-      (failure) {
-        _errorMessage = failure.message;
-        DialogService.showError(title: 'خطا', message: failure.message);
-      },
-      (saved) {
-        _history.insert(0, saved);
+    return submit<BodyTensionModel>(
+      action: () => _repository.createBodyTension(bodyTension: bodyTension),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        // Show the confirmed record immediately (dedupe by id) and clear form.
+        _history = [saved, ..._history.where((e) => e.id != saved.id)];
         resetForm();
-        DialogService.showSuccess(
-          title: 'موفق',
-          message: 'نقشه تنش بدنی ثبت شد',
-        );
-        success = true;
       },
+      fallbackSuccessMessage: 'نقشه تنش بدنی ثبت شد',
     );
-
-    _isSaving = false;
-    notifyListeners();
-    return success;
   }
 }

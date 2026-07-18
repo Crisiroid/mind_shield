@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/emotion_triangle_local_datasource.dart';
 import '../datasources/emotion_triangle_remote_datasource.dart';
 import '../models/emotion_interaction_model.dart';
@@ -31,11 +32,13 @@ class EmotionTriangleRepository
       _remoteDataSource.listInteractions(page: 1, pageSize: 200);
 
   @override
-  Future<EmotionInteractionModel> pushCreate(EmotionInteractionModel item) =>
-      _remoteDataSource.createInteraction(interaction: item);
+  Future<EmotionInteractionModel> pushCreate(
+    EmotionInteractionModel item,
+  ) async =>
+      (await _remoteDataSource.createInteraction(interaction: item)).data;
 
   /// Create a new emotion triangle interaction (offline-first).
-  Result<EmotionInteractionModel> createInteraction({
+  Result<WriteResult<EmotionInteractionModel>> createInteraction({
     required EmotionInteractionModel interaction,
   }) {
     return writeCreate(

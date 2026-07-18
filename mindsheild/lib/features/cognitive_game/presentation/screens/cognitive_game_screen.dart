@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/cognitive_game_view_model.dart';
 
 /// Cognitive Errors Game screen — drag & drop game for identifying
@@ -521,7 +522,7 @@ class _GameHistoryCard extends StatelessWidget {
             ),
             if (createdAt != null)
               Text(
-                '${createdAt.month}/${createdAt.day}',
+                PersianDateFormatter.monthDay(createdAt),
                 style: PersianFonts.Vazir.copyWith(
                   fontSize: AppSizes.fontXs,
                   color: AppColors.textHint,

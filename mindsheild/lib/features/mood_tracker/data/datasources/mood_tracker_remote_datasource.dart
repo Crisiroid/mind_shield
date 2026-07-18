@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/mood_tracker_model.dart';
 
 /// Contract for mood tracker remote operations.
 abstract class MoodTrackerRemoteDataSource {
   /// Create a new mood tracker record (before/after an activity).
-  Future<MoodTrackerModel> createMoodTracker({required MoodTrackerModel mood});
+  Future<WriteResult<MoodTrackerModel>> createMoodTracker({
+    required MoodTrackerModel mood,
+  });
 
   /// List mood tracker records for the current user.
   Future<List<MoodTrackerModel>> listMoodTrackers({
@@ -23,7 +26,7 @@ class MoodTrackerRemoteDataSourceImpl implements MoodTrackerRemoteDataSource {
   MoodTrackerRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<MoodTrackerModel> createMoodTracker({
+  Future<WriteResult<MoodTrackerModel>> createMoodTracker({
     required MoodTrackerModel mood,
   }) async {
     final response = await _dio.post(
@@ -35,7 +38,10 @@ class MoodTrackerRemoteDataSourceImpl implements MoodTrackerRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return MoodTrackerModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      MoodTrackerModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

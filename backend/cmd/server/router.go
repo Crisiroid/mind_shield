@@ -76,7 +76,7 @@ func setupUserRoutes(
 	userAuth.POST(schemas.RouteUserLogout, authHandler.UserLogout)
 	userAuth.POST(schemas.RouteUserChangePassword, authHandler.UserChangePassword)
 
-	userApi := e.Group("/api/v1")
+	userApi := e.Group("")
 	userApi.Use(jwtMiddleware.Authenticate, jwtMiddleware.RequireUserRole)
 
 	userApi.GET(schemas.RouteUserProfile, userHandler.GetUserProfile)
@@ -129,7 +129,7 @@ func setupAdminRoutes(
 	adminAuth.POST(schemas.RouteAdminLogout, authHandler.AdminLogout)
 	adminAuth.POST(schemas.RouteAdminChangePassword, authHandler.AdminChangePassword)
 
-	adminApi := e.Group("/api/v1")
+	adminApi := e.Group("")
 	adminApi.Use(jwtMiddleware.Authenticate, jwtMiddleware.RequireAdminRole)
 
 	adminApi.GET("/admin/me", adminHandler.GetAdminProfile)

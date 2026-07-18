@@ -1,18 +1,19 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/breathing_session_model.dart';
 
 /// Contract for breathing session remote operations.
 abstract class BreathingRemoteDataSource {
   /// Create a new breathing session.
-  Future<BreathingSessionModel> createSession({
+  Future<WriteResult<BreathingSessionModel>> createSession({
     required BreathingSessionModel session,
   });
 
   /// Update an existing breathing session.
-  Future<BreathingSessionModel> updateSession({
+  Future<WriteResult<BreathingSessionModel>> updateSession({
     required String id,
     required Map<String, dynamic> data,
   });
@@ -31,7 +32,7 @@ class BreathingRemoteDataSourceImpl implements BreathingRemoteDataSource {
   BreathingRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<BreathingSessionModel> createSession({
+  Future<WriteResult<BreathingSessionModel>> createSession({
     required BreathingSessionModel session,
   }) async {
     final response = await _dio.post(
@@ -43,11 +44,14 @@ class BreathingRemoteDataSourceImpl implements BreathingRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return BreathingSessionModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      BreathingSessionModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override
-  Future<BreathingSessionModel> updateSession({
+  Future<WriteResult<BreathingSessionModel>> updateSession({
     required String id,
     required Map<String, dynamic> data,
   }) async {
@@ -60,7 +64,10 @@ class BreathingRemoteDataSourceImpl implements BreathingRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return BreathingSessionModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      BreathingSessionModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

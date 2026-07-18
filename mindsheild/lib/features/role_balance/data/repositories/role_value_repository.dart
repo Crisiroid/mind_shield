@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/role_value_local_datasource.dart';
 import '../datasources/role_value_remote_datasource.dart';
 import '../models/role_value_model.dart';
@@ -23,11 +24,13 @@ class RoleValueRepository extends OfflineFirstRepository<RoleValueModel> {
       _remoteDataSource.listRolesValues(page: 1, pageSize: 200);
 
   @override
-  Future<RoleValueModel> pushCreate(RoleValueModel item) =>
-      _remoteDataSource.createRoleValue(entry: item);
+  Future<RoleValueModel> pushCreate(RoleValueModel item) async =>
+      (await _remoteDataSource.createRoleValue(entry: item)).data;
 
   /// Create a new role or value entry (offline-first).
-  Result<RoleValueModel> createRoleValue({required RoleValueModel entry}) {
+  Result<WriteResult<RoleValueModel>> createRoleValue({
+    required RoleValueModel entry,
+  }) {
     return writeCreate(
       entry,
       (i) => _remoteDataSource.createRoleValue(entry: i),

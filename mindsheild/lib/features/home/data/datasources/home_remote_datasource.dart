@@ -36,7 +36,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     int pageSize = 20,
   }) async {
     final response = await _dio.get(
-      '${ApiConstants.weeklyMedia}/week/$weekNumber',
+      '${ApiConstants.weeklyMedia}/by-week/$weekNumber',
       queryParameters: {'page': page, 'page_size': pageSize},
     );
 

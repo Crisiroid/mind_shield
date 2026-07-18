@@ -8,7 +8,7 @@ type UserReport struct {
 	ActiveUsers        int     `gorm:"default:0" json:"active_users"`
 	AvgEngagementScore float64 `json:"avg_engagement_score,omitempty"`
 	CrisisAlertsCount  int     `gorm:"default:0" json:"crisis_alerts_count"`
-	AnonymizedData     string  `gorm:"type:jsonb" json:"anonymized_data,omitempty"`
+	AnonymizedData     string  `gorm:"type:text" json:"anonymized_data,omitempty"`
 }
 
 func (UserReport) TableName() string {

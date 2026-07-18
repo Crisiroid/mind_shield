@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/stress_view_model.dart';
 
 /// Stress Registration screen — quick-select buttons for occupational stress.
@@ -482,7 +483,7 @@ class _StressHistoryCard extends StatelessWidget {
             ),
             SizedBox(height: AppSizes.xs),
             Text(
-              '${date.year}/${date.month}/${date.day} - ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
+              PersianDateFormatter.dateTime(date),
               style: PersianFonts.Vazir.copyWith(
                 fontSize: AppSizes.fontXs,
                 color: AppColors.textHint,

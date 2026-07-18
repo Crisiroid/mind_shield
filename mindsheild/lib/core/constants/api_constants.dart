@@ -31,7 +31,7 @@ class ApiConstants {
   static const String acceptAgreement = '$apiPrefix/users/me/agreement';
 
   // Emotion Triangle
-  static const String emotionTriangle = '$apiPrefix/emotion-triangle';
+  static const String emotionTriangle = '$apiPrefix/emotion-interactions';
 
   // Breathing
   static const String breathing = '$apiPrefix/breathing';
@@ -70,5 +70,5 @@ class ApiConstants {
   static const String reports = '$apiPrefix/reports';
 
   // Weekly Media
-  static const String weeklyMedia = '$apiPrefix/weekly-media';
+  static const String weeklyMedia = '$apiPrefix/media/weekly';
 }

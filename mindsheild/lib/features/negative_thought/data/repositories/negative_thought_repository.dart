@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/negative_thought_local_datasource.dart';
 import '../datasources/negative_thought_remote_datasource.dart';
 import '../models/negative_thought_model.dart';
@@ -24,11 +25,11 @@ class NegativeThoughtRepository
       _remoteDataSource.listNegativeThoughts(page: 1, pageSize: 200);
 
   @override
-  Future<NegativeThoughtModel> pushCreate(NegativeThoughtModel item) =>
-      _remoteDataSource.createNegativeThought(thought: item);
+  Future<NegativeThoughtModel> pushCreate(NegativeThoughtModel item) async =>
+      (await _remoteDataSource.createNegativeThought(thought: item)).data;
 
   /// Create a new negative thought entry (offline-first).
-  Result<NegativeThoughtModel> createNegativeThought({
+  Result<WriteResult<NegativeThoughtModel>> createNegativeThought({
     required NegativeThoughtModel thought,
   }) {
     return writeCreate(

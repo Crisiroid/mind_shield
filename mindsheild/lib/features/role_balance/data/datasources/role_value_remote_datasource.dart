@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/role_value_model.dart';
 
 /// Contract for role/value remote operations.
 abstract class RoleValueRemoteDataSource {
   /// Create a new role or value entry.
-  Future<RoleValueModel> createRoleValue({required RoleValueModel entry});
+  Future<WriteResult<RoleValueModel>> createRoleValue({
+    required RoleValueModel entry,
+  });
 
   /// List role/value entries for the current user.
   Future<List<RoleValueModel>> listRolesValues({
@@ -23,7 +26,7 @@ class RoleValueRemoteDataSourceImpl implements RoleValueRemoteDataSource {
   RoleValueRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<RoleValueModel> createRoleValue({
+  Future<WriteResult<RoleValueModel>> createRoleValue({
     required RoleValueModel entry,
   }) async {
     final response = await _dio.post(
@@ -35,7 +38,10 @@ class RoleValueRemoteDataSourceImpl implements RoleValueRemoteDataSource {
       response.data as Map<String, dynamic>,
     );
 
-    return RoleValueModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      RoleValueModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

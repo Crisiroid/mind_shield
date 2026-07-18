@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/conflict_exercise_model.dart';
 
 /// Contract for conflict exercise remote operations.
 abstract class ConflictExerciseRemoteDataSource {
   /// Create a new conflict exercise attempt.
-  Future<ConflictExerciseModel> createConflictExercise({
+  Future<WriteResult<ConflictExerciseModel>> createConflictExercise({
     required ConflictExerciseModel exercise,
   });
 
@@ -26,7 +27,7 @@ class ConflictExerciseRemoteDataSourceImpl
   ConflictExerciseRemoteDataSourceImpl() : _dio = DioClient.instance;
 
   @override
-  Future<ConflictExerciseModel> createConflictExercise({
+  Future<WriteResult<ConflictExerciseModel>> createConflictExercise({
     required ConflictExerciseModel exercise,
   }) async {
     final response = await _dio.post(
@@ -38,7 +39,10 @@ class ConflictExerciseRemoteDataSourceImpl
       response.data as Map<String, dynamic>,
     );
 
-    return ConflictExerciseModel.fromJson(apiResponse.data!);
+    return WriteResult(
+      ConflictExerciseModel.fromJson(apiResponse.data!),
+      apiResponse.message,
+    );
   }
 
   @override

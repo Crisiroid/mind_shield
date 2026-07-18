@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/dialog_service.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
@@ -11,12 +12,11 @@ import '../../data/repositories/negative_thought_repository.dart';
 ///
 /// Follows the Single Responsibility Principle: only handles negative
 /// thought radar logic.
-class NegativeThoughtViewModel extends ChangeNotifier {
+class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
   final NegativeThoughtRepository _repository;
 
   NegativeThoughtViewModel(this._repository);
 
-  bool _isSaving = false;
   bool _isLoading = false;
   String? _errorMessage;
   List<NegativeThoughtModel> _thoughts = [];
@@ -27,7 +27,8 @@ class NegativeThoughtViewModel extends ChangeNotifier {
   String? _selectedErrorType;
   int _impactLevel = 5;
 
-  bool get isSaving => _isSaving;
+  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
+  bool get isSaving => isSubmitting;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   List<NegativeThoughtModel> get thoughts => _thoughts;
@@ -75,7 +76,8 @@ class NegativeThoughtViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _thoughts = [];
+        // Keep any previously loaded thoughts on a failed refresh.
+        _errorMessage = failure.message;
       },
       (data) {
         _thoughts = data;
@@ -127,9 +129,6 @@ class NegativeThoughtViewModel extends ChangeNotifier {
       return false;
     }
 
-    _isSaving = true;
-    notifyListeners();
-
     final thought = NegativeThoughtModel(
       id: '',
       userId: '',
@@ -139,32 +138,15 @@ class NegativeThoughtViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createNegativeThought(thought: thought);
-
-    bool success = false;
-
-    result.fold(
-      (failure) {
-        _errorMessage = failure.message;
-        DialogService.showError(
-          title: AppStrings.error,
-          message: failure.message,
-        );
-      },
-      (saved) {
-        _thoughts.insert(0, saved);
+    return submit<NegativeThoughtModel>(
+      action: () => _repository.createNegativeThought(thought: thought),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        _thoughts = [saved, ..._thoughts.where((t) => t.id != saved.id)];
         _resetInstantReportForm();
-        DialogService.showSuccess(
-          title: AppStrings.success,
-          message: AppStrings.thoughtRecorded,
-        );
-        success = true;
       },
+      fallbackSuccessMessage: AppStrings.thoughtRecorded,
     );
-
-    _isSaving = false;
-    notifyListeners();
-    return success;
   }
 
   /// Submit thought impact assessment (thought + impact level).
@@ -177,9 +159,6 @@ class NegativeThoughtViewModel extends ChangeNotifier {
       return false;
     }
 
-    _isSaving = true;
-    notifyListeners();
-
     final thought = NegativeThoughtModel(
       id: '',
       userId: '',
@@ -189,32 +168,15 @@ class NegativeThoughtViewModel extends ChangeNotifier {
       dayNumber: _currentDayNumber,
     );
 
-    final result = await _repository.createNegativeThought(thought: thought);
-
-    bool success = false;
-
-    result.fold(
-      (failure) {
-        _errorMessage = failure.message;
-        DialogService.showError(
-          title: AppStrings.error,
-          message: failure.message,
-        );
-      },
-      (saved) {
-        _thoughts.insert(0, saved);
+    return submit<NegativeThoughtModel>(
+      action: () => _repository.createNegativeThought(thought: thought),
+      onSuccess: (outcome) {
+        final saved = outcome.data;
+        _thoughts = [saved, ..._thoughts.where((t) => t.id != saved.id)];
         _resetImpactForm();
-        DialogService.showSuccess(
-          title: AppStrings.success,
-          message: AppStrings.impactSaved,
-        );
-        success = true;
       },
+      fallbackSuccessMessage: AppStrings.impactSaved,
     );
-
-    _isSaving = false;
-    notifyListeners();
-    return success;
   }
 
   /// Reset the instant report form.

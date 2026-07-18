@@ -12,7 +12,7 @@ type WeeklyReport struct {
 	NegativeThoughtsCount  int     `gorm:"default:0" json:"negative_thoughts_count"`
 	BodyTensionMapsCount   int     `gorm:"default:0" json:"body_tension_maps_count"`
 	MoodImprovementScore   float64 `json:"mood_improvement_score,omitempty"`
-	ActivitiesDistribution string  `gorm:"type:jsonb" json:"activities_distribution,omitempty"`
+	ActivitiesDistribution string  `gorm:"type:text" json:"activities_distribution,omitempty"`
 	ProgressPercentage     float64 `json:"progress_percentage,omitempty"`
 	GeneratedAt            string  `gorm:"autoCreateTime" json:"generated_at"`
 }

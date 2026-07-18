@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/mood_tracker_local_datasource.dart';
 import '../datasources/mood_tracker_remote_datasource.dart';
 import '../models/mood_tracker_model.dart';
@@ -23,11 +24,13 @@ class MoodTrackerRepository extends OfflineFirstRepository<MoodTrackerModel> {
       _remoteDataSource.listMoodTrackers(page: 1, pageSize: 200);
 
   @override
-  Future<MoodTrackerModel> pushCreate(MoodTrackerModel item) =>
-      _remoteDataSource.createMoodTracker(mood: item);
+  Future<MoodTrackerModel> pushCreate(MoodTrackerModel item) async =>
+      (await _remoteDataSource.createMoodTracker(mood: item)).data;
 
   /// Create a new mood tracker record (offline-first).
-  Result<MoodTrackerModel> createMoodTracker({required MoodTrackerModel mood}) {
+  Result<WriteResult<MoodTrackerModel>> createMoodTracker({
+    required MoodTrackerModel mood,
+  }) {
     return writeCreate(
       mood,
       (i) => _remoteDataSource.createMoodTracker(mood: i),

@@ -1,5 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../../../../core/sync/offline_first_repository.dart';
+import '../../../../core/sync/write_result.dart';
 import '../datasources/conflict_exercise_local_datasource.dart';
 import '../datasources/conflict_exercise_remote_datasource.dart';
 import '../models/conflict_exercise_model.dart';
@@ -24,11 +25,11 @@ class ConflictExerciseRepository
       _remoteDataSource.listConflictExercises(page: 1, pageSize: 200);
 
   @override
-  Future<ConflictExerciseModel> pushCreate(ConflictExerciseModel item) =>
-      _remoteDataSource.createConflictExercise(exercise: item);
+  Future<ConflictExerciseModel> pushCreate(ConflictExerciseModel item) async =>
+      (await _remoteDataSource.createConflictExercise(exercise: item)).data;
 
   /// Create a new conflict exercise attempt (offline-first).
-  Result<ConflictExerciseModel> createConflictExercise({
+  Result<WriteResult<ConflictExerciseModel>> createConflictExercise({
     required ConflictExerciseModel exercise,
   }) {
     return writeCreate(
