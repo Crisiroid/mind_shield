@@ -1,0 +1,67 @@
+import 'package:dio/dio.dart';
+import '../../../../core/constants/api_constants.dart';
+import '../../../../core/network/dio_client.dart';
+import '../../../auth/data/models/auth_response_model.dart';
+import '../models/body_tension_model.dart';
+
+/// Contract for body tension map remote operations.
+abstract class BodyTensionRemoteDataSource {
+  /// Create a new body tension map entry.
+  Future<BodyTensionModel> createBodyTension({
+    required BodyTensionModel bodyTension,
+  });
+
+  /// List body tension map entries for the current user.
+  Future<List<BodyTensionModel>> listBodyTensions({
+    int page = 1,
+    int pageSize = 20,
+  });
+}
+
+/// Implementation using Dio HTTP client.
+class BodyTensionRemoteDataSourceImpl implements BodyTensionRemoteDataSource {
+  final Dio _dio;
+
+  BodyTensionRemoteDataSourceImpl() : _dio = DioClient.instance;
+
+  @override
+  Future<BodyTensionModel> createBodyTension({
+    required BodyTensionModel bodyTension,
+  }) async {
+    final response = await _dio.post(
+      '${ApiConstants.apiPrefix}/body-tension-maps',
+      data: bodyTension.toJson(),
+    );
+
+    final apiResponse = ApiResponse.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+
+    return BodyTensionModel.fromJson(apiResponse.data!);
+  }
+
+  @override
+  Future<List<BodyTensionModel>> listBodyTensions({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    final response = await _dio.get(
+      '${ApiConstants.apiPrefix}/body-tension-maps',
+      queryParameters: {'page': page, 'page_size': pageSize},
+    );
+
+    final apiResponse = ApiResponse.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+
+    if (apiResponse.data == null) return [];
+
+    final data = apiResponse.data!;
+    final items =
+        data['items'] as List<dynamic>? ?? data['data'] as List<dynamic>? ?? [];
+
+    return items
+        .map((item) => BodyTensionModel.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+}

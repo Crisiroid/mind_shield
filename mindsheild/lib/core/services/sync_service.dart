@@ -1,0 +1,106 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import '../errors/exceptions.dart';
+import '../network/dio_client.dart';
+import 'storage_service.dart';
+
+/// Background sync service that sends pending data to server when online.
+///
+/// When the user has no internet, data is saved locally in the pending_sync
+/// table. When connectivity is restored, this service processes the queue
+/// and sends each item to the server.
+class SyncService {
+  SyncService._();
+
+  static const int _maxRetries = 3;
+
+  /// Process all pending sync items from local storage.
+  /// Call this when internet connectivity is restored.
+  static Future<SyncResult> processPendingQueue() async {
+    final pendingItems = await StorageService.getPendingSyncItems();
+    if (pendingItems.isEmpty) {
+      return SyncResult(successCount: 0, failCount: 0, total: 0);
+    }
+
+    int successCount = 0;
+    int failCount = 0;
+
+    for (final item in pendingItems) {
+      final id = item['id'] as int;
+      final endpoint = item['endpoint'] as String;
+      final method = item['method'] as String;
+      final payload = jsonDecode(item['payload'] as String);
+      final retryCount = item['retry_count'] as int;
+
+      try {
+        await _sendRequest(method, endpoint, payload);
+        await StorageService.deletePendingSync(id);
+        successCount++;
+      } catch (e) {
+        if (retryCount >= _maxRetries) {
+          // Max retries reached — remove from queue
+          await StorageService.deletePendingSync(id);
+          failCount++;
+        } else {
+          await StorageService.incrementRetryCount(id);
+        }
+      }
+    }
+
+    return SyncResult(
+      successCount: successCount,
+      failCount: failCount,
+      total: pendingItems.length,
+    );
+  }
+
+  /// Queue a request for later sync when offline.
+  static Future<void> queueForSync({
+    required String endpoint,
+    required String method,
+    required Map<String, dynamic> payload,
+  }) async {
+    await StorageService.insertPendingSync(
+      endpoint: endpoint,
+      method: method,
+      payload: jsonEncode(payload),
+    );
+  }
+
+  /// Send a single HTTP request.
+  static Future<Response> _sendRequest(
+    String method,
+    String endpoint,
+    dynamic data,
+  ) async {
+    final dio = DioClient.instance;
+    switch (method.toUpperCase()) {
+      case 'POST':
+        return dio.post(endpoint, data: data);
+      case 'PUT':
+        return dio.put(endpoint, data: data);
+      case 'PATCH':
+        return dio.patch(endpoint, data: data);
+      case 'DELETE':
+        return dio.delete(endpoint, data: data);
+      default:
+        return dio.get(endpoint);
+    }
+  }
+}
+
+/// Result of a sync operation.
+class SyncResult {
+  final int successCount;
+  final int failCount;
+  final int total;
+
+  const SyncResult({
+    required this.successCount,
+    required this.failCount,
+    required this.total,
+  });
+
+  bool get hasFailures => failCount > 0;
+  bool get allSucceeded => successCount == total;
+}
