@@ -1,6 +1,3 @@
-/// Mental must model matching the backend API contract.
-///
-/// Parses the JSON response from mental-musts endpoints.
 class MentalMustModel {
   final String id;
   final String userId;
@@ -48,7 +45,6 @@ class MentalMustModel {
     return {'is_released': isReleased};
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -62,7 +58,6 @@ class MentalMustModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory MentalMustModel.fromDbMap(Map<String, dynamic> map) {
     return MentalMustModel(
       id: map['id'] as String,

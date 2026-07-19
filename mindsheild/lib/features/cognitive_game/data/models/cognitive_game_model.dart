@@ -1,6 +1,3 @@
-/// Cognitive game model matching the backend API contract.
-///
-/// Parses the JSON response from cognitive-games endpoints.
 class CognitiveGameModel {
   final String id;
   final String userId;
@@ -54,7 +51,6 @@ class CognitiveGameModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -70,7 +66,6 @@ class CognitiveGameModel {
     };
   }
 
-  /// Rebuild from a local SQLite row.
   factory CognitiveGameModel.fromDbMap(Map<String, dynamic> map) {
     return CognitiveGameModel(
       id: map['id'] as String,

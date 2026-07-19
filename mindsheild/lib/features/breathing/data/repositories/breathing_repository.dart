@@ -5,8 +5,6 @@ import '../datasources/breathing_local_datasource.dart';
 import '../datasources/breathing_remote_datasource.dart';
 import '../models/breathing_session_model.dart';
 
-/// Breathing repository — offline-first bridge between the data sources and
-/// the domain layer. Supports create, update and list, all offline-first.
 class BreathingRepository
     extends OfflineFirstRepository<BreathingSessionModel> {
   final BreathingRemoteDataSource _remoteDataSource;
@@ -35,7 +33,6 @@ class BreathingRepository
         data: item.toUpdateJson(),
       )).data;
 
-  /// Create a new breathing session (offline-first).
   Result<WriteResult<BreathingSessionModel>> createSession({
     required BreathingSessionModel session,
   }) {
@@ -45,7 +42,6 @@ class BreathingRepository
     );
   }
 
-  /// Update an existing breathing session (offline-first).
   Result<WriteResult<BreathingSessionModel>> updateSession({
     required String id,
     required Map<String, dynamic> data,
@@ -58,7 +54,6 @@ class BreathingRepository
     );
   }
 
-  /// List breathing sessions (offline-first).
   Result<List<BreathingSessionModel>> listSessions({
     int page = 1,
     int pageSize = 20,
@@ -68,8 +63,6 @@ class BreathingRepository
     );
   }
 
-  /// Build the updated session model by applying the partial [data] map onto
-  /// the [existing] mirror row, so the outbox carries the full new state.
   BreathingSessionModel _merge(
     BreathingSessionModel? existing,
     String id,

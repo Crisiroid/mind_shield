@@ -7,10 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/services/dialog_service.dart';
 import '../view_models/profile_view_model.dart';
 
-/// Profile screen — view and edit user profile settings.
-///
-/// Displays account info, app settings (cloud sync, DND),
-/// security (change password), and device info.
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -98,8 +94,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ─── Account Info Card ──────────────────────────────────────────
-
   Widget _buildAccountInfoCard(ProfileViewModel vm) {
     final user = vm.user!;
     return _ProfileCard(
@@ -144,8 +138,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ─── Security Card ──────────────────────────────────────────────
-
   Widget _buildSecurityCard(ProfileViewModel vm) {
     return _ProfileCard(
       title: AppStrings.securitySection,
@@ -184,8 +176,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ─── Device Info Card ───────────────────────────────────────────
-
   Widget _buildDeviceInfoCard(ProfileViewModel vm) {
     final user = vm.user!;
     return _ProfileCard(
@@ -205,8 +195,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-
-  // ─── Actions ────────────────────────────────────────────────────
 
   void _showChangePasswordDialog(ProfileViewModel vm) {
     final oldPassCtrl = TextEditingController();
@@ -349,10 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // ─── Helpers ────────────────────────────────────────────────────
-
   String _formatDate(DateTime dt) {
-    // Simple Gregorian → display format (DD/MM/YYYY HH:MM)
     final d = dt.toLocal();
     final day = d.day.toString().padLeft(2, '0');
     final month = d.month.toString().padLeft(2, '0');
@@ -363,11 +348,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// ─── Reusable Profile Widgets ──────────────────────────────────────
-// ═══════════════════════════════════════════════════════════════════
-
-/// Card wrapper for profile sections.
 class _ProfileCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -432,7 +412,6 @@ class _ProfileCard extends StatelessWidget {
   }
 }
 
-/// Single info row with icon, label, and value.
 class _InfoRow extends StatelessWidget {
   final IconData icon;
   final String label;

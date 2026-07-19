@@ -1,7 +1,3 @@
-/// Conflict exercise model matching the backend API contract.
-///
-/// Represents one attempt at a workplace conflict scenario, with the
-/// chosen response quality captured as a performance score.
 class ConflictExerciseModel {
   final String id;
   final String userId;
@@ -43,7 +39,6 @@ class ConflictExerciseModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -56,7 +51,6 @@ class ConflictExerciseModel {
     };
   }
 
-  /// Rebuild from a local SQLite row.
   factory ConflictExerciseModel.fromDbMap(Map<String, dynamic> map) {
     return ConflictExerciseModel(
       id: map['id'] as String,

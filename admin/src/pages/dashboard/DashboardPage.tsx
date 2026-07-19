@@ -20,7 +20,6 @@ import { PageLoading } from '@/components/ui/LoadingSpinner'
 import { handleApiError } from '@/utils/errorHandler'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
 
 const COLORS = ['#0e8de3', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316']
 

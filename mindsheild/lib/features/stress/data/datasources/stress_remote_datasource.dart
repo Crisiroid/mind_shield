@@ -5,21 +5,17 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/stress_event_model.dart';
 
-/// Contract for stress event remote operations.
 abstract class StressRemoteDataSource {
-  /// Create a new stress event.
   Future<WriteResult<StressEventModel>> createStressEvent({
     required StressEventModel stressEvent,
   });
 
-  /// List stress events for the current user.
   Future<List<StressEventModel>> listStressEvents({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class StressRemoteDataSourceImpl implements StressRemoteDataSource {
   final Dio _dio;
 

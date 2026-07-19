@@ -8,11 +8,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/emotion_triangle_view_model.dart';
 
-/// Emotion Triangle screen — interactive triangle with 3 tappable sides.
-///
-/// Each side represents a dimension of emotional experience:
-/// thought, body, behavior. Tapping a side records the interaction
-/// and navigates to the appropriate next screen.
 class EmotionTriangleScreen extends StatefulWidget {
   const EmotionTriangleScreen({super.key});
 
@@ -40,7 +35,6 @@ class _EmotionTriangleScreenState extends State<EmotionTriangleScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Subtitle
             Text(
               AppStrings.emotionTriangleSubtitle,
               textAlign: TextAlign.center,
@@ -51,11 +45,9 @@ class _EmotionTriangleScreenState extends State<EmotionTriangleScreen> {
             ),
             SizedBox(height: AppSizes.xl),
 
-            // Interactive Triangle
             _InteractiveTriangle(
               isSaving: vm.isSaving,
               onSideTapped: (side) async {
-                // Haptic feedback for body side
                 if (side == 'body') {
                   await HapticFeedback.heavyImpact();
                 } else {
@@ -67,7 +59,6 @@ class _EmotionTriangleScreenState extends State<EmotionTriangleScreen> {
 
                 if (!context.mounted) return;
 
-                // Navigate based on side
                 if (clickedSide == 'body') {
                   Navigator.of(context).pushNamed('/body-tension-map');
                 } else if (clickedSide == 'thought') {
@@ -90,7 +81,6 @@ class _EmotionTriangleScreenState extends State<EmotionTriangleScreen> {
 
             SizedBox(height: AppSizes.xl),
 
-            // Instruction text
             Text(
               AppStrings.tapTriangleSide,
               style: PersianFonts.Vazir.copyWith(
@@ -101,7 +91,6 @@ class _EmotionTriangleScreenState extends State<EmotionTriangleScreen> {
 
             SizedBox(height: AppSizes.xl),
 
-            // Interaction history
             if (vm.interactions.isNotEmpty) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,7 +167,6 @@ class _EmotionTriangleScreenState extends State<EmotionTriangleScreen> {
   }
 }
 
-/// Interactive triangle widget with 3 tappable sides.
 class _InteractiveTriangle extends StatelessWidget {
   final bool isSaving;
   final void Function(String side) onSideTapped;
@@ -197,7 +185,6 @@ class _InteractiveTriangle extends StatelessWidget {
       height: size * 0.9,
       child: Stack(
         children: [
-          // Triangle background
           Center(
             child: CustomPaint(
               size: Size(size, size * 0.85),
@@ -205,7 +192,6 @@ class _InteractiveTriangle extends StatelessWidget {
             ),
           ),
 
-          // Top vertex — Thought
           Positioned(
             top: 0,
             left: 0,
@@ -221,7 +207,6 @@ class _InteractiveTriangle extends StatelessWidget {
             ),
           ),
 
-          // Bottom-left vertex — Body
           Positioned(
             bottom: 0,
             left: 0,
@@ -234,7 +219,6 @@ class _InteractiveTriangle extends StatelessWidget {
             ),
           ),
 
-          // Bottom-right vertex — Behavior
           Positioned(
             bottom: 0,
             right: 0,
@@ -247,7 +231,6 @@ class _InteractiveTriangle extends StatelessWidget {
             ),
           ),
 
-          // Center label
           Center(
             child: Container(
               padding: EdgeInsets.all(AppSizes.md),
@@ -275,7 +258,6 @@ class _InteractiveTriangle extends StatelessWidget {
   }
 }
 
-/// Tappable button for each triangle vertex.
 class _TriangleSideButton extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -326,7 +308,6 @@ class _TriangleSideButton extends StatelessWidget {
   }
 }
 
-/// Triangle painter for the background shape.
 class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -353,7 +334,6 @@ class _TrianglePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// History tile for a single interaction.
 class _InteractionHistoryTile extends StatelessWidget {
   final dynamic interaction;
 

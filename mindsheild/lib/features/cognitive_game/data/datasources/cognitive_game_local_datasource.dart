@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/cognitive_game_model.dart';
 
-/// Local SQLite mirror + outbox for cognitive game results.
 class CognitiveGameLocalDataSource
     extends SyncableLocalDataSource<CognitiveGameModel> {
   @override

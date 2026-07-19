@@ -5,8 +5,6 @@ import '../datasources/mood_tracker_local_datasource.dart';
 import '../datasources/mood_tracker_remote_datasource.dart';
 import '../models/mood_tracker_model.dart';
 
-/// Mood tracker repository — offline-first bridge between the data sources
-/// and the domain layer.
 class MoodTrackerRepository extends OfflineFirstRepository<MoodTrackerModel> {
   final MoodTrackerRemoteDataSource _remoteDataSource;
   final MoodTrackerLocalDataSource _localDataSource;
@@ -27,7 +25,6 @@ class MoodTrackerRepository extends OfflineFirstRepository<MoodTrackerModel> {
   Future<MoodTrackerModel> pushCreate(MoodTrackerModel item) async =>
       (await _remoteDataSource.createMoodTracker(mood: item)).data;
 
-  /// Create a new mood tracker record (offline-first).
   Result<WriteResult<MoodTrackerModel>> createMoodTracker({
     required MoodTrackerModel mood,
   }) {
@@ -37,7 +34,6 @@ class MoodTrackerRepository extends OfflineFirstRepository<MoodTrackerModel> {
     );
   }
 
-  /// List mood tracker records (offline-first).
   Result<List<MoodTrackerModel>> listMoodTrackers({
     int page = 1,
     int pageSize = 20,

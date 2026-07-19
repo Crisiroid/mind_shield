@@ -6,11 +6,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/mind_court_view_model.dart';
 
-/// Mind Court screen (Week 5) — 2-tab interface:
-/// 1. Balance of evidence (ترازو): pick a negative thought, weigh
-///    supporting vs. contradicting evidence, optional guide helper.
-/// 2. Alternative thought (فکر جایگزین): write a rational alternative
-///    and submit the verdict.
 class MindCourtScreen extends StatefulWidget {
   const MindCourtScreen({super.key});
 
@@ -92,8 +87,6 @@ class _MindCourtScreenState extends State<MindCourtScreen>
   }
 }
 
-// ─── Empty state: no negative thoughts to put on trial ─────────────────────────
-
 class _EmptyThoughtsState extends StatelessWidget {
   const _EmptyThoughtsState();
 
@@ -141,8 +134,6 @@ class _EmptyThoughtsState extends StatelessWidget {
     );
   }
 }
-
-// ─── Tab 1: Balance of evidence (ترازو) ────────────────────────────────────────
 
 class _BalanceTab extends StatelessWidget {
   final MindCourtViewModel vm;
@@ -204,7 +195,6 @@ class _BalanceTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Thought picker
           Text(
             AppStrings.selectThoughtOnTrial,
             style: PersianFonts.Vazir.copyWith(
@@ -246,11 +236,9 @@ class _BalanceTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Scale visual
           const _ScaleVisual(),
           SizedBox(height: AppSizes.lg),
 
-          // Supporting evidence (left pan)
           _EvidenceField(
             label: AppStrings.supportingEvidenceLabel,
             hint: AppStrings.supportingEvidenceHint,
@@ -261,7 +249,6 @@ class _BalanceTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Contradicting evidence (right pan)
           _EvidenceField(
             label: AppStrings.contradictingEvidenceLabel,
             hint: AppStrings.contradictingEvidenceHint,
@@ -272,7 +259,6 @@ class _BalanceTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Guide helper
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
@@ -298,7 +284,6 @@ class _BalanceTab extends StatelessWidget {
   }
 }
 
-/// A two-pan scale illustration for the evidence balance.
 class _ScaleVisual extends StatelessWidget {
   const _ScaleVisual();
 
@@ -411,8 +396,6 @@ class _EvidenceField extends StatelessWidget {
     );
   }
 }
-
-// ─── Tab 2: Alternative thought (فکر جایگزین) ──────────────────────────────────
 
 class _AlternativeTab extends StatelessWidget {
   final MindCourtViewModel vm;

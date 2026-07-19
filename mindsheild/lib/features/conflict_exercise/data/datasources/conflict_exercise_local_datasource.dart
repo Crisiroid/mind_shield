@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/conflict_exercise_model.dart';
 
-/// Local SQLite mirror + outbox for conflict exercise attempts.
 class ConflictExerciseLocalDataSource
     extends SyncableLocalDataSource<ConflictExerciseModel> {
   @override

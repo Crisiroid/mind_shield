@@ -4,18 +4,11 @@ import '../errors/exceptions.dart';
 import '../network/dio_client.dart';
 import 'storage_service.dart';
 
-/// Background sync service that sends pending data to server when online.
-///
-/// When the user has no internet, data is saved locally in the pending_sync
-/// table. When connectivity is restored, this service processes the queue
-/// and sends each item to the server.
 class SyncService {
   SyncService._();
 
   static const int _maxRetries = 3;
 
-  /// Process all pending sync items from local storage.
-  /// Call this when internet connectivity is restored.
   static Future<SyncResult> processPendingQueue() async {
     final pendingItems = await StorageService.getPendingSyncItems();
     if (pendingItems.isEmpty) {
@@ -38,7 +31,6 @@ class SyncService {
         successCount++;
       } catch (e) {
         if (retryCount >= _maxRetries) {
-          // Max retries reached — remove from queue
           await StorageService.deletePendingSync(id);
           failCount++;
         } else {
@@ -54,7 +46,6 @@ class SyncService {
     );
   }
 
-  /// Queue a request for later sync when offline.
   static Future<void> queueForSync({
     required String endpoint,
     required String method,
@@ -67,7 +58,6 @@ class SyncService {
     );
   }
 
-  /// Send a single HTTP request.
   static Future<Response> _sendRequest(
     String method,
     String endpoint,
@@ -89,7 +79,6 @@ class SyncService {
   }
 }
 
-/// Result of a sync operation.
 class SyncResult {
   final int successCount;
   final int failCount;

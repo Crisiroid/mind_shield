@@ -9,10 +9,6 @@ import '../../../../core/services/dialog_service.dart';
 import '../../../../core/services/token_service.dart';
 import '../view_models/auth_view_model.dart';
 
-/// Login screen — minimalistic flat design with Persian RTL layout.
-///
-/// Uses phone number + password for authentication.
-/// Error handling uses dialogs (never snackbars).
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -46,7 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Header
                   Text(
                     AppStrings.appTitle,
                     textAlign: TextAlign.center,
@@ -60,7 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: AppSizes.xxl),
 
-                  // Phone number field
                   TextFormField(
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
@@ -73,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: AppSizes.md),
 
-                  // Password field
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
@@ -96,7 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: AppSizes.lg),
 
-                  // Login button
                   Consumer<AuthViewModel>(
                     builder: (context, auth, _) {
                       return ElevatedButton(
@@ -116,7 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: AppSizes.md),
 
-                  // Navigate to register
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -185,9 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           } else if (auth.isAuthenticated) {
             final onboardingComplete = TokenService.isOnboardingComplete();
-            // Sync locally-accepted agreement to the server
             _syncAgreementIfNeeded(auth);
-            // Rebuild the local mirror from the server before entering the app
             final appProvider = context.read<AppProvider>();
             await appProvider.runInitialSync();
             if (!mounted) return;
@@ -198,7 +187,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
-  /// If the user accepted the agreement locally (before login), sync it to the server.
   void _syncAgreementIfNeeded(AuthViewModel auth) {
     if (TokenService.isAgreementAccepted()) {
       auth.acceptAgreement();

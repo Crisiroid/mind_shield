@@ -5,27 +5,22 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/mental_must_model.dart';
 
-/// Contract for mental must remote operations.
 abstract class MentalMustRemoteDataSource {
-  /// Create a new mental must entry.
   Future<WriteResult<MentalMustModel>> createMentalMust({
     required MentalMustModel must,
   });
 
-  /// List mental must entries for the current user.
   Future<List<MentalMustModel>> listMentalMusts({
     int page = 1,
     int pageSize = 50,
   });
 
-  /// Update a mental must entry (e.g., release it).
   Future<WriteResult<MentalMustModel>> updateMentalMust({
     required String id,
     required Map<String, dynamic> data,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class MentalMustRemoteDataSourceImpl implements MentalMustRemoteDataSource {
   final Dio _dio;
 

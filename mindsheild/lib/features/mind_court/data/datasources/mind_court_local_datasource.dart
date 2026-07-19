@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/mind_court_model.dart';
 
-/// Local SQLite mirror + outbox for mind court evidence entries.
 class MindCourtLocalDataSource extends SyncableLocalDataSource<MindCourtModel> {
   @override
   String get tableName => 'mind_court_entries';

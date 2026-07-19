@@ -6,13 +6,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../../../core/services/token_service.dart';
 
-/// 56-day mini calendar grid widget.
-///
-/// Displays a visual representation of the 56-day program:
-/// - 8 rows (weeks) × 7 columns (days)
-/// - Current day highlighted
-/// - Past days marked as completed
-/// - Future days shown as upcoming
 class MiniCalendarGrid extends StatelessWidget {
   const MiniCalendarGrid({super.key});
 
@@ -34,7 +27,6 @@ class MiniCalendarGrid extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -57,7 +49,6 @@ class MiniCalendarGrid extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.md),
 
-          // Week labels
           Row(
             children: [
               SizedBox(
@@ -93,7 +84,6 @@ class MiniCalendarGrid extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.xs),
 
-          // Calendar grid
           ...List.generate(8, (weekIndex) {
             return Padding(
               padding: EdgeInsets.only(bottom: weekIndex < 7 ? 4 : 0),

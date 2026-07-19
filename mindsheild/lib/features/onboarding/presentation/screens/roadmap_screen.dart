@@ -8,18 +8,9 @@ import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../view_models/onboarding_view_model.dart';
 
-/// 56-Day Roadmap Infographic Screen (Screen 3 of Phase Zero).
-///
-/// Displays the 8-week journey overview with visual indicators:
-/// - Week-by-week content descriptions
-/// - Current week is visually highlighted using stored registration date
-/// - "Start" button to enter the main app
-///
-/// Only shown once after first successful registration/login.
 class RoadmapScreen extends StatelessWidget {
   const RoadmapScreen({super.key});
 
-  // ─── Week Data ────────────────────────────────────────────
   static const List<_WeekData> _weeks = [
     _WeekData(
       1,
@@ -64,7 +55,6 @@ class RoadmapScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ─── Header ─────────────────────────────────────────
             Padding(
               padding: EdgeInsets.fromLTRB(
                 AppSizes.md,
@@ -112,7 +102,6 @@ class RoadmapScreen extends StatelessWidget {
               ),
             ),
 
-            // ─── Week List ──────────────────────────────────────
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(
@@ -131,7 +120,6 @@ class RoadmapScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // ─── Timeline Indicator ──────────────────
                         SizedBox(
                           width: 44,
                           child: Column(
@@ -191,7 +179,6 @@ class RoadmapScreen extends StatelessWidget {
                         ),
                         SizedBox(width: AppSizes.sm),
 
-                        // ─── Week Card ───────────────────────────
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.only(bottom: isLast ? 0 : 4),
@@ -301,7 +288,6 @@ class RoadmapScreen extends StatelessWidget {
               ),
             ),
 
-            // ─── Start Button ───────────────────────────────────
             Padding(
               padding: EdgeInsets.all(AppSizes.md),
               child: SizedBox(
@@ -330,7 +316,6 @@ class RoadmapScreen extends StatelessWidget {
   }
 }
 
-/// Internal data class for week information.
 class _WeekData {
   final int number;
   final String title;

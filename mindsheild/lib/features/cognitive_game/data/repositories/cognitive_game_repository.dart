@@ -5,8 +5,6 @@ import '../datasources/cognitive_game_local_datasource.dart';
 import '../datasources/cognitive_game_remote_datasource.dart';
 import '../models/cognitive_game_model.dart';
 
-/// Cognitive game repository — offline-first bridge between the data sources
-/// and the domain layer.
 class CognitiveGameRepository
     extends OfflineFirstRepository<CognitiveGameModel> {
   final CognitiveGameRemoteDataSource _remoteDataSource;
@@ -28,7 +26,6 @@ class CognitiveGameRepository
   Future<CognitiveGameModel> pushCreate(CognitiveGameModel item) async =>
       (await _remoteDataSource.createCognitiveGame(game: item)).data;
 
-  /// Create a new cognitive game result (offline-first).
   Result<WriteResult<CognitiveGameModel>> createCognitiveGame({
     required CognitiveGameModel game,
   }) {
@@ -38,7 +35,6 @@ class CognitiveGameRepository
     );
   }
 
-  /// List cognitive game results (offline-first).
   Result<List<CognitiveGameModel>> listCognitiveGames({
     int page = 1,
     int pageSize = 20,

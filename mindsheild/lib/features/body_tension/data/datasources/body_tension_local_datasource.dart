@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/body_tension_model.dart';
 
-/// Local SQLite mirror + outbox for body tension maps.
 class BodyTensionLocalDataSource
     extends SyncableLocalDataSource<BodyTensionModel> {
   @override

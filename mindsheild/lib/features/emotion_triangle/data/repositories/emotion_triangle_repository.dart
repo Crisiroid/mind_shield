@@ -5,14 +5,6 @@ import '../datasources/emotion_triangle_local_datasource.dart';
 import '../datasources/emotion_triangle_remote_datasource.dart';
 import '../models/emotion_interaction_model.dart';
 
-/// Emotion triangle repository — offline-first bridge between the data
-/// sources and the domain layer.
-///
-/// Extends [OfflineFirstRepository] so reads fall back to the local mirror
-/// when offline and writes are persisted optimistically then synced. Depends
-/// on abstractions (remote/local datasources), not on Dio directly
-/// (Dependency Inversion). Public method signatures are unchanged so the
-/// view model keeps working without edits.
 class EmotionTriangleRepository
     extends OfflineFirstRepository<EmotionInteractionModel> {
   final EmotionTriangleRemoteDataSource _remoteDataSource;
@@ -37,7 +29,6 @@ class EmotionTriangleRepository
   ) async =>
       (await _remoteDataSource.createInteraction(interaction: item)).data;
 
-  /// Create a new emotion triangle interaction (offline-first).
   Result<WriteResult<EmotionInteractionModel>> createInteraction({
     required EmotionInteractionModel interaction,
   }) {
@@ -47,7 +38,6 @@ class EmotionTriangleRepository
     );
   }
 
-  /// List emotion triangle interactions (offline-first).
   Result<List<EmotionInteractionModel>> listInteractions({
     int page = 1,
     int pageSize = 20,

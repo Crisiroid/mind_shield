@@ -11,13 +11,11 @@ import 'core/config/app_config.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Force portrait orientation
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -25,18 +23,15 @@ void main() async {
     ),
   );
 
-  // Initialize core services
   await StorageService.init();
   await TokenService.init();
 
-  // Initialize Dio HTTP client with interceptors
   final interceptors = <dynamic>[
     ApiInterceptor(),
     if (AppConfig.isDebug) LoggingInterceptor(),
   ];
   DioClient.init(interceptors: interceptors.cast());
 
-  // Setup navigator key for DialogService
   final navigatorKey = GlobalKey<NavigatorState>();
   DialogService.init(navigatorKey);
 

@@ -18,5 +18,9 @@ uploads/
 .DS_Store
 Thumbs.db
 
+# Deployment secrets
+setup_server.sh
+deploy_config.json
+
 # Go
 *.sum

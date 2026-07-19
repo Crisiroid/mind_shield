@@ -6,14 +6,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/week_calculator.dart';
 import '../../../../core/services/token_service.dart';
 
-/// Weekly report bottom sheet.
-///
-/// Shows a summary of the user's progress in the 56-day program:
-/// - Current week and day
-/// - Overall progress percentage
-/// - Weekly progress breakdown
-/// - Days completed vs remaining
-/// - Motivational message based on progress
 class WeeklyReportSheet extends StatelessWidget {
   final int currentWeek;
   final int currentDay;
@@ -51,7 +43,6 @@ class WeeklyReportSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Handle
           Center(
             child: Container(
               width: 40,
@@ -64,7 +55,6 @@ class WeeklyReportSheet extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Title
           Row(
             children: [
               const Icon(Icons.assessment_outlined, color: AppColors.primary),
@@ -81,7 +71,6 @@ class WeeklyReportSheet extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.xl),
 
-          // Stats cards row
           Row(
             children: [
               Expanded(
@@ -107,7 +96,6 @@ class WeeklyReportSheet extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.md),
 
-          // Overall progress
           _buildProgressSection(
             title: 'پیشرفت کلی برنامه',
             value: overallPercent,
@@ -115,7 +103,6 @@ class WeeklyReportSheet extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.md),
 
-          // Weekly progress
           _buildProgressSection(
             title: 'پیشرفت هفته $currentWeek',
             value: weekProgressPercent,
@@ -123,7 +110,6 @@ class WeeklyReportSheet extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Week breakdown
           Text(
             'جزئیات هفتگی',
             style: PersianFonts.Vazir.copyWith(
@@ -136,7 +122,6 @@ class WeeklyReportSheet extends StatelessWidget {
           _buildWeekBreakdown(currentWeek),
           SizedBox(height: AppSizes.lg),
 
-          // Motivational message
           _buildMotivationalMessage(overallPercent),
           SizedBox(height: AppSizes.lg),
         ],

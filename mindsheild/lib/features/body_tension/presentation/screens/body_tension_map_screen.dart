@@ -7,11 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/body_tension_view_model.dart';
 
-/// Body Tension Map screen — anatomical body figure for tension tracking.
-///
-/// User taps body regions to mark tension areas, selects intensity
-/// on a slider (1-10), and saves the entry. Color-coded feedback
-/// from yellow (low) to dark red (high intensity).
 class BodyTensionMapScreen extends StatefulWidget {
   const BodyTensionMapScreen({super.key});
 
@@ -66,7 +61,6 @@ class _BodyTensionMapScreenState extends State<BodyTensionMapScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Subtitle
           Text(
             AppStrings.bodyTensionMapSubtitle,
             textAlign: TextAlign.center,
@@ -77,7 +71,6 @@ class _BodyTensionMapScreenState extends State<BodyTensionMapScreen>
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Body figure
           _BodyFigureWidget(
             selectedRegions: vm.selectedRegions,
             onRegionTapped: (region) => vm.toggleRegion(region),
@@ -85,17 +78,14 @@ class _BodyTensionMapScreenState extends State<BodyTensionMapScreen>
 
           SizedBox(height: AppSizes.lg),
 
-          // Intensity slider
           _buildIntensitySlider(vm),
 
           SizedBox(height: AppSizes.md),
 
-          // Notes field
           _buildNotesField(vm),
 
           SizedBox(height: AppSizes.lg),
 
-          // Save button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -122,7 +112,6 @@ class _BodyTensionMapScreenState extends State<BodyTensionMapScreen>
   }
 
   Widget _buildIntensitySlider(BodyTensionViewModel vm) {
-    // Get color based on intensity
     Color intensityColor;
     if (vm.intensity <= 3) {
       intensityColor = Colors.yellow.shade700;
@@ -266,7 +255,6 @@ class _BodyTensionMapScreenState extends State<BodyTensionMapScreen>
   }
 }
 
-/// Interactive body figure widget with tappable regions.
 class _BodyFigureWidget extends StatelessWidget {
   final Set<String> selectedRegions;
   final void Function(String region) onRegionTapped;
@@ -276,7 +264,6 @@ class _BodyFigureWidget extends StatelessWidget {
     required this.onRegionTapped,
   });
 
-  // Body region definitions with positions
   static const List<_BodyRegion> _regions = [
     _BodyRegion(id: 'head', label: 'سر', yFraction: 0.06, xFraction: 0.5),
     _BodyRegion(id: 'neck', label: 'گردن', yFraction: 0.16, xFraction: 0.5),
@@ -310,7 +297,6 @@ class _BodyFigureWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Body outline
           Center(
             child: CustomPaint(
               size: const Size(160, 340),
@@ -318,7 +304,6 @@ class _BodyFigureWidget extends StatelessWidget {
             ),
           ),
 
-          // Tappable region buttons
           ..._regions.map((region) {
             final isSelected = selectedRegions.contains(region.id);
             return Positioned(
@@ -392,7 +377,6 @@ class _BodyFigureWidget extends StatelessWidget {
   }
 }
 
-/// Body region definition.
 class _BodyRegion {
   final String id;
   final String label;
@@ -407,7 +391,6 @@ class _BodyRegion {
   });
 }
 
-/// Painter for the body outline figure.
 class _BodyOutlinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -422,11 +405,9 @@ class _BodyOutlinePainter extends CustomPainter {
 
     final cx = size.width / 2;
 
-    // Head (circle)
     canvas.drawCircle(Offset(cx, 25), 22, fillPaint);
     canvas.drawCircle(Offset(cx, 25), 22, paint);
 
-    // Neck
     canvas.drawRect(
       Rect.fromCenter(center: Offset(cx, 58), width: 14, height: 18),
       fillPaint,
@@ -436,7 +417,6 @@ class _BodyOutlinePainter extends CustomPainter {
       paint,
     );
 
-    // Torso
     final torsoPath = Path()
       ..moveTo(cx - 40, 72)
       ..lineTo(cx + 40, 72)
@@ -446,7 +426,6 @@ class _BodyOutlinePainter extends CustomPainter {
     canvas.drawPath(torsoPath, fillPaint);
     canvas.drawPath(torsoPath, paint);
 
-    // Arms
     final leftArm = Path()
       ..moveTo(cx - 40, 75)
       ..lineTo(cx - 60, 80)
@@ -465,7 +444,6 @@ class _BodyOutlinePainter extends CustomPainter {
       ..lineTo(cx + 40, 90);
     canvas.drawPath(rightArm, paint);
 
-    // Legs
     final leftLeg = Path()
       ..moveTo(cx - 30, 170)
       ..lineTo(cx - 35, 310)
@@ -487,7 +465,6 @@ class _BodyOutlinePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// History card for a single body tension entry.
 class _TensionHistoryCard extends StatelessWidget {
   final dynamic entry;
 
@@ -500,7 +477,6 @@ class _TensionHistoryCard extends StatelessWidget {
     final date = entry.mappingDate as DateTime;
     final notes = entry.notes as String?;
 
-    // Determine color based on intensity
     Color intensityColor;
     if (intensity == null || intensity <= 3) {
       intensityColor = Colors.yellow.shade700;

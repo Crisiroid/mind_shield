@@ -3,20 +3,14 @@ import 'package:persian_fonts/persian_fonts.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
 
-/// Application theme configuration following the Open/Closed Principle.
-///
-/// Extend or override specific theme aspects without modifying the base theme.
-/// Uses [PersianFonts] for all typography — the entire app is Persian-only.
 class AppTheme {
   AppTheme._();
 
-  // ─── Light Theme ────────────────────────────────────────────
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
 
-      // Color scheme
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
@@ -28,10 +22,8 @@ class AppTheme {
         onError: AppColors.textOnPrimary,
       ),
 
-      // Scaffold
       scaffoldBackgroundColor: AppColors.background,
 
-      // AppBar
       appBarTheme: AppBarTheme(
         elevation: 0,
         centerTitle: true,
@@ -44,10 +36,8 @@ class AppTheme {
         ),
       ),
 
-      // Text theme — all Persian
       textTheme: _buildTextTheme(),
 
-      // Elevated button
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
@@ -64,7 +54,6 @@ class AppTheme {
         ),
       ),
 
-      // Input decoration
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceVariant,
@@ -94,7 +83,6 @@ class AppTheme {
         ),
       ),
 
-      // Card
       cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -103,7 +91,6 @@ class AppTheme {
         color: AppColors.surface,
       ),
 
-      // Dialog
       dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusXl),
@@ -120,7 +107,6 @@ class AppTheme {
         ),
       ),
 
-      // Bottom navigation
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
         selectedItemColor: AppColors.primary,
@@ -131,7 +117,6 @@ class AppTheme {
     );
   }
 
-  // ─── Text Theme ─────────────────────────────────────────────
   static TextTheme _buildTextTheme() {
     return TextTheme(
       displayLarge: PersianFonts.Vazir.copyWith(

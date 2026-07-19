@@ -5,8 +5,6 @@ import '../datasources/sky_thought_local_datasource.dart';
 import '../datasources/sky_thought_remote_datasource.dart';
 import '../models/sky_thought_model.dart';
 
-/// Sky thought repository — offline-first bridge between the data sources and
-/// the domain layer. Supports create, update (swipe) and list.
 class SkyThoughtRepository extends OfflineFirstRepository<SkyThoughtModel> {
   final SkyThoughtRemoteDataSource _remoteDataSource;
   final SkyThoughtLocalDataSource _localDataSource;
@@ -34,7 +32,6 @@ class SkyThoughtRepository extends OfflineFirstRepository<SkyThoughtModel> {
         cloudSwiped: item.cloudSwiped,
       )).data;
 
-  /// Create a new sky thought (offline-first).
   Result<WriteResult<SkyThoughtModel>> createSkyThought({
     required SkyThoughtModel thought,
   }) {
@@ -44,7 +41,6 @@ class SkyThoughtRepository extends OfflineFirstRepository<SkyThoughtModel> {
     );
   }
 
-  /// Update a sky thought, e.g. mark its cloud swiped away (offline-first).
   Result<WriteResult<SkyThoughtModel>> updateSkyThought({
     required String id,
     required bool cloudSwiped,
@@ -62,7 +58,6 @@ class SkyThoughtRepository extends OfflineFirstRepository<SkyThoughtModel> {
     );
   }
 
-  /// List sky thoughts (offline-first).
   Result<List<SkyThoughtModel>> listSkyThoughts({
     int page = 1,
     int pageSize = 50,

@@ -1,6 +1,3 @@
-/// Stress event model matching the backend API contract.
-///
-/// Parses the JSON response from stress-events endpoints.
 class StressEventModel {
   final String id;
   final String userId;
@@ -51,7 +48,6 @@ class StressEventModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -66,7 +62,6 @@ class StressEventModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory StressEventModel.fromDbMap(Map<String, dynamic> map) {
     return StressEventModel(
       id: map['id'] as String,

@@ -1,7 +1,3 @@
-/// Mind Court evidence model matching the backend API contract.
-///
-/// Represents one "trial" of a negative thought: supporting and
-/// contradicting evidence plus the rational alternative thought.
 class MindCourtModel {
   final String id;
   final String userId;
@@ -53,7 +49,6 @@ class MindCourtModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -68,7 +63,6 @@ class MindCourtModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory MindCourtModel.fromDbMap(Map<String, dynamic> map) {
     return MindCourtModel(
       id: map['id'] as String,

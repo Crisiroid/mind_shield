@@ -1,12 +1,7 @@
-/// Role/Value model matching the backend `roles-values` API contract.
-///
-/// Represents a single entry that is either an organizational [role] or a
-/// personal [value], used to visualize the tension between work identity and
-/// personal identity.
 class RoleValueModel {
   final String id;
   final String userId;
-  final String entryType; // 'role' | 'value'
+  final String entryType;
   final String entryText;
   final int? dayNumber;
   final DateTime? createdAt;
@@ -44,7 +39,6 @@ class RoleValueModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -56,7 +50,6 @@ class RoleValueModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory RoleValueModel.fromDbMap(Map<String, dynamic> map) {
     return RoleValueModel(
       id: map['id'] as String,

@@ -7,17 +7,11 @@ import '../datasources/profile_remote_datasource.dart';
 
 typedef Result<T> = Future<Either<Failure, T>>;
 
-/// Profile repository — bridges data source and domain layer.
-///
-/// Follows the Dependency Inversion Principle: depends on the
-/// [ProfileRemoteDataSource] abstraction, not on Dio directly.
-/// Converts exceptions to [Failure] using dartz Either pattern.
 class ProfileRepository {
   final ProfileRemoteDataSource _remoteDataSource;
 
   const ProfileRepository(this._remoteDataSource);
 
-  /// Fetch the current user's profile.
   Result<UserModel> getProfile() async {
     try {
       final result = await _remoteDataSource.getProfile();
@@ -29,7 +23,6 @@ class ProfileRepository {
     }
   }
 
-  /// Update the current user's profile settings.
   Result<UserModel> updateProfile(Map<String, dynamic> data) async {
     try {
       final result = await _remoteDataSource.updateProfile(data);
@@ -41,7 +34,6 @@ class ProfileRepository {
     }
   }
 
-  /// Change the current user's password.
   Result<void> changePassword({
     required String oldPassword,
     required String newPassword,
@@ -59,7 +51,6 @@ class ProfileRepository {
     }
   }
 
-  /// Maps any exception to the appropriate [Failure].
   Failure _mapExceptionToFailure(dynamic error) {
     if (error is DioException) {
       final appException = error.error;

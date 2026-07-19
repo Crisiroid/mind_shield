@@ -9,10 +9,6 @@ import '../../../../core/services/dialog_service.dart';
 import '../../../../core/services/token_service.dart';
 import '../view_models/auth_view_model.dart';
 
-/// Register screen — minimalistic flat design.
-///
-/// Phone number + password + confirm password fields.
-/// Error handling uses dialogs (never snackbars).
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -49,7 +45,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Header
                   Text(
                     AppStrings.register,
                     textAlign: TextAlign.center,
@@ -63,7 +58,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(height: AppSizes.xxl),
 
-                  // Phone number field
                   TextFormField(
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
@@ -76,7 +70,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(height: AppSizes.md),
 
-                  // Password field
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
@@ -99,7 +92,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(height: AppSizes.md),
 
-                  // Confirm password field
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
@@ -123,7 +115,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(height: AppSizes.lg),
 
-                  // Register button
                   Consumer<AuthViewModel>(
                     builder: (context, auth, _) {
                       return ElevatedButton(
@@ -143,7 +134,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(height: AppSizes.md),
 
-                  // Navigate to login
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -219,9 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           } else if (auth.isAuthenticated) {
             final onboardingComplete = TokenService.isOnboardingComplete();
-            // Sync locally-accepted agreement to the server
             _syncAgreementIfNeeded(auth);
-            // Rebuild the local mirror from the server before entering the app
             final appProvider = context.read<AppProvider>();
             await appProvider.runInitialSync();
             if (!mounted) return;
@@ -232,7 +220,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
   }
 
-  /// If the user accepted the agreement locally (before login), sync it to the server.
   void _syncAgreementIfNeeded(AuthViewModel auth) {
     if (TokenService.isAgreementAccepted()) {
       auth.acceptAgreement();

@@ -5,10 +5,6 @@ import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/conflict_exercise_model.dart';
 import '../../data/repositories/conflict_exercise_repository.dart';
 
-/// A single response option for a conflict scenario.
-///
-/// [qualityScore] is the performance value (0-100) awarded when this
-/// response is chosen — the assertive/respectful option scores highest.
 class ConflictResponseOption {
   final String text;
   final int qualityScore;
@@ -19,7 +15,6 @@ class ConflictResponseOption {
   });
 }
 
-/// A predefined workplace conflict scenario.
 class ConflictScenario {
   final int id;
   final String title;
@@ -34,12 +29,6 @@ class ConflictScenario {
   });
 }
 
-/// Conflict Exercise ViewModel — manages repeatable conflict-practice
-/// scenarios, scoring, and persistence.
-///
-/// Follows the Single Responsibility Principle: only handles conflict
-/// practice logic. Each completed attempt is POSTed as a new record
-/// (mirrors the Cognitive Game pattern).
 class ConflictExerciseViewModel extends ChangeNotifier {
   final ConflictExerciseRepository _repository;
 
@@ -57,13 +46,10 @@ class ConflictExerciseViewModel extends ChangeNotifier {
   bool get hasAnswered => _selectedOption != null;
   bool get isLastScenario => _currentScenarioIndex >= scenarios.length - 1;
 
-  /// The scenario currently being practiced.
   ConflictScenario get currentScenario => scenarios[_currentScenarioIndex];
 
-  /// Performance score of the selected option (0-100), or 0 if unanswered.
   int get performanceScore => _selectedOption?.qualityScore ?? 0;
 
-  /// Feedback text tailored to the chosen response quality.
   String get feedback {
     final score = performanceScore;
     if (score >= 100) return AppStrings.conflictFeedbackBest;
@@ -71,7 +57,6 @@ class ConflictExerciseViewModel extends ChangeNotifier {
     return AppStrings.conflictFeedbackLow;
   }
 
-  /// Get the current day number from registration date.
   int get _currentDayNumber {
     final registrationDate = WeekCalculator.parseStoredDate(
       TokenService.getRegistrationDate(),
@@ -79,7 +64,6 @@ class ConflictExerciseViewModel extends ChangeNotifier {
     return WeekCalculator.currentDayNumber(registrationDate);
   }
 
-  /// The 3 predefined workplace conflict scenarios.
   static final List<ConflictScenario> scenarios = [
     ConflictScenario(
       id: 1,
@@ -140,16 +124,14 @@ class ConflictExerciseViewModel extends ChangeNotifier {
     ),
   ];
 
-  /// Select a response for the current scenario and persist the attempt.
   void selectOption(ConflictResponseOption option) {
-    if (_selectedOption != null) return; // Already answered
+    if (_selectedOption != null) return;
     _selectedOption = option;
     notifyListeners();
 
     _submitAttempt();
   }
 
-  /// Advance to the next scenario, or mark the practice as finished.
   void nextScenario() {
     if (_currentScenarioIndex < scenarios.length - 1) {
       _currentScenarioIndex++;
@@ -161,7 +143,6 @@ class ConflictExerciseViewModel extends ChangeNotifier {
     }
   }
 
-  /// Reset to practice all scenarios again from the start.
   void resetPractice() {
     _currentScenarioIndex = 0;
     _selectedOption = null;
@@ -169,8 +150,6 @@ class ConflictExerciseViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// POST the current attempt to the backend (fails silently — the
-  /// practice remains usable offline, like the Cognitive Game).
   Future<void> _submitAttempt() async {
     _isSaving = true;
     notifyListeners();

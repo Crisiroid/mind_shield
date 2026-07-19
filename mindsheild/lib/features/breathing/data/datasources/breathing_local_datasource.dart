@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/breathing_session_model.dart';
 
-/// Local SQLite mirror + outbox for breathing sessions.
 class BreathingLocalDataSource
     extends SyncableLocalDataSource<BreathingSessionModel> {
   @override

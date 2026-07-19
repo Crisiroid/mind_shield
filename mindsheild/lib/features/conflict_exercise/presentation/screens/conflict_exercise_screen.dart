@@ -6,13 +6,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/conflict_exercise_view_model.dart';
 
-/// Conflict Practice screen (Week 6) — repeatable workplace conflict
-/// simulation.
-///
-/// The user reads a scenario, taps a response option, then receives
-/// feedback with a performance score. Each attempt is persisted to the
-/// backend. When all scenarios are completed, a summary is shown with a
-/// "practice again" option.
 class ConflictExerciseScreen extends StatelessWidget {
   const ConflictExerciseScreen({super.key});
 
@@ -26,8 +19,6 @@ class ConflictExerciseScreen extends StatelessWidget {
     );
   }
 }
-
-// ─── Scenario view ─────────────────────────────────────────────────────────
 
 class _ScenarioView extends StatelessWidget {
   final ConflictExerciseViewModel vm;
@@ -43,7 +34,6 @@ class _ScenarioView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header: subtitle + progress
           Text(
             AppStrings.conflictExerciseSubtitle,
             style: PersianFonts.Vazir.copyWith(
@@ -76,7 +66,6 @@ class _ScenarioView extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.md),
 
-          // Scenario card
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(AppSizes.lg),
@@ -122,7 +111,6 @@ class _ScenarioView extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Response prompt
           Text(
             AppStrings.chooseResponse,
             style: PersianFonts.Vazir.copyWith(
@@ -133,7 +121,6 @@ class _ScenarioView extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.md),
 
-          // Response options
           ...scenario.options.map((option) {
             final isSelected = vm.selectedOption == option;
             return _ResponseOption(
@@ -145,7 +132,6 @@ class _ScenarioView extends StatelessWidget {
             );
           }),
 
-          // Feedback after answering
           if (vm.hasAnswered) ...[
             SizedBox(height: AppSizes.lg),
             _FeedbackCard(vm: vm),
@@ -175,7 +161,6 @@ class _ScenarioView extends StatelessWidget {
   }
 }
 
-/// A single tappable response option.
 class _ResponseOption extends StatelessWidget {
   final String text;
   final bool isSelected;
@@ -262,7 +247,6 @@ class _ResponseOption extends StatelessWidget {
   }
 }
 
-/// Feedback card shown after a response is selected.
 class _FeedbackCard extends StatelessWidget {
   final ConflictExerciseViewModel vm;
 
@@ -316,8 +300,6 @@ class _FeedbackCard extends StatelessWidget {
     );
   }
 }
-
-// ─── Finished view ───────────────────────────────────────────────────────────
 
 class _FinishedView extends StatelessWidget {
   final ConflictExerciseViewModel vm;

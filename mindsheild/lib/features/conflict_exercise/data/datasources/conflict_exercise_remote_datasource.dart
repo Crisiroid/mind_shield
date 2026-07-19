@@ -5,21 +5,17 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/conflict_exercise_model.dart';
 
-/// Contract for conflict exercise remote operations.
 abstract class ConflictExerciseRemoteDataSource {
-  /// Create a new conflict exercise attempt.
   Future<WriteResult<ConflictExerciseModel>> createConflictExercise({
     required ConflictExerciseModel exercise,
   });
 
-  /// List conflict exercise attempts for the current user.
   Future<List<ConflictExerciseModel>> listConflictExercises({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class ConflictExerciseRemoteDataSourceImpl
     implements ConflictExerciseRemoteDataSource {
   final Dio _dio;

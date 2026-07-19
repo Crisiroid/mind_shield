@@ -1,18 +1,12 @@
-/// All hardcoded Persian strings used throughout the application.
-///
-/// Since the app is Persian-only (no localization), all user-facing
-/// text is centralized here for easy maintenance and consistency.
 class AppStrings {
   AppStrings._();
 
-  // ─── App ────────────────────────────────────────────────────
   static const String appTitle = 'سپر روان';
   static const String home = 'خانه';
   static const String settings = 'تنظیمات';
   static const String profile = 'پروفایل';
   static const String dashboard = 'داشبورد';
 
-  // ─── Auth ───────────────────────────────────────────────────
   static const String login = 'ورود';
   static const String register = 'ثبت‌نام';
   static const String logout = 'خروج';
@@ -33,17 +27,14 @@ class AppStrings {
   static const String logoutConfirm = 'آیا مطمئن هستید که می‌خواهید خارج شوید؟';
   static const String logoutSuccess = 'با موفقیت خارج شدید';
 
-  // ─── Validation ─────────────────────────────────────────────
   static const String phoneRequired = 'شماره تلفن الزامی است';
   static const String phoneInvalid = 'شماره تلفن نامعتبر است';
   static const String passwordRequired = 'رمز عبور الزامی است';
   static const String passwordTooShort = 'رمز عبور باید حداقل ۶ کاراکتر باشد';
   static const String passwordsDoNotMatch = 'رمز عبور و تکرار آن مطابقت ندارند';
 
-  // ─── Splash ─────────────────────────────────────────────────
   static const String splashLoading = 'در حال بارگذاری...';
 
-  // ─── Errors ─────────────────────────────────────────────────
   static const String error = 'خطا';
   static const String unknownError = 'خطای نامشخص رخ داد';
   static const String networkError = 'خطا در اتصال به شبکه';
@@ -55,7 +46,6 @@ class AppStrings {
   static const String noInternet = 'اتصال به اینترنت برقرار نیست';
   static const String dataSyncFailed = 'همگام‌سازی داده‌ها ناموفق بود';
 
-  // ─── Status ─────────────────────────────────────────────────
   static const String success = 'موفق';
   static const String loading = 'در حال بارگذاری...';
   static const String saving = 'در حال ذخیره...';
@@ -70,7 +60,6 @@ class AppStrings {
   static const String save = 'ذخیره';
   static const String close = 'بستن';
 
-  // ─── Offline ────────────────────────────────────────────────
   static const String offlineMode = 'حالت آفلاین';
   static const String dataWillSync =
       'اطلاعات ذخیره شد و پس از اتصال اینترنت همگام‌سازی می‌شود';
@@ -78,12 +67,10 @@ class AppStrings {
   static const String offlineModeActive =
       'اکنون آفلاین هستید؛ اطلاعات محلی نمایش داده می‌شود';
 
-  // ─── Initial Sync ───────────────────────────────────────────
   static const String initialSyncTitle = 'همگام‌سازی اطلاعات';
   static const String syncCompleted = 'همگام‌سازی کامل شد';
   static const String preparingSpace = 'در حال آماده‌سازی فضای آرامش شما...';
 
-  /// Calm, non-repetitive remarks shown during the initial pull sync.
   static const List<String> syncRemarks = [
     'در حال آماده‌سازی فضای آرامش شما...',
     'داده‌هایت را با امنیت همگام می‌کنیم...',
@@ -93,7 +80,6 @@ class AppStrings {
     'آرام‌آرام همه‌چیز را مرتب می‌کنیم...',
   ];
 
-  /// Calm remarks that rotate on the generic loading dialog.
   static const List<String> loadingRemarks = [
     'یک لحظه صبر کن...',
     'نفس عمیق بکش، تقریباً آماده‌ست...',
@@ -101,7 +87,6 @@ class AppStrings {
     'آرامش خودت را حفظ کن، همین حالا آماده می‌شود...',
   ];
 
-  // ─── Onboarding ────────────────────────────────────────────────
   static const String welcomeTitle = 'به سپر روان خوش آمدید';
   static const String welcomeSubtitle =
       'همراه شما در مسیر ۵۶ روزه بازیابی سیستم عصبی';
@@ -116,7 +101,6 @@ class AppStrings {
   static const String agreeAndContinue = 'می‌پذیرم و ادامه می‌دهم';
   static const String iAgree = 'میثاق‌نامه را مطالعه کردم و می‌پذیرم';
 
-  // ─── Roadmap ──────────────────────────────────────────────────
   static const String roadmapTitle = 'مسیر ۵۶ روزه';
   static const String roadmapSubtitle = '۸ هفته برای بازسازی سیستم عصبی';
   static const String startJourney = 'شروع سفر';
@@ -139,7 +123,6 @@ class AppStrings {
   static const String weekSevenDesc = 'فعالیت‌های خرد، ردیاب خلق';
   static const String weekEightDesc = 'تعادل نقش‌ها، آسمان افکار';
 
-  // ─── Home Dashboard ───────────────────────────────────────────
   static const String weeklyProgress = 'پیشرفت هفتگی';
   static const String overallProgress = 'پیشرفت کلی';
   static const String currentWeekLabel = 'هفته جاری';
@@ -169,7 +152,6 @@ class AppStrings {
   static const String mindfulTimer = 'تایمر آگاهانه';
   static const String weeklyReport = 'گزارش هفتگی';
 
-  // ─── Splash ───────────────────────────────────────────────────
   static const String lastLogin = 'آخرین ورود';
   static const String permissionRequest = 'لطفاً مجوزهای لازم را اعطا کنید';
   static const String notificationPermission = 'مجوز اعلان‌ها';
@@ -179,7 +161,6 @@ class AppStrings {
   static const String storagePermissionDesc =
       'برای ذخیره تصاویر و محتوای آموزشی به این مجوز نیاز داریم';
 
-  // ─── Emotion Triangle ─────────────────────────────────────────
   static const String emotionTriangleTitle = 'مثلث هیجان';
   static const String emotionTriangleSubtitle =
       'هر ضلع مثلث را لمس کنید تا با یکی از ابعاد تجربه هیجانی آشنا شوید';
@@ -195,7 +176,6 @@ class AppStrings {
   static const String interactionSaved = 'تعامل هیجانی ثبت شد';
   static const String tapTriangleSide = 'یکی از اضلاع مثلث را لمس کنید';
 
-  // ─── Body Tension Map ──────────────────────────────────────────
   static const String bodyTensionMapTitle = 'نقشه تنش بدنی';
   static const String bodyTensionMapSubtitle =
       'نواحی از بدن که تنش را احساس می‌کنید لمس کنید';
@@ -218,7 +198,6 @@ class AppStrings {
   static const String addNote = 'یادداشت (اختیاری)';
   static const String saveTensionMap = 'ذخیره نقشه تنش';
 
-  // ─── Stress Registration ───────────────────────────────────────
   static const String stressRegistrationTitle = 'ثبت استرس شغلی';
   static const String stressRegistrationSubtitle =
       'موقعیت استرس‌زای شغلی خود را انتخاب کنید';
@@ -236,7 +215,6 @@ class AppStrings {
   static const String stressSaved = 'رویداد استرس ثبت شد';
   static const String selectSituation = 'لطفاً یک موقعیت را انتخاب کنید';
 
-  // ─── Breathing ─────────────────────────────────────────────────
   static const String breathingTitle = 'تنفس آگاهانه';
   static const String breathingSubtitle = 'با هر نفس، به لحظه حال بازگردید';
   static const String inhale = 'دم';
@@ -253,7 +231,6 @@ class AppStrings {
   static const String sessionSaved = 'جلسه تنفس ثبت شد';
   static const String breathingCount = 'تعداد نفس';
 
-  // ─── Resilience Education ──────────────────────────────────────
   static const String resilienceTitle = 'انعطاف‌پذیری روانی';
   static const String resilienceSubtitle = 'ستون بتنی در برابر نخل میلگرد';
   static const String concreteColumnTitle = 'ستون بتنی';
@@ -265,7 +242,6 @@ class AppStrings {
   static const String resilienceLesson =
       'درس کلیدی: تاب‌آوری به معنای سخت بودن نیست، بلکه به معنای انعطاف‌پذیر بودن است. مانند نخل میلگرد، با تغییر شرایط سازگار شوید بدون اینکه اصول خود را رها کنید.';
 
-  // ─── Common Actions ────────────────────────────────────────────
   static const String submit = 'ثبت';
   static const String history = 'تاریخچه';
   static const String back = 'بازگشت';
@@ -274,7 +250,6 @@ class AppStrings {
   static const String noHistory = 'هنوز سابقه‌ای ثبت نشده';
   static const String featureLocked = 'این بخش در هفته فعلی فعال نیست';
 
-  // ─── Cognitive Errors Game ─────────────────────────────────────
   static const String cognitiveGameTitle = 'بازی تشخیص خطای شناختی';
   static const String cognitiveGameSubtitle =
       'خطاهای شناختی را در موقعیت‌های کاری شناسایی کنید';
@@ -301,7 +276,6 @@ class AppStrings {
   static const String mindReading = 'ذهن‌خوانی';
   static const String discountingPositives = 'نادیده گرفتن مثبت‌ها';
 
-  // ─── Cognitive Game Scenarios ──────────────────────────────────
   static const String scenario1Title = 'جلسه ارزیابی عملکرد';
   static const String scenario1Description =
       'در جلسه ارزیابی عملکرد، مدیرتان فقط به یک نکته منفی کوچک در گزارش شما اشاره می‌کند. بقیه گزارش عالی بوده اما شما فقط همان یک نقد کوچک را به خاطر می‌سپارید و فکر می‌کنید عملکردتان ضعیف بوده.';
@@ -317,7 +291,6 @@ class AppStrings {
       'همکارتان می‌گوید ارائه شما می‌توانست بهتر باشد. شما بلافاصله نتیجه می‌گیرید: «او از من خوشش نمی‌آید و حتماً قصد دارد مرا خراب کند.» بدون اینکه شواهد دیگری بررسی کنید.';
   static const String scenario3Answer = 'ذهن‌خوانی';
 
-  // ─── Mental Musts ──────────────────────────────────────────────
   static const String mentalMustTitle = 'کوله‌پشتی بایدهای ذهنی';
   static const String mentalMustSubtitle =
       'بایدهای ذهنی خود را بنویسید و یاد بگیرید آنها را رها کنید';
@@ -336,7 +309,6 @@ class AppStrings {
   static const String backpackStones = 'سنگ‌های کوله‌پشتی';
   static const String releasedStones = 'سنگ‌های رها شده';
 
-  // ─── Negative Thought Radar ────────────────────────────────────
   static const String negativeThoughtRadarTitle = 'رادار افکار منفی';
   static const String negativeThoughtRadarSubtitle =
       'افکار منفی خود را شناسایی، ثبت و مدیریت کنید';
@@ -353,7 +325,6 @@ class AppStrings {
   static const String enterThought = 'لطفاً فکر منفی را وارد کنید';
   static const String enterSituation = 'لطفاً موقعیت را وارد کنید';
 
-  // ─── Termite Animation ─────────────────────────────────────────
   static const String termiteAnimationTitle = 'موریانه‌های ذهن';
   static const String termiteAnimationSubtitle =
       'افکار منفی مانند موریانه‌ها سازه روانی شما را تخریب می‌کنند';
@@ -363,7 +334,6 @@ class AppStrings {
       'درس کلیدی: با شناسایی و ثبت افکار منفی، مانند یک بازرس موریانه، جلوی تخریب درونی را بگیرید.';
   static const String buildingHealth = 'سلامت سازه';
 
-  // ─── Thought Impact Assessment ─────────────────────────────────
   static const String thoughtImpactTitle = 'سنجش اثر فکر';
   static const String thoughtImpactSubtitle =
       'میزان تأثیر فکر منفی بر عملکردتان را بسنجید';
@@ -374,7 +344,6 @@ class AppStrings {
   static const String thoughtImpactDesc =
       'یک فکر منفی را وارد کنید و مشخص کنید این فکر چقدر بر عملکرد روزانه شما تأثیر گذاشته است.';
 
-  // ─── Mind Court (Week 5) ───────────────────────────────────────
   static const String mindCourtTitle = 'دادگاه ذهن';
   static const String mindCourtSubtitle =
       'فکر منفی را روی ترازوی شواهد بگذارید و آن را به محاکمه بکشید';
@@ -409,7 +378,6 @@ class AppStrings {
       'هنوز فکر منفی‌ای ثبت نکرده‌اید. ابتدا در «رادار افکار منفی» یک فکر ثبت کنید.';
   static const String goToRadar = 'رفتن به رادار افکار منفی';
 
-  // ─── Conflict Practice (Week 6) ────────────────────────────────
   static const String conflictExerciseTitle = 'تمرین تعارض';
   static const String conflictExerciseSubtitle =
       'در موقعیت‌های تعارض محیط کار، بهترین پاسخ را تمرین کنید';
@@ -459,8 +427,6 @@ class AppStrings {
   static const String conflictFeedbackLow =
       'این پاسخ ممکن است تعارض را تشدید کند یا نیاز شما را نادیده بگیرد. پاسخ قاطعانه‌تری را تمرین کنید.';
 
-  // ─── Mood & Activity (Week 7) ──────────────────────────────────
-  // Isolation cycle animation
   static const String isolationCycleTitle = 'چرخه انزوا';
   static const String isolationCycleSubtitle =
       'وقتی فشار کار زیاد می‌شود، بدون آنکه متوجه شویم وارد یک چرخه نزولی می‌شویم. با شکستن این چرخه، خلق دوباره بالا می‌آید.';
@@ -472,7 +438,6 @@ class AppStrings {
   static const String isolationCycleMessage =
       'یک قدم کوچک کافی است تا مسیر برعکس شود: فعالیت خرد → خلق بهتر → ارتباط بیشتر.';
 
-  // Micro activities menu
   static const String microActivitiesTitle = 'فعالیت‌های خرد';
   static const String microActivitiesSubtitle =
       'یک فعالیت کوچک انتخاب کنید و اثر آن را بر خلق خود بسنجید.';
@@ -493,7 +458,6 @@ class AppStrings {
       'گوش دادن به یک قطعه موسیقی آرامش‌بخش';
   static const String startActivityTracking = 'شروع و پیگیری';
 
-  // Mood tracker
   static const String moodTrackerTitle = 'ردیاب خلق';
   static const String moodTrackerSubtitle =
       'خلق خود را قبل و بعد از فعالیت بسنجید تا اثر حرکت را ببینید.';
@@ -517,8 +481,6 @@ class AppStrings {
   static const String noMoodHistory = 'هنوز رکوردی ثبت نشده است';
   static const String trackAnotherActivity = 'فعالیت دیگری را پیگیری کنید';
 
-  // ─── Role Balance & Thought Sky (Week 8) ───────────────────────
-  // Role balance
   static const String roleBalanceTitle = 'تعادل نقش‌ها';
   static const String roleBalanceSubtitle =
       'نقش سازمانی و ارزش‌های فردی خود را کنار هم ببینید و برای تعادل میان آن‌ها بکوشید.';
@@ -535,7 +497,6 @@ class AppStrings {
   static const String roleBalanceTensionMessage =
       'تنش میان نقش کاری و ارزش‌های شخصی طبیعی است؛ آگاهی از آن، اولین گام برای ایجاد تعادل است.';
 
-  // Thought sky
   static const String thoughtSkyTitle = 'آسمان افکار';
   static const String thoughtSkySubtitle =
       'افکار منفی را بنویسید تا به ابر تبدیل شوند، سپس با یک سوایپ آن‌ها را از آسمان ذهن‌تان عبور دهید.';
@@ -547,7 +508,6 @@ class AppStrings {
   static const String skyEmptyMessage =
       'آسمان ذهن شما صاف است. هر فکری که آمد، آن را به ابری بسپارید.';
 
-  // ─── Profile ─────────────────────────────────────────────────────
   static const String profileTitle = 'پروفایل من';
   static const String accountInfo = 'اطلاعات حساب';
   static const String phoneNumberLabel = 'شماره تلفن';

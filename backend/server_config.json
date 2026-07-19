@@ -1,0 +1,61 @@
+{
+    "server": {
+        "ip": "87.107.165.75",
+        "user": "root",
+        "password": "MVjcy4omb6",
+        "ssh_port": 22,
+        "os": "linux",
+        "arch": "amd64"
+    },
+    "deployment": {
+        "base_path": "/opt/psychology-backend",
+        "binary_path": "/opt/psychology-backend/bin/server",
+        "env_path": "/opt/psychology-backend/.env",
+        "uploads_path": "/opt/psychology-backend/uploads",
+        "service_name": "psychology",
+        "service_file": "/etc/systemd/system/psychology.service",
+        "service_user": "root",
+        "service_group": "root"
+    },
+    "application": {
+        "port": 8080,
+        "environment": "production",
+        "base_url": "http://87.107.165.75:8080"
+    },
+    "database": {
+        "type": "PostgreSQL",
+        "host": "localhost",
+        "port": 5432,
+        "name": "psychology_app",
+        "user": "postgres",
+        "password": "@miRs13811381",
+        "sslmode": "disable"
+    },
+    "jwt": {
+        "secret": "your-secret-key-change-in-production",
+        "expiration": "24h"
+    },
+    "firewall": {
+        "ssh_port": 22,
+        "app_port": 8080,
+        "tool": "ufw"
+    },
+    "build": {
+        "local_goos": "windows",
+        "local_goarch": "amd64",
+        "target_goos": "linux",
+        "target_goarch": "amd64",
+        "build_command": "go build -o bin/server ./cmd/server",
+        "cross_compile_command": "$env:GOOS='linux'; $env:GOARCH='amd64'; go build -o bin/server ./cmd/server"
+    },
+    "technologies": {
+        "backend": "Go (Golang)",
+        "framework": "Gin",
+        "orm": "GORM",
+        "database": "PostgreSQL 15+",
+        "auth": "JWT (HS256)",
+        "file_storage": "Local filesystem (./uploads)",
+        "process_manager": "systemd",
+        "firewall": "ufw"
+    }
+}

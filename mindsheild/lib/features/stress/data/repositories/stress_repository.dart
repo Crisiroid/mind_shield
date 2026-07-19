@@ -5,8 +5,6 @@ import '../datasources/stress_local_datasource.dart';
 import '../datasources/stress_remote_datasource.dart';
 import '../models/stress_event_model.dart';
 
-/// Stress event repository — offline-first bridge between the data sources
-/// and the domain layer.
 class StressRepository extends OfflineFirstRepository<StressEventModel> {
   final StressRemoteDataSource _remoteDataSource;
   final StressLocalDataSource _localDataSource;
@@ -27,7 +25,6 @@ class StressRepository extends OfflineFirstRepository<StressEventModel> {
   Future<StressEventModel> pushCreate(StressEventModel item) async =>
       (await _remoteDataSource.createStressEvent(stressEvent: item)).data;
 
-  /// Create a new stress event (offline-first).
   Result<WriteResult<StressEventModel>> createStressEvent({
     required StressEventModel stressEvent,
   }) {
@@ -37,7 +34,6 @@ class StressRepository extends OfflineFirstRepository<StressEventModel> {
     );
   }
 
-  /// List stress events (offline-first).
   Result<List<StressEventModel>> listStressEvents({
     int page = 1,
     int pageSize = 20,

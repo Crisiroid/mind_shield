@@ -1,7 +1,3 @@
-/// Sky Thought model matching the backend `sky-thoughts` API contract.
-///
-/// Represents a single negative thought that the user externalizes as a
-/// drifting cloud, and can "swipe away" to let it pass across the sky.
 class SkyThoughtModel {
   final String id;
   final String userId;
@@ -50,7 +46,6 @@ class SkyThoughtModel {
     );
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -62,7 +57,6 @@ class SkyThoughtModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory SkyThoughtModel.fromDbMap(Map<String, dynamic> map) {
     return SkyThoughtModel(
       id: map['id'] as String,

@@ -5,8 +5,6 @@ import '../datasources/mind_court_local_datasource.dart';
 import '../datasources/mind_court_remote_datasource.dart';
 import '../models/mind_court_model.dart';
 
-/// Mind court repository — offline-first bridge between the data sources
-/// and the domain layer.
 class MindCourtRepository extends OfflineFirstRepository<MindCourtModel> {
   final MindCourtRemoteDataSource _remoteDataSource;
   final MindCourtLocalDataSource _localDataSource;
@@ -27,7 +25,6 @@ class MindCourtRepository extends OfflineFirstRepository<MindCourtModel> {
   Future<MindCourtModel> pushCreate(MindCourtModel item) async =>
       (await _remoteDataSource.createMindCourt(evidence: item)).data;
 
-  /// Create a new mind court evidence entry (offline-first).
   Result<WriteResult<MindCourtModel>> createMindCourt({
     required MindCourtModel evidence,
   }) {
@@ -37,7 +34,6 @@ class MindCourtRepository extends OfflineFirstRepository<MindCourtModel> {
     );
   }
 
-  /// List mind court evidence entries (offline-first).
   Result<List<MindCourtModel>> listMindCourt({
     int page = 1,
     int pageSize = 20,

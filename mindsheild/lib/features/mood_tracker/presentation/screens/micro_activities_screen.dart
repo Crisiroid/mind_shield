@@ -6,9 +6,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/mood_tracker_view_model.dart';
 
-/// Micro-Activities menu (Week 7) — a tappable list of small activities the
-/// user can perform to lift their mood. Tapping one selects it in the shared
-/// ViewModel and opens the mood tracker to measure the before/after effect.
 class MicroActivitiesScreen extends StatelessWidget {
   const MicroActivitiesScreen({super.key});
 
@@ -48,7 +45,6 @@ class MicroActivitiesScreen extends StatelessWidget {
   }
 }
 
-/// A single tappable micro-activity card.
 class _ActivityCard extends StatelessWidget {
   final MicroActivity activity;
   final VoidCallback onTap;
@@ -107,10 +103,7 @@ class _ActivityCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.chevron_left,
-                  color: AppColors.textHint,
-                ),
+                const Icon(Icons.chevron_left, color: AppColors.textHint),
               ],
             ),
           ),

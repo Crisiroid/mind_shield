@@ -7,10 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/stress_view_model.dart';
 
-/// Stress Registration screen — quick-select buttons for occupational stress.
-///
-/// User selects a stress situation from predefined buttons, optionally
-/// adds a description and intensity level, then submits.
 class StressRegistrationScreen extends StatefulWidget {
   const StressRegistrationScreen({super.key});
 
@@ -23,7 +19,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // Predefined stress situation types
   static const List<_StressSituation> _situations = [
     _StressSituation(
       type: 'deadline_pressure',
@@ -118,7 +113,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Subtitle
           Text(
             AppStrings.stressRegistrationSubtitle,
             style: PersianFonts.Vazir.copyWith(
@@ -128,7 +122,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Situation buttons grid
           Text(
             'موقعیت استرس‌زا:',
             style: PersianFonts.Vazir.copyWith(
@@ -157,7 +150,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
 
           SizedBox(height: AppSizes.lg),
 
-          // Description field
           Text(
             'توضیحات:',
             style: PersianFonts.Vazir.copyWith(
@@ -185,7 +177,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
 
           SizedBox(height: AppSizes.lg),
 
-          // Intensity slider
           Text(
             AppStrings.stressIntensityLabel,
             style: PersianFonts.Vazir.copyWith(
@@ -199,7 +190,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
 
           SizedBox(height: AppSizes.xl),
 
-          // Submit button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -336,7 +326,6 @@ class _StressRegistrationScreenState extends State<StressRegistrationScreen>
   }
 }
 
-/// Predefined stress situation definition.
 class _StressSituation {
   final String type;
   final String label;
@@ -351,7 +340,6 @@ class _StressSituation {
   });
 }
 
-/// Tappable situation button.
 class _SituationButton extends StatelessWidget {
   final _StressSituation situation;
   final bool isSelected;
@@ -410,7 +398,6 @@ class _SituationButton extends StatelessWidget {
   }
 }
 
-/// History card for a single stress event.
 class _StressHistoryCard extends StatelessWidget {
   final dynamic entry;
 
@@ -423,7 +410,6 @@ class _StressHistoryCard extends StatelessWidget {
     final situation = entry.situationType as String;
     final description = entry.situationDescription as String?;
 
-    // Find matching situation label
     String situationLabel = situation;
     for (final s in _StressRegistrationScreenState._situations) {
       if (s.type == situation) {

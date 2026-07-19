@@ -7,7 +7,6 @@ import '../../data/repositories/home_repository.dart';
 import '../widgets/mindful_timer_sheet.dart';
 import '../widgets/weekly_report_sheet.dart';
 
-/// Tool item model for quick access grid.
 class ToolItem {
   final String label;
   final IconData icon;
@@ -22,11 +21,6 @@ class ToolItem {
   });
 }
 
-/// Home ViewModel — manages home screen state and data.
-///
-/// Follows the Single Responsibility Principle: only handles home screen logic.
-/// UI observes this provider and reacts to state changes.
-/// Uses dependency injection for the repository (DIP).
 class HomeViewModel extends ChangeNotifier {
   final HomeRepository _homeRepository;
 
@@ -46,16 +40,13 @@ class HomeViewModel extends ChangeNotifier {
   int get currentDay => _currentDay;
   double get progress => _progress;
 
-  /// Whether all weekly features are unlocked (debug mode only).
   bool get isAllUnlocked => AppConfig.isDebug;
 
-  /// Initialize home screen data.
   Future<void> init() async {
     _loadProgress();
     await _loadWeeklyMedia();
   }
 
-  /// Load progress from stored registration date.
   void _loadProgress() {
     final registrationDate = WeekCalculator.parseStoredDate(
       TokenService.getRegistrationDate(),
@@ -66,9 +57,6 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Load weekly media content for current week.
-  ///
-  /// In debug mode, loads ALL media across all weeks.
   Future<void> _loadWeeklyMedia() async {
     _isLoadingMedia = true;
     _errorMessage = null;
@@ -80,7 +68,6 @@ class HomeViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        // Don't show error for media loading failure (offline-first)
         _weeklyMedia = [];
       },
       (media) {
@@ -92,19 +79,11 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Refresh all home screen data.
   Future<void> refresh() async {
     _loadProgress();
     await _loadWeeklyMedia();
   }
 
-  /// Get tools for current week based on application flow.
-  ///
-  /// In debug mode ([AppConfig.isDebug] == true), returns ALL tools from
-  /// every week so developers can access every feature without waiting.
-  /// In production, only the current week's tools are returned.
-  ///
-  /// Accepts a [BuildContext] for navigation to feature screens.
   List<ToolItem> getCurrentWeekTools(BuildContext? context) {
     if (AppConfig.isDebug) {
       return _getAllTools(context);
@@ -252,10 +231,8 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  /// Returns all tools from every week combined (used in debug mode).
   List<ToolItem> _getAllTools(BuildContext? context) {
     return [
-      // Week 1
       ToolItem(
         label: 'مثلث هیجان',
         icon: Icons.change_history,
@@ -274,7 +251,6 @@ class HomeViewModel extends ChangeNotifier {
         color: const Color(0xFFFFC107),
         onTap: () => Navigator.of(context!).pushNamed('/stress-registration'),
       ),
-      // Week 2
       ToolItem(
         label: 'تنفس آگاهانه',
         icon: Icons.air,
@@ -287,7 +263,6 @@ class HomeViewModel extends ChangeNotifier {
         color: const Color(0xFF8BC34A),
         onTap: () => Navigator.of(context!).pushNamed('/resilience-education'),
       ),
-      // Week 3
       ToolItem(
         label: 'خطاهای شناختی',
         icon: Icons.psychology_outlined,
@@ -300,7 +275,6 @@ class HomeViewModel extends ChangeNotifier {
         color: const Color(0xFFFF9800),
         onTap: () => Navigator.of(context!).pushNamed('/mental-musts'),
       ),
-      // Week 4
       ToolItem(
         label: 'رادار افکار منفی',
         icon: Icons.radar,
@@ -315,7 +289,6 @@ class HomeViewModel extends ChangeNotifier {
         onTap: () =>
             Navigator.of(context!).pushNamed('/negative-thought-radar'),
       ),
-      // Week 5
       ToolItem(
         label: 'دادگاه ذهن',
         icon: Icons.gavel,
@@ -328,14 +301,12 @@ class HomeViewModel extends ChangeNotifier {
         color: const Color(0xFFFFC107),
         onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
       ),
-      // Week 6
       ToolItem(
         label: 'تمرین تعارض',
         icon: Icons.forum,
         color: const Color(0xFF009688),
         onTap: () => Navigator.of(context!).pushNamed('/conflict-exercise'),
       ),
-      // Week 7
       ToolItem(
         label: 'چرخه انزوا',
         icon: Icons.loop,
@@ -354,7 +325,6 @@ class HomeViewModel extends ChangeNotifier {
         color: const Color(0xFF4CAF50),
         onTap: () => Navigator.of(context!).pushNamed('/mood-tracker'),
       ),
-      // Week 8
       ToolItem(
         label: 'تعادل نقش‌ها',
         icon: Icons.balance,
@@ -370,9 +340,6 @@ class HomeViewModel extends ChangeNotifier {
     ];
   }
 
-  /// Get permanent tools available throughout the program.
-  ///
-  /// Accepts a [BuildContext] for showing bottom sheets.
   List<ToolItem> getPermanentTools([BuildContext? context]) {
     return [
       ToolItem(
@@ -412,9 +379,6 @@ class HomeViewModel extends ChangeNotifier {
     ];
   }
 
-  /// Get the navigation route for the first tool of the current week.
-  ///
-  /// Used by the "شروع تمرین" button on the today's exercise card.
   String? getStartExerciseRoute() {
     switch (_currentWeek) {
       case 1:

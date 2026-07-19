@@ -5,21 +5,17 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/cognitive_game_model.dart';
 
-/// Contract for cognitive game remote operations.
 abstract class CognitiveGameRemoteDataSource {
-  /// Create a new cognitive game result.
   Future<WriteResult<CognitiveGameModel>> createCognitiveGame({
     required CognitiveGameModel game,
   });
 
-  /// List cognitive game results for the current user.
   Future<List<CognitiveGameModel>> listCognitiveGames({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class CognitiveGameRemoteDataSourceImpl
     implements CognitiveGameRemoteDataSource {
   final Dio _dio;

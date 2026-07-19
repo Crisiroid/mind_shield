@@ -7,10 +7,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/negative_thought_view_model.dart';
 
-/// Negative Thought Radar screen — 3-tab interface:
-/// 1. Instant Report (form for situation + thought + error type)
-/// 2. Termite Animation (educational metaphor animation)
-/// 3. Thought Impact (thought + impact slider)
 class NegativeThoughtRadarScreen extends StatefulWidget {
   const NegativeThoughtRadarScreen({super.key});
 
@@ -66,7 +62,6 @@ class _NegativeThoughtRadarScreenState extends State<NegativeThoughtRadarScreen>
   }
 }
 
-// ─── Tab 1: Instant Report ────────────────────────────────────────────────────
 
 class _InstantReportTab extends StatelessWidget {
   final NegativeThoughtViewModel vm;
@@ -89,7 +84,6 @@ class _InstantReportTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Situation field
           Text(
             AppStrings.situationLabel,
             style: PersianFonts.Vazir.copyWith(
@@ -116,7 +110,6 @@ class _InstantReportTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Thought field
           Text(
             AppStrings.thoughtLabel,
             style: PersianFonts.Vazir.copyWith(
@@ -143,7 +136,6 @@ class _InstantReportTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Error type dropdown
           Text(
             AppStrings.errorTypeLabel,
             style: PersianFonts.Vazir.copyWith(
@@ -182,7 +174,6 @@ class _InstantReportTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.xl),
 
-          // Submit button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -215,7 +206,6 @@ class _InstantReportTab extends StatelessWidget {
   }
 }
 
-// ─── Tab 2: Termite Animation ─────────────────────────────────────────────────
 
 class _TermiteAnimationTab extends StatefulWidget {
   const _TermiteAnimationTab();
@@ -234,7 +224,6 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
   void initState() {
     super.initState();
 
-    // Building degradation animation
     _buildingController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 6),
@@ -243,7 +232,6 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
       CurvedAnimation(parent: _buildingController, curve: Curves.easeInOut),
     );
 
-    // Termite movement animation
     _termiteController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -266,7 +254,6 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Animation area
           Center(
             child: AnimatedBuilder(
               animation: _buildingController,
@@ -277,9 +264,7 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Building structure
                       _BuildingWidget(health: _buildingHealth.value),
-                      // Animated termites
                       ...List.generate(5, (i) {
                         return AnimatedBuilder(
                           animation: _termiteController,
@@ -318,7 +303,6 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
           ),
           SizedBox(height: AppSizes.md),
 
-          // Health bar
           AnimatedBuilder(
             animation: _buildingController,
             builder: (context, child) {
@@ -377,7 +361,6 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
           ),
           SizedBox(height: AppSizes.xl),
 
-          // Educational text
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(AppSizes.lg),
@@ -438,7 +421,6 @@ class _TermiteAnimationTabState extends State<_TermiteAnimationTab>
   }
 }
 
-/// Building widget that degrades visually based on health.
 class _BuildingWidget extends StatelessWidget {
   final double health;
 
@@ -455,7 +437,6 @@ class _BuildingWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Roof
         Container(width: 120, height: 0),
         CustomPaint(
           size: const Size(140, 50),
@@ -463,7 +444,6 @@ class _BuildingWidget extends StatelessWidget {
             color: buildingColor.withValues(alpha: health.clamp(0.3, 1.0)),
           ),
         ),
-        // Building body
         Container(
           width: 100,
           height: 80,
@@ -477,7 +457,6 @@ class _BuildingWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Windows
               ...List.generate(2, (row) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -501,7 +480,6 @@ class _BuildingWidget extends StatelessWidget {
             ],
           ),
         ),
-        // Cracks (appear as health decreases)
         if (health < 0.7) Icon(Icons.remove, size: 16, color: buildingColor),
       ],
     );
@@ -532,7 +510,6 @@ class _TrianglePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-// ─── Tab 3: Thought Impact ────────────────────────────────────────────────────
 
 class _ThoughtImpactTab extends StatelessWidget {
   final NegativeThoughtViewModel vm;
@@ -556,7 +533,6 @@ class _ThoughtImpactTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Thought text field
           Text(
             AppStrings.thoughtLabel,
             style: PersianFonts.Vazir.copyWith(
@@ -583,7 +559,6 @@ class _ThoughtImpactTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Error type dropdown
           Text(
             AppStrings.errorTypeLabel,
             style: PersianFonts.Vazir.copyWith(
@@ -622,7 +597,6 @@ class _ThoughtImpactTab extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.xl),
 
-          // Impact slider
           Text(
             AppStrings.impactLevel,
             style: PersianFonts.Vazir.copyWith(
@@ -635,7 +609,6 @@ class _ThoughtImpactTab extends StatelessWidget {
           _buildImpactSlider(),
           SizedBox(height: AppSizes.xl),
 
-          // Submit button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

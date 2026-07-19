@@ -5,11 +5,6 @@ import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/role_value_model.dart';
 import '../../data/repositories/role_value_repository.dart';
 
-/// Role Balance ViewModel (Week 8) — manages organizational roles and
-/// personal values, and visualizes the tension between them.
-///
-/// Follows the Single Responsibility Principle: only handles role/value
-/// logic. UI observes this provider and reacts to state changes.
 class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
   final RoleValueRepository _repository;
 
@@ -23,12 +18,8 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
   List<RoleValueModel> get values => List.unmodifiable(_values);
   bool get isLoading => _isLoading;
 
-  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
   bool get isSaving => isSubmitting;
 
-  /// Overlap/tension intensity (0.0 - 1.0) derived from how balanced the
-  /// counts of roles and values are. The more entries on both sides, the
-  /// larger the overlap between the two identity circles.
   double get overlapIntensity {
     final total = _roles.length + _values.length;
     if (total == 0) return 0.0;
@@ -37,10 +28,8 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
     return (balance * volume).clamp(0.0, 1.0);
   }
 
-  /// Whether there is any tension to visualize (entries on both sides).
   bool get hasTension => _roles.isNotEmpty && _values.isNotEmpty;
 
-  /// Get the current day number from the stored registration date.
   int get _currentDayNumber {
     final registrationDate = WeekCalculator.parseStoredDate(
       TokenService.getRegistrationDate(),
@@ -48,7 +37,6 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
     return WeekCalculator.currentDayNumber(registrationDate);
   }
 
-  /// Load existing role/value entries and split them into the two groups.
   Future<void> load() async {
     _isLoading = true;
     notifyListeners();
@@ -59,16 +47,11 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
     notifyListeners();
   }
 
-  /// Silently re-fetch the authoritative list from the server and refresh the
-  /// UI in place — used after a write so the screen reflects the server
-  /// without flashing the full-screen loading spinner.
   Future<void> _reloadSilently() async {
     await _fetchAndSplit();
     notifyListeners();
   }
 
-  /// Fetch the entries and split them into the role/value groups. Shared by
-  /// [load] and [_reloadSilently] (DRY).
   Future<void> _fetchAndSplit() async {
     final result = await _repository.listRolesValues(pageSize: 100);
     result.fold((failure) {}, (entries) {
@@ -81,9 +64,6 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
     });
   }
 
-  /// Add a new role or value entry and persist it.
-  ///
-  /// Shows the server's confirmation and adds the saved entry locally.
   Future<void> addEntry({
     required String entryType,
     required String text,
@@ -116,8 +96,6 @@ class RoleBalanceViewModel extends ChangeNotifier with SubmissionFlow {
       fallbackSuccessMessage: 'مورد جدید اضافه شد',
     );
 
-    // Reconcile with the server so the list always mirrors the backend
-    // (real-time reload after the optimistic in-place update).
     if (saved) await _reloadSilently();
   }
 }

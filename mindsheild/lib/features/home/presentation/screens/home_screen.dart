@@ -11,16 +11,6 @@ import '../view_models/home_view_model.dart';
 import '../widgets/mini_calendar_grid.dart';
 import '../widgets/todays_exercise_card.dart';
 
-/// Home screen — main dashboard after authentication.
-///
-/// Shows:
-/// - Weekly progress bar and current week/day info (calculated locally)
-/// - 56-day calendar with current day indicator
-/// - Today's exercise content (from weekly media)
-/// - Quick access tools for current week
-/// - Permanent tools available throughout the program
-/// - Connectivity status
-/// - Logout action
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -90,12 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ─── Progress Card ──────────────────────────────────
               _buildProgressCard(homeVM),
 
               SizedBox(height: AppSizes.xl),
 
-              // ─── Today's Exercise ───────────────────────────────
               Text(
                 AppStrings.todaysContent,
                 style: PersianFonts.Vazir.copyWith(
@@ -119,12 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: AppSizes.xl),
 
-              // ─── 56-Day Calendar ────────────────────────────────
               const MiniCalendarGrid(),
 
               SizedBox(height: AppSizes.xl),
 
-              // ─── Current Week Tools ─────────────────────────────
               Text(
                 homeVM.isAllUnlocked
                     ? '${AppStrings.weekTools} (همه – دیباگ)'
@@ -140,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: AppSizes.xl),
 
-              // ─── Permanent Tools ────────────────────────────────
               Text(
                 AppStrings.permanentTools,
                 style: PersianFonts.Vazir.copyWith(
@@ -307,7 +292,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final navContext = DialogService.navigatorKey?.currentContext;
     if (navContext != null) {
-      // ignore: use_build_context_synchronously
       final auth = navContext.read<AuthViewModel>();
       await auth.logout();
       if (navContext.mounted) {
@@ -317,7 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-/// Quick-access tool card widget.
 class _ToolCard extends StatelessWidget {
   final IconData icon;
   final String label;

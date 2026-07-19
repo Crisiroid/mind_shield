@@ -1,20 +1,8 @@
-/// Immutable Shamsi (Jalali / Persian) calendar date.
-///
-/// The backend stores and exchanges every date in the Gregorian calendar
-/// (ISO-8601). This value object converts a Gregorian [DateTime] into its
-/// Shamsi equivalent so the UI can present dates the way Persian users expect,
-/// without ever touching what is sent to or received from the server.
-///
-/// Follows the Single Responsibility Principle — it is only concerned with the
-/// calendar conversion itself, not with how the result is formatted or shown.
 class ShamsiDate {
-  /// Shamsi year (e.g. 1403).
   final int year;
 
-  /// Shamsi month, 1-based (1 = فروردین, 12 = اسفند).
   final int month;
 
-  /// Shamsi day of month, 1-based.
   final int day;
 
   const ShamsiDate({
@@ -23,7 +11,6 @@ class ShamsiDate {
     required this.day,
   });
 
-  /// Persian month names, indexed 1-based via [month] - 1.
   static const List<String> monthNames = [
     'فروردین',
     'اردیبهشت',
@@ -39,19 +26,13 @@ class ShamsiDate {
     'اسفند',
   ];
 
-  /// The Persian name of this date's month.
   String get monthName => monthNames[month - 1];
 
-  /// Convert a Gregorian [date] to its Shamsi equivalent.
-  ///
-  /// Only the calendar-date part (year/month/day) is converted; the time of
-  /// day is identical in both calendars and is handled by the formatter.
   factory ShamsiDate.fromGregorian(DateTime date) {
     final gy = date.year;
     final gm = date.month;
     final gd = date.day;
 
-    // Cumulative days at the start of each Gregorian month (non-leap year).
     const gDaysInMonth = [
       0,
       31,

@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/stress_event_model.dart';
 
-/// Local SQLite mirror + outbox for stress events.
 class StressLocalDataSource extends SyncableLocalDataSource<StressEventModel> {
   @override
   String get tableName => 'stress_events';

@@ -1,6 +1,3 @@
-/// Negative thought model matching the backend API contract.
-///
-/// Parses the JSON response from negative-thoughts endpoints.
 class NegativeThoughtModel {
   final String id;
   final String userId;
@@ -51,7 +48,6 @@ class NegativeThoughtModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -66,7 +62,6 @@ class NegativeThoughtModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory NegativeThoughtModel.fromDbMap(Map<String, dynamic> map) {
     return NegativeThoughtModel(
       id: map['id'] as String,

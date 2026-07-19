@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../../data/repositories/profile_repository.dart';
 
-/// ViewModel for the profile screen.
-///
-/// Manages profile loading, update, and password change flows.
-/// Follows the same ChangeNotifier pattern as all other view models.
 class ProfileViewModel extends ChangeNotifier {
   final ProfileRepository _repository;
 
   ProfileViewModel(this._repository);
 
-  // ─── State ────────────────────────────────────────────────────
   UserModel? _user;
   UserModel? get user => _user;
 
@@ -24,9 +19,6 @@ class ProfileViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-  // ─── Load Profile ─────────────────────────────────────────────
-
-  /// Fetch the current user's profile from the server.
   Future<void> loadProfile() async {
     _isLoading = true;
     _error = null;
@@ -47,9 +39,6 @@ class ProfileViewModel extends ChangeNotifier {
     );
   }
 
-  // ─── Update Profile ───────────────────────────────────────────
-
-  /// Update profile settings (cloud sync, DND, etc.).
   Future<bool> updateProfile(Map<String, dynamic> data) async {
     _isSaving = true;
     _error = null;
@@ -73,9 +62,6 @@ class ProfileViewModel extends ChangeNotifier {
     return success;
   }
 
-  // ─── Change Password ──────────────────────────────────────────
-
-  /// Change the user's password.
   Future<bool> changePassword({
     required String oldPassword,
     required String newPassword,
@@ -104,7 +90,6 @@ class ProfileViewModel extends ChangeNotifier {
     return success;
   }
 
-  /// Clear any displayed error.
   void clearError() {
     _error = null;
     notifyListeners();

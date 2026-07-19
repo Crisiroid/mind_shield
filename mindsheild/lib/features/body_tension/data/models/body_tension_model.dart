@@ -1,6 +1,3 @@
-/// Body tension map model matching the backend API contract.
-///
-/// Parses the JSON response from body-tension-maps endpoints.
 class BodyTensionModel {
   final String id;
   final String userId;
@@ -50,7 +47,6 @@ class BodyTensionModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -65,7 +61,6 @@ class BodyTensionModel {
     };
   }
 
-  /// Rebuild from a local SQLite row.
   factory BodyTensionModel.fromDbMap(Map<String, dynamic> map) {
     return BodyTensionModel(
       id: map['id'] as String,

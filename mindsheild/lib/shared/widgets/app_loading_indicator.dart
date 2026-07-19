@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 
-/// Reusable loading indicator widget.
-///
-/// Used throughout the app for consistent loading states.
-/// Follows the DRY principle — defined once, used everywhere.
 class AppLoadingIndicator extends StatelessWidget {
   final double size;
   final Color color;
@@ -28,7 +24,6 @@ class AppLoadingIndicator extends StatelessWidget {
   }
 }
 
-/// Reusable error display widget with retry button.
 class AppErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
@@ -65,7 +60,6 @@ class AppErrorWidget extends StatelessWidget {
   }
 }
 
-/// Empty state widget for lists with no data.
 class AppEmptyWidget extends StatelessWidget {
   final String message;
   final IconData icon;

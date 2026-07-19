@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/mental_must_model.dart';
 
-/// Local SQLite mirror + outbox for mental must entries.
 class MentalMustLocalDataSource
     extends SyncableLocalDataSource<MentalMustModel> {
   @override

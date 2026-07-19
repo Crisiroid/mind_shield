@@ -5,9 +5,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 
-/// Isolation Cycle screen (Week 7) — educational looping animation of the
-/// downward spiral: work pressure -> less activity -> lower mood -> more
-/// isolation. Purely educational, no backend interaction.
 class IsolationCycleScreen extends StatefulWidget {
   const IsolationCycleScreen({super.key});
 
@@ -60,7 +57,6 @@ class _IsolationCycleScreenState extends State<IsolationCycleScreen>
             ),
             SizedBox(height: AppSizes.lg),
 
-            // Animated cycle diagram
             AspectRatio(
               aspectRatio: 1,
               child: AnimatedBuilder(
@@ -77,7 +73,6 @@ class _IsolationCycleScreenState extends State<IsolationCycleScreen>
             ),
             SizedBox(height: AppSizes.lg),
 
-            // Break-the-cycle message
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(AppSizes.md),
@@ -109,7 +104,6 @@ class _IsolationCycleScreenState extends State<IsolationCycleScreen>
             ),
             SizedBox(height: AppSizes.lg),
 
-            // Break the cycle -> go to micro activities
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -135,8 +129,6 @@ class _IsolationCycleScreenState extends State<IsolationCycleScreen>
   }
 }
 
-/// Paints four stage nodes on a ring with a rotating highlight and
-/// clockwise arrows, illustrating the self-reinforcing downward cycle.
 class _IsolationCyclePainter extends CustomPainter {
   final double progress;
   final List<String> stages;
@@ -148,14 +140,12 @@ class _IsolationCyclePainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = math.min(size.width, size.height) / 2 - 56;
 
-    // Ring
     final ringPaint = Paint()
       ..color = AppColors.divider
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
     canvas.drawCircle(center, radius, ringPaint);
 
-    // Rotating highlight arc (shows the cycle "moving")
     final sweepPaint = Paint()
       ..shader = SweepGradient(
         colors: [
@@ -177,10 +167,8 @@ class _IsolationCyclePainter extends CustomPainter {
       sweepPaint,
     );
 
-    // The active stage index based on progress
     final activeIndex = (progress * stages.length).floor() % stages.length;
 
-    // Stage nodes at N, E, S, W positions
     for (var i = 0; i < stages.length; i++) {
       final angle = -math.pi / 2 + (2 * math.pi * i / stages.length);
       final nodeCenter = Offset(
@@ -194,7 +182,6 @@ class _IsolationCyclePainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       canvas.drawCircle(nodeCenter, isActive ? 34 : 28, nodePaint);
 
-      // Stage number
       final numberPainter = TextPainter(
         text: TextSpan(
           text: '${i + 1}',
@@ -211,7 +198,6 @@ class _IsolationCyclePainter extends CustomPainter {
         nodeCenter - Offset(numberPainter.width / 2, numberPainter.height / 2),
       );
 
-      // Stage label below the node
       final labelPainter = TextPainter(
         text: TextSpan(
           text: stages[i],
@@ -233,7 +219,6 @@ class _IsolationCyclePainter extends CustomPainter {
       );
     }
 
-    // Center down-arrow denoting the downward spiral
     final centerArrow = TextPainter(
       text: const TextSpan(
         text: '↻',

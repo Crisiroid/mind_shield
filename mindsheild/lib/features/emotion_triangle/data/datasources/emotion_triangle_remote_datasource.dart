@@ -5,26 +5,17 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/emotion_interaction_model.dart';
 
-/// Contract for emotion triangle remote operations.
-///
-/// Interface Segregation Principle — the repository depends only
-/// on the methods it needs, not the full HTTP implementation.
 abstract class EmotionTriangleRemoteDataSource {
-  /// Create a new emotion triangle interaction.
   Future<WriteResult<EmotionInteractionModel>> createInteraction({
     required EmotionInteractionModel interaction,
   });
 
-  /// List emotion triangle interactions for the current user.
   Future<List<EmotionInteractionModel>> listInteractions({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
-///
-/// Handles all emotion triangle API calls and response parsing.
 class EmotionTriangleRemoteDataSourceImpl
     implements EmotionTriangleRemoteDataSource {
   final Dio _dio;

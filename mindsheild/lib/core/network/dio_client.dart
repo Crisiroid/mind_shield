@@ -3,10 +3,6 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import '../constants/api_constants.dart';
 import '../errors/exceptions.dart';
 
-/// Dio HTTP client configuration and singleton instance.
-///
-/// Centralizes all HTTP setup (timeouts, interceptors, base options)
-/// so feature repositories only inject and use this single client.
 class DioClient {
   DioClient._();
 
@@ -14,8 +10,6 @@ class DioClient {
 
   static Dio get instance => _instance;
 
-  /// Initialize Dio with interceptors and base config.
-  /// Must be called once at app startup.
   static void init({required List<Interceptor> interceptors}) {
     _instance = Dio(
       BaseOptions(
@@ -39,10 +33,6 @@ class DioClient {
   }
 }
 
-/// Checks internet connectivity before network operations.
-///
-/// Used by repositories to decide between remote and local data sources,
-/// following the Interface Segregation Principle — only exposes what's needed.
 class NetworkInfo {
   final InternetConnection _connection;
 

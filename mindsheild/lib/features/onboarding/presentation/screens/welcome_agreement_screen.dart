@@ -6,15 +6,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/onboarding_view_model.dart';
 
-/// Welcome & Digital Therapy Agreement Screen (Screen 2 of Phase Zero).
-///
-/// Only shown once on first launch before registration:
-/// 1. Welcome message with app branding
-/// 2. Digital therapy agreement text
-/// 3. Warning: "This app is not a substitute for professional help"
-/// 4. Checkbox acceptance → Continue button
-///
-/// After acceptance, navigates to the register screen.
 class WelcomeAgreementScreen extends StatefulWidget {
   const WelcomeAgreementScreen({super.key});
 
@@ -40,7 +31,6 @@ class _WelcomeAgreementScreenState extends State<WelcomeAgreementScreen> {
               children: [
                 SizedBox(height: AppSizes.xxl),
 
-                // ─── Welcome Header ─────────────────────────────────
                 Container(
                   width: 80,
                   height: 80,
@@ -77,7 +67,6 @@ class _WelcomeAgreementScreenState extends State<WelcomeAgreementScreen> {
 
                 SizedBox(height: AppSizes.xxl),
 
-                // ─── Agreement Card ─────────────────────────────────
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
@@ -124,7 +113,6 @@ class _WelcomeAgreementScreenState extends State<WelcomeAgreementScreen> {
 
                 SizedBox(height: AppSizes.md),
 
-                // ─── Warning Banner ─────────────────────────────────
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
@@ -161,7 +149,6 @@ class _WelcomeAgreementScreenState extends State<WelcomeAgreementScreen> {
 
                 SizedBox(height: AppSizes.xl),
 
-                // ─── Acceptance Checkbox ────────────────────────────
                 InkWell(
                   onTap: () => setState(() => _iAgree = !_iAgree),
                   borderRadius: BorderRadius.circular(AppSizes.radiusMd),
@@ -214,7 +201,6 @@ class _WelcomeAgreementScreenState extends State<WelcomeAgreementScreen> {
 
                 SizedBox(height: AppSizes.lg),
 
-                // ─── Continue Button ────────────────────────────────
                 SizedBox(
                   width: double.infinity,
                   height: AppSizes.buttonHeight,
@@ -248,7 +234,6 @@ class _WelcomeAgreementScreenState extends State<WelcomeAgreementScreen> {
     final onboarding = context.read<OnboardingViewModel>();
     onboarding.acceptAgreement().then((_) {
       if (!mounted) return;
-      // Navigate to register after accepting agreement
       Navigator.of(context).pushReplacementNamed('/register');
     });
   }

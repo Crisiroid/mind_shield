@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/negative_thought_model.dart';
 
-/// Local SQLite mirror + outbox for negative thought entries.
 class NegativeThoughtLocalDataSource
     extends SyncableLocalDataSource<NegativeThoughtModel> {
   @override

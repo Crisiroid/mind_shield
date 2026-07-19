@@ -7,11 +7,6 @@ import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/negative_thought_model.dart';
 import '../../data/repositories/negative_thought_repository.dart';
 
-/// Negative Thought ViewModel — manages thought registration, history,
-/// and impact tracking.
-///
-/// Follows the Single Responsibility Principle: only handles negative
-/// thought radar logic.
 class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
   final NegativeThoughtRepository _repository;
 
@@ -21,13 +16,11 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
   String? _errorMessage;
   List<NegativeThoughtModel> _thoughts = [];
 
-  // Instant report form state
   String _situation = '';
   String _thoughtText = '';
   String? _selectedErrorType;
   int _impactLevel = 5;
 
-  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
   bool get isSaving => isSubmitting;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
@@ -37,7 +30,6 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
   String? get selectedErrorType => _selectedErrorType;
   int get impactLevel => _impactLevel;
 
-  /// Get the current day number from registration date.
   int get _currentDayNumber {
     final registrationDate = WeekCalculator.parseStoredDate(
       TokenService.getRegistrationDate(),
@@ -45,7 +37,6 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
     return WeekCalculator.currentDayNumber(registrationDate);
   }
 
-  /// All cognitive error types for dropdown selection.
   static final List<String> cognitiveErrorTypes = [
     AppStrings.allOrNothing,
     AppStrings.catastrophizing,
@@ -61,12 +52,10 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
     AppStrings.discountingPositives,
   ];
 
-  /// Initialize by loading history.
   Future<void> init() async {
     await loadThoughts();
   }
 
-  /// Load thoughts from API.
   Future<void> loadThoughts() async {
     _isLoading = true;
     _errorMessage = null;
@@ -76,7 +65,6 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
 
     result.fold(
       (failure) {
-        // Keep any previously loaded thoughts on a failed refresh.
         _errorMessage = failure.message;
       },
       (data) {
@@ -88,31 +76,26 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
     notifyListeners();
   }
 
-  /// Update situation text.
   void setSituation(String value) {
     _situation = value;
     notifyListeners();
   }
 
-  /// Update thought text.
   void setThoughtText(String value) {
     _thoughtText = value;
     notifyListeners();
   }
 
-  /// Update selected error type.
   void setSelectedErrorType(String? value) {
     _selectedErrorType = value;
     notifyListeners();
   }
 
-  /// Update impact level.
   void setImpactLevel(int value) {
     _impactLevel = value;
     notifyListeners();
   }
 
-  /// Submit instant report (situation + thought + error type).
   Future<bool> submitInstantReport() async {
     if (_situation.trim().isEmpty) {
       DialogService.showError(
@@ -149,7 +132,6 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
     );
   }
 
-  /// Submit thought impact assessment (thought + impact level).
   Future<bool> submitThoughtImpact() async {
     if (_thoughtText.trim().isEmpty) {
       DialogService.showError(
@@ -179,7 +161,6 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
     );
   }
 
-  /// Reset the instant report form.
   void _resetInstantReportForm() {
     _situation = '';
     _thoughtText = '';
@@ -187,7 +168,6 @@ class NegativeThoughtViewModel extends ChangeNotifier with SubmissionFlow {
     notifyListeners();
   }
 
-  /// Reset the impact assessment form.
   void _resetImpactForm() {
     _thoughtText = '';
     _impactLevel = 5;

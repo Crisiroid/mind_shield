@@ -8,10 +8,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../data/models/role_value_model.dart';
 import '../view_models/role_balance_view_model.dart';
 
-/// Role Balance screen (Week 8) — visualizes the tension between the user's
-/// organizational role and personal values as two overlapping circles (a
-/// Venn diagram), and lets them add entries to each side, persisted to the
-/// backend.
 class RoleBalanceScreen extends StatefulWidget {
   const RoleBalanceScreen({super.key});
 
@@ -38,7 +34,6 @@ class _RoleBalanceScreenState extends State<RoleBalanceScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // Scrollable top section (no Row with unbounded-width issues)
                 Expanded(
                   child: SingleChildScrollView(
                     padding: AppSizes.paddingScreen,
@@ -55,7 +50,6 @@ class _RoleBalanceScreenState extends State<RoleBalanceScreen> {
                         ),
                         SizedBox(height: AppSizes.lg),
 
-                        // Two overlapping circles (Venn diagram)
                         AspectRatio(
                           aspectRatio: 1.4,
                           child: CustomPaint(
@@ -104,13 +98,11 @@ class _RoleBalanceScreenState extends State<RoleBalanceScreen> {
                     ),
                   ),
                 ),
-                // Entry sections — outside SingleChildScrollView for bounded width
                 Padding(
                   padding: AppSizes.paddingScreen,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Organizational role section
                       _EntrySection(
                         title: AppStrings.organizationalRole,
                         hint: AppStrings.addRoleHint,
@@ -125,7 +117,6 @@ class _RoleBalanceScreenState extends State<RoleBalanceScreen> {
                       ),
                       SizedBox(height: AppSizes.md),
 
-                      // Personal values section
                       _EntrySection(
                         title: AppStrings.personalValues,
                         hint: AppStrings.addValueHint,
@@ -147,8 +138,6 @@ class _RoleBalanceScreenState extends State<RoleBalanceScreen> {
   }
 }
 
-/// A titled section with a text field to add an entry and a chip list of
-/// existing entries.
 class _EntrySection extends StatefulWidget {
   final String title;
   final String hint;
@@ -252,11 +241,6 @@ class _EntrySectionState extends State<_EntrySection> {
               onPressed: widget.isSaving ? null : _submit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: widget.color,
-                // Override the global full-width `minimumSize`
-                // (Size(double.infinity, ...)) from the app theme. Inside a
-                // Row the button gets an unbounded max width, so an infinite
-                // minimum width would force invalid constraints and crash
-                // layout. Constrain it to a bounded square instead.
                 minimumSize: Size.square(AppSizes.buttonHeight),
                 padding: EdgeInsets.symmetric(
                   horizontal: AppSizes.md,
@@ -299,9 +283,6 @@ class _EntrySectionState extends State<_EntrySection> {
   }
 }
 
-/// Paints two overlapping circles representing the organizational role and
-/// personal values. The overlap area grows and intensifies with the amount
-/// of balance/tension between the two identities.
 class _RoleValueVennPainter extends CustomPainter {
   final double overlap;
   final int roleCount;
@@ -318,7 +299,6 @@ class _RoleValueVennPainter extends CustomPainter {
     final cy = size.height / 2;
     final radius = math.min(size.width / 2.6, size.height / 2.2);
 
-    // Larger overlap pulls the two circles closer together.
     final maxGap = radius;
     final minGap = radius * 0.55;
     final gap = maxGap - (maxGap - minGap) * overlap;
@@ -336,7 +316,6 @@ class _RoleValueVennPainter extends CustomPainter {
     canvas.drawCircle(roleCenter, radius, rolePaint);
     canvas.drawCircle(valueCenter, radius, valuePaint);
 
-    // Overlap area highlighted via intersection clip.
     final rolePath = Path()
       ..addOval(Rect.fromCircle(center: roleCenter, radius: radius));
     final valuePath = Path()
@@ -351,7 +330,6 @@ class _RoleValueVennPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
     canvas.drawPath(overlapPath, overlapPaint);
 
-    // Circle outlines
     final outlineRole = Paint()
       ..color = AppColors.primary
       ..style = PaintingStyle.stroke
@@ -363,7 +341,6 @@ class _RoleValueVennPainter extends CustomPainter {
     canvas.drawCircle(roleCenter, radius, outlineRole);
     canvas.drawCircle(valueCenter, radius, outlineValue);
 
-    // Labels
     _drawLabel(
       canvas,
       AppStrings.organizationalRole,

@@ -112,7 +112,6 @@ interface SidebarProps {
 
 export default function Sidebar({ onClose }: SidebarProps) {
     const [expandedMenu, setExpandedMenu] = useState<string | null>(null)
-    const ChevronDown = Icons.ChevronDown
 
     const handleNavLinkClick = () => {
         if (onClose) {

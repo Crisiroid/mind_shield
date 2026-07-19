@@ -5,21 +5,17 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/negative_thought_model.dart';
 
-/// Contract for negative thought remote operations.
 abstract class NegativeThoughtRemoteDataSource {
-  /// Create a new negative thought entry.
   Future<WriteResult<NegativeThoughtModel>> createNegativeThought({
     required NegativeThoughtModel thought,
   });
 
-  /// List negative thought entries for the current user.
   Future<List<NegativeThoughtModel>> listNegativeThoughts({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class NegativeThoughtRemoteDataSourceImpl
     implements NegativeThoughtRemoteDataSource {
   final Dio _dio;

@@ -5,10 +5,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../data/models/weekly_media_model.dart';
 
-/// Today's exercise content card widget.
-///
-/// Displays the exercise or media content for the current day/week.
-/// Shows a placeholder if no content is available.
 class TodaysExerciseCard extends StatelessWidget {
   final List<WeeklyMediaModel> mediaList;
   final int currentWeek;
@@ -50,7 +46,6 @@ class TodaysExerciseCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             children: [
               Container(
@@ -75,7 +70,6 @@ class TodaysExerciseCard extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.md),
 
-          // Title
           Text(
             AppStrings.todaysExercise,
             style: PersianFonts.Vazir.copyWith(
@@ -86,7 +80,6 @@ class TodaysExerciseCard extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.sm),
 
-          // Content
           if (hasMedia && media != null) ...[
             Text(
               media.description ?? _getWeekExerciseTitle(currentWeek),
@@ -99,7 +92,6 @@ class TodaysExerciseCard extends StatelessWidget {
             ),
             SizedBox(height: AppSizes.md),
 
-            // Media type indicator
             Row(
               children: [
                 Icon(
@@ -139,7 +131,6 @@ class TodaysExerciseCard extends StatelessWidget {
 
           SizedBox(height: AppSizes.md),
 
-          // Start button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

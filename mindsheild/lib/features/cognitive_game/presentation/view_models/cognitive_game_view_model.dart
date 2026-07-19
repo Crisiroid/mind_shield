@@ -5,7 +5,6 @@ import '../../../../core/utils/week_calculator.dart';
 import '../../data/models/cognitive_game_model.dart';
 import '../../data/repositories/cognitive_game_repository.dart';
 
-/// A predefined game scenario for the cognitive errors game.
 class GameScenario {
   final int id;
   final String title;
@@ -22,10 +21,6 @@ class GameScenario {
   });
 }
 
-/// Cognitive Game ViewModel — manages game state, scoring, and history.
-///
-/// Follows the Single Responsibility Principle: only handles cognitive
-/// game logic and state management.
 class CognitiveGameViewModel extends ChangeNotifier {
   final CognitiveGameRepository _repository;
 
@@ -36,7 +31,6 @@ class CognitiveGameViewModel extends ChangeNotifier {
   String? _errorMessage;
   List<CognitiveGameModel> _history = [];
 
-  // Game state
   int _currentScenarioIndex = 0;
   String? _selectedAnswer;
   bool? _isAnswerCorrect;
@@ -56,7 +50,6 @@ class CognitiveGameViewModel extends ChangeNotifier {
   int get totalAnswered => _totalAnswered;
   bool get gameFinished => _gameFinished;
 
-  /// Get the current day number from registration date.
   int get _currentDayNumber {
     final registrationDate = WeekCalculator.parseStoredDate(
       TokenService.getRegistrationDate(),
@@ -64,7 +57,6 @@ class CognitiveGameViewModel extends ChangeNotifier {
     return WeekCalculator.currentDayNumber(registrationDate);
   }
 
-  /// All 3 predefined workplace scenarios.
   static final List<GameScenario> scenarios = [
     GameScenario(
       id: 1,
@@ -104,15 +96,12 @@ class CognitiveGameViewModel extends ChangeNotifier {
     ),
   ];
 
-  /// Get the current scenario.
   GameScenario get currentScenario => scenarios[_currentScenarioIndex];
 
-  /// Initialize by loading history.
   Future<void> init() async {
     await loadHistory();
   }
 
-  /// Load game history from API.
   Future<void> loadHistory() async {
     _isLoading = true;
     _errorMessage = null;
@@ -122,7 +111,6 @@ class CognitiveGameViewModel extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        // Keep any previously loaded history on a failed refresh.
         _errorMessage = failure.message;
       },
       (data) {
@@ -134,9 +122,8 @@ class CognitiveGameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Select an answer for the current scenario.
   void selectAnswer(String answer) {
-    if (_selectedAnswer != null) return; // Already answered
+    if (_selectedAnswer != null) return;
     _selectedAnswer = answer;
     _isAnswerCorrect = answer == currentScenario.correctAnswer;
 
@@ -145,17 +132,14 @@ class CognitiveGameViewModel extends ChangeNotifier {
     }
     _totalAnswered++;
 
-    // Record time taken
     final timeTaken =
         (DateTime.now().millisecondsSinceEpoch - _startTime) ~/ 1000;
 
-    // Submit result to backend
     _submitGameResult(timeTaken: timeTaken);
 
     notifyListeners();
   }
 
-  /// Move to the next scenario or finish the game.
   void nextScenario() {
     if (_currentScenarioIndex < scenarios.length - 1) {
       _currentScenarioIndex++;
@@ -169,7 +153,6 @@ class CognitiveGameViewModel extends ChangeNotifier {
     }
   }
 
-  /// Reset the game to play again.
   void resetGame() {
     _currentScenarioIndex = 0;
     _selectedAnswer = null;
@@ -181,13 +164,11 @@ class CognitiveGameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Start the game timer.
   void startGame() {
     _startTime = DateTime.now().millisecondsSinceEpoch;
     notifyListeners();
   }
 
-  /// Submit game result to backend.
   Future<void> _submitGameResult({required int timeTaken}) async {
     _isSaving = true;
     notifyListeners();
@@ -206,9 +187,6 @@ class CognitiveGameViewModel extends ChangeNotifier {
 
     final result = await _repository.createCognitiveGame(game: game);
 
-    // Reflect the confirmed record immediately (dedupe by id) without a
-    // destructive re-fetch. This write fires automatically per in-game
-    // answer, so it stays silent — the game already gives instant feedback.
     result.fold((failure) {}, (outcome) {
       final saved = outcome.data;
       _history = [saved, ..._history.where((e) => e.id != saved.id)];

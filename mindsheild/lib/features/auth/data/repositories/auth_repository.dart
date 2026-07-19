@@ -5,20 +5,13 @@ import '../../../../core/errors/failures.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/auth_response_model.dart';
 
-/// Common result type alias for cleaner signatures.
 typedef Result<T> = Future<Either<Failure, T>>;
 
-/// Auth repository — bridges data source and domain layer.
-///
-/// Follows the Dependency Inversion Principle: depends on the
-/// [AuthRemoteDataSource] abstraction, not on Dio directly.
-/// Converts exceptions to [Failure] using dartz Either pattern.
 class AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
 
   const AuthRepository(this._remoteDataSource);
 
-  /// Authenticate user with phone number and password.
   Result<AuthTokenData> login({
     required String phoneNumber,
     required String password,
@@ -36,7 +29,6 @@ class AuthRepository {
     }
   }
 
-  /// Register a new user with phone number and password.
   Result<AuthTokenData> register({
     required String phoneNumber,
     required String password,
@@ -54,7 +46,6 @@ class AuthRepository {
     }
   }
 
-  /// Refresh the access token using the refresh token.
   Result<AuthTokenData> refreshToken({required String refreshToken}) async {
     try {
       final result = await _remoteDataSource.refreshToken(
@@ -68,7 +59,6 @@ class AuthRepository {
     }
   }
 
-  /// Logout the current user.
   Result<void> logout() async {
     try {
       await _remoteDataSource.logout();
@@ -80,7 +70,6 @@ class AuthRepository {
     }
   }
 
-  /// Accept the digital therapy agreement on the server.
   Result<void> acceptAgreement() async {
     try {
       await _remoteDataSource.acceptAgreement();
@@ -92,7 +81,6 @@ class AuthRepository {
     }
   }
 
-  /// Send device/app version info to the server (best-effort).
   Result<void> updateLoginInfo({
     required String androidVersion,
     required String appVersion,
@@ -110,7 +98,6 @@ class AuthRepository {
     }
   }
 
-  /// Maps any exception to the appropriate [Failure].
   Failure _mapExceptionToFailure(dynamic error) {
     if (error is DioException) {
       final appException = error.error;

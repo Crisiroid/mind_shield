@@ -1,8 +1,3 @@
-/// Emotion triangle interaction model matching the backend API contract.
-///
-/// Parses the JSON response from emotion-interactions endpoints.
-/// Follows the Single Responsibility Principle — responsible only
-/// for its own JSON parsing.
 import 'dart:convert';
 
 class EmotionInteractionModel {
@@ -54,7 +49,6 @@ class EmotionInteractionModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -68,7 +62,6 @@ class EmotionInteractionModel {
     };
   }
 
-  /// Rebuild from a local SQLite row.
   factory EmotionInteractionModel.fromDbMap(Map<String, dynamic> map) {
     return EmotionInteractionModel(
       id: map['id'] as String,

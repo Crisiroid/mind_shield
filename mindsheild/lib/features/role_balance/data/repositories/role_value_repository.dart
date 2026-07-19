@@ -5,8 +5,6 @@ import '../datasources/role_value_local_datasource.dart';
 import '../datasources/role_value_remote_datasource.dart';
 import '../models/role_value_model.dart';
 
-/// Role/Value repository — offline-first bridge between the data sources
-/// and the domain layer.
 class RoleValueRepository extends OfflineFirstRepository<RoleValueModel> {
   final RoleValueRemoteDataSource _remoteDataSource;
   final RoleValueLocalDataSource _localDataSource;
@@ -27,7 +25,6 @@ class RoleValueRepository extends OfflineFirstRepository<RoleValueModel> {
   Future<RoleValueModel> pushCreate(RoleValueModel item) async =>
       (await _remoteDataSource.createRoleValue(entry: item)).data;
 
-  /// Create a new role or value entry (offline-first).
   Result<WriteResult<RoleValueModel>> createRoleValue({
     required RoleValueModel entry,
   }) {
@@ -37,7 +34,6 @@ class RoleValueRepository extends OfflineFirstRepository<RoleValueModel> {
     );
   }
 
-  /// List role/value entries (offline-first).
   Result<List<RoleValueModel>> listRolesValues({
     int page = 1,
     int pageSize = 50,

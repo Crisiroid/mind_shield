@@ -6,17 +6,11 @@ import '../../../auth/data/repositories/auth_repository.dart';
 import '../datasources/home_remote_datasource.dart';
 import '../models/weekly_media_model.dart';
 
-/// Home repository — bridges data source and domain layer.
-///
-/// Follows the Dependency Inversion Principle: depends on the
-/// [HomeRemoteDataSource] abstraction, not on Dio directly.
-/// Converts exceptions to [Failure] using dartz Either pattern.
 class HomeRepository {
   final HomeRemoteDataSource _remoteDataSource;
 
   const HomeRepository(this._remoteDataSource);
 
-  /// Fetch weekly media content for a specific week.
   Result<List<WeeklyMediaModel>> getMediaByWeek({
     required int weekNumber,
     int page = 1,
@@ -36,7 +30,6 @@ class HomeRepository {
     }
   }
 
-  /// Fetch all active weekly media content.
   Result<List<WeeklyMediaModel>> getAllMedia({
     int page = 1,
     int pageSize = 20,
@@ -54,7 +47,6 @@ class HomeRepository {
     }
   }
 
-  /// Maps any exception to the appropriate [Failure].
   Failure _mapExceptionToFailure(dynamic error) {
     if (error is DioException) {
       final appException = error.error;

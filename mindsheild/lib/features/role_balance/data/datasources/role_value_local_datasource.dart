@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/role_value_model.dart';
 
-/// Local SQLite mirror + outbox for role/value entries.
 class RoleValueLocalDataSource extends SyncableLocalDataSource<RoleValueModel> {
   @override
   String get tableName => 'role_value_entries';

@@ -5,8 +5,6 @@ import '../datasources/negative_thought_local_datasource.dart';
 import '../datasources/negative_thought_remote_datasource.dart';
 import '../models/negative_thought_model.dart';
 
-/// Negative thought repository — offline-first bridge between the data
-/// sources and the domain layer.
 class NegativeThoughtRepository
     extends OfflineFirstRepository<NegativeThoughtModel> {
   final NegativeThoughtRemoteDataSource _remoteDataSource;
@@ -28,7 +26,6 @@ class NegativeThoughtRepository
   Future<NegativeThoughtModel> pushCreate(NegativeThoughtModel item) async =>
       (await _remoteDataSource.createNegativeThought(thought: item)).data;
 
-  /// Create a new negative thought entry (offline-first).
   Result<WriteResult<NegativeThoughtModel>> createNegativeThought({
     required NegativeThoughtModel thought,
   }) {
@@ -38,7 +35,6 @@ class NegativeThoughtRepository
     );
   }
 
-  /// List negative thought entries (offline-first).
   Result<List<NegativeThoughtModel>> listNegativeThoughts({
     int page = 1,
     int pageSize = 20,

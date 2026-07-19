@@ -5,27 +5,22 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/sky_thought_model.dart';
 
-/// Contract for sky thought remote operations.
 abstract class SkyThoughtRemoteDataSource {
-  /// Create a new sky thought (a negative thought turned into a cloud).
   Future<WriteResult<SkyThoughtModel>> createSkyThought({
     required SkyThoughtModel thought,
   });
 
-  /// Update a sky thought (e.g., mark its cloud as swiped away).
   Future<WriteResult<SkyThoughtModel>> updateSkyThought({
     required String id,
     required bool cloudSwiped,
   });
 
-  /// List sky thoughts for the current user.
   Future<List<SkyThoughtModel>> listSkyThoughts({
     int page = 1,
     int pageSize = 50,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class SkyThoughtRemoteDataSourceImpl implements SkyThoughtRemoteDataSource {
   final Dio _dio;
 

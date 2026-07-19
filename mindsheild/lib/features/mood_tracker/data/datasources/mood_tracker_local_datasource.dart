@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/mood_tracker_model.dart';
 
-/// Local SQLite mirror + outbox for mood tracker records.
 class MoodTrackerLocalDataSource
     extends SyncableLocalDataSource<MoodTrackerModel> {
   @override

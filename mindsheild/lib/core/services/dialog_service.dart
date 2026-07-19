@@ -7,17 +7,11 @@ import '../constants/app_strings.dart';
 import '../sync/sync_progress.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
-/// Centralized dialog service for showing errors, statuses, and confirmations.
-///
-/// All user-facing notifications go through dialogs — never snackbars.
-/// This ensures consistent UX and keeps error display logic in one place
-/// (Single Responsibility Principle).
 class DialogService {
   DialogService._();
 
   static GlobalKey<NavigatorState>? _navigatorKey;
 
-  /// Public accessor for the navigator key (used by screens outside the widget tree).
   static GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
   static void init(GlobalKey<NavigatorState> navigatorKey) {
@@ -26,9 +20,6 @@ class DialogService {
 
   static BuildContext? get _context => _navigatorKey?.currentContext;
 
-  // ─── Error Dialog ───────────────────────────────────────────
-
-  /// Show an error dialog with a title and message.
   static Future<void> showError({
     required String title,
     required String message,
@@ -65,8 +56,6 @@ class DialogService {
       ),
     );
   }
-
-  // ─── Success Dialog ─────────────────────────────────────────
 
   static Future<void> showSuccess({
     required String title,
@@ -108,8 +97,6 @@ class DialogService {
     );
   }
 
-  // ─── Confirm Dialog ─────────────────────────────────────────
-
   static Future<bool> showConfirm({
     required String title,
     required String message,
@@ -147,12 +134,8 @@ class DialogService {
     return result ?? false;
   }
 
-  // ─── Loading Dialog ─────────────────────────────────────────
-
   static bool _isLoadingVisible = false;
 
-  /// Show a calming, animated loading dialog whose message gently cross-fades
-  /// through a curated list of remarks so waiting never feels static.
   static void showLoading({String? message}) {
     if (_context == null || _isLoadingVisible) return;
     _isLoadingVisible = true;
@@ -176,13 +159,8 @@ class DialogService {
     _isLoadingVisible = false;
   }
 
-  // ─── Sync Progress Dialog ───────────────────────────────────
-
   static bool _isSyncVisible = false;
 
-  /// Show an animated sync dialog driven by a [ValueListenable] of
-  /// [SyncProgress]. Renders `done/total` plus the current remark and
-  /// auto-dismisses once [SyncProgress.isComplete] becomes true.
   static void showSyncProgress(ValueListenable<SyncProgress> progress) {
     if (_context == null || _isSyncVisible) return;
     _isSyncVisible = true;
@@ -198,14 +176,11 @@ class DialogService {
     ).whenComplete(() => _isSyncVisible = false);
   }
 
-  /// Dismiss the sync dialog if it is showing.
   static void hideSyncProgress() {
     if (_context == null || !_isSyncVisible) return;
     Navigator.of(_context!).pop();
     _isSyncVisible = false;
   }
-
-  // ─── Offline Info Dialog ────────────────────────────────────
 
   static Future<void> showOfflineMessage({required String message}) async {
     if (_context == null) return;
@@ -240,8 +215,6 @@ class DialogService {
   }
 }
 
-/// Rounded surface card shared by the loading and sync dialogs so both speak
-/// the same visual language (RTL, [AppColors], [AppSizes], Vazir font).
 class _SyncCard extends StatelessWidget {
   final Widget child;
 
@@ -274,10 +247,7 @@ class _SyncCard extends StatelessWidget {
   }
 }
 
-/// A gently pulsing indicator whose caption cross-fades through a curated
-/// remark list every ~2.5s so waiting feels calm rather than static.
 class _AnimatedLoadingContent extends StatefulWidget {
-  /// When provided, this fixed message is shown instead of rotating remarks.
   final String? fixedMessage;
 
   const _AnimatedLoadingContent({this.fixedMessage});
@@ -356,8 +326,6 @@ class _AnimatedLoadingContentState extends State<_AnimatedLoadingContent>
   }
 }
 
-/// Renders live [SyncProgress] with a determinate bar, `done/total` counter
-/// and the current remark, auto-dismissing once the run completes.
 class _SyncProgressContent extends StatelessWidget {
   final ValueListenable<SyncProgress> progress;
 
@@ -368,7 +336,6 @@ class _SyncProgressContent extends StatelessWidget {
     return ValueListenableBuilder<SyncProgress>(
       valueListenable: progress,
       builder: (context, value, _) {
-        // Auto-dismiss right after the final frame paints.
         if (value.isComplete) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             DialogService.hideSyncProgress();

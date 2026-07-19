@@ -1,12 +1,3 @@
-// Authentication response models matching the backend API contract.
-//
-// Parses the JSON response from login/register endpoints:
-// `{success, message, data: {access_token, refresh_token, expires_in, token_type, user}}`
-//
-// Follows the Single Responsibility Principle — each model
-// is responsible only for its own JSON parsing.
-
-/// Top-level API response wrapper.
 class ApiResponse {
   final bool success;
   final String message;
@@ -23,7 +14,6 @@ class ApiResponse {
   }
 }
 
-/// Authentication token data returned after login/register.
 class AuthTokenData {
   final String accessToken;
   final String refreshToken;
@@ -50,7 +40,6 @@ class AuthTokenData {
   }
 }
 
-/// User model matching the backend UserResponse schema.
 class UserModel {
   final String id;
   final String phoneNumber;

@@ -6,10 +6,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/breathing_view_model.dart';
 
-/// Breathing screen — animated circle with inhale/exhale rhythm.
-///
-/// Features an expanding/contracting circle synchronized with
-/// breathing phases, session timer, and pattern selection.
 class BreathingScreen extends StatefulWidget {
   const BreathingScreen({super.key});
 
@@ -40,7 +36,6 @@ class _BreathingScreenState extends State<BreathingScreen>
   Widget build(BuildContext context) {
     final vm = context.watch<BreathingViewModel>();
 
-    // Sync animation with breathing phase
     if (vm.isActive) {
       final durations = vm.patternDurations;
       final phaseDuration = durations[vm.currentPhase.name] ?? 4;
@@ -63,7 +58,6 @@ class _BreathingScreenState extends State<BreathingScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Subtitle
             Text(
               AppStrings.breathingSubtitle,
               textAlign: TextAlign.center,
@@ -74,18 +68,15 @@ class _BreathingScreenState extends State<BreathingScreen>
             ),
             SizedBox(height: AppSizes.xl),
 
-            // Pattern selector (only when not active)
             if (!vm.isActive) ...[
               _buildPatternSelector(vm),
               SizedBox(height: AppSizes.xl),
             ],
 
-            // Animated breathing circle
             _buildBreathingCircle(vm),
 
             SizedBox(height: AppSizes.lg),
 
-            // Phase label
             if (vm.isActive)
               Text(
                 vm.currentPhaseLabel,
@@ -98,7 +89,6 @@ class _BreathingScreenState extends State<BreathingScreen>
 
             SizedBox(height: AppSizes.md),
 
-            // Session timer
             if (vm.isActive) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +110,6 @@ class _BreathingScreenState extends State<BreathingScreen>
 
             SizedBox(height: AppSizes.xl),
 
-            // Start/Stop button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -213,7 +202,6 @@ class _BreathingScreenState extends State<BreathingScreen>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Outer glow
               Container(
                 width: 250 * scale,
                 height: 250 * scale,
@@ -222,7 +210,6 @@ class _BreathingScreenState extends State<BreathingScreen>
                   color: phaseColor.withValues(alpha: 0.1),
                 ),
               ),
-              // Middle ring
               Container(
                 width: 200 * scale,
                 height: 200 * scale,
@@ -235,7 +222,6 @@ class _BreathingScreenState extends State<BreathingScreen>
                   ),
                 ),
               ),
-              // Inner circle
               Container(
                 width: 150 * scale,
                 height: 150 * scale,
@@ -325,7 +311,6 @@ class _BreathingScreenState extends State<BreathingScreen>
   }
 }
 
-/// Pattern selection card.
 class _PatternCard extends StatelessWidget {
   final String title;
   final String description;

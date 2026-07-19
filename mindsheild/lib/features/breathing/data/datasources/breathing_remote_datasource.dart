@@ -5,27 +5,22 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/breathing_session_model.dart';
 
-/// Contract for breathing session remote operations.
 abstract class BreathingRemoteDataSource {
-  /// Create a new breathing session.
   Future<WriteResult<BreathingSessionModel>> createSession({
     required BreathingSessionModel session,
   });
 
-  /// Update an existing breathing session.
   Future<WriteResult<BreathingSessionModel>> updateSession({
     required String id,
     required Map<String, dynamic> data,
   });
 
-  /// List breathing sessions for the current user.
   Future<List<BreathingSessionModel>> listSessions({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class BreathingRemoteDataSourceImpl implements BreathingRemoteDataSource {
   final Dio _dio;
 

@@ -5,18 +5,14 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/mind_court_model.dart';
 
-/// Contract for mind court remote operations.
 abstract class MindCourtRemoteDataSource {
-  /// Create a new mind court evidence entry.
   Future<WriteResult<MindCourtModel>> createMindCourt({
     required MindCourtModel evidence,
   });
 
-  /// List mind court evidence entries for the current user.
   Future<List<MindCourtModel>> listMindCourt({int page = 1, int pageSize = 20});
 }
 
-/// Implementation using Dio HTTP client.
 class MindCourtRemoteDataSourceImpl implements MindCourtRemoteDataSource {
   final Dio _dio;
 

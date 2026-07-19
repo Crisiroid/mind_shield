@@ -3,10 +3,6 @@ import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../models/auth_response_model.dart';
 
-/// Contract for remote auth operations.
-///
-/// Interface Segregation Principle — the repository depends only
-/// on the methods it needs, not the full HTTP implementation.
 abstract class AuthRemoteDataSource {
   Future<AuthTokenData> login({
     required String phoneNumber,
@@ -22,20 +18,14 @@ abstract class AuthRemoteDataSource {
 
   Future<void> logout();
 
-  /// Accept the digital therapy agreement on the server.
   Future<void> acceptAgreement();
 
-  /// Send device/app version info to the server.
   Future<void> updateLoginInfo({
     required String androidVersion,
     required String appVersion,
   });
 }
 
-/// Implementation using Dio HTTP client.
-///
-/// Handles all remote auth API calls and response parsing.
-/// Throws [AppException] (mapped by the interceptor) on failures.
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
 

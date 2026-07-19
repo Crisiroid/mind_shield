@@ -9,14 +9,6 @@ import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/persian_date_formatter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// Splash screen — Phase Zero, Screen 1.
-///
-/// Manifests the application entry experience:
-/// - Animated logo and title entrance
-/// - Runtime permission requests (notification & storage) on first launch
-/// - Last login timestamp display for returning users
-/// - Intelligent navigation to the correct next screen based on
-///   authentication and onboarding state (SRP — only decides routing).
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -68,12 +60,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigate after animation + permissions
     Future.delayed(const Duration(milliseconds: 2800), _navigate);
   }
 
   Future<void> _loadLastLogin() async {
-    // Stored as a raw ISO-8601 timestamp; convert to Shamsi for display.
     final lastLogin = DateTime.tryParse(TokenService.getLastLogin() ?? '');
     if (lastLogin != null && mounted) {
       setState(() => _lastLoginTime = PersianDateFormatter.dateTime(lastLogin));
@@ -81,10 +71,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _requestPermissions() async {
-    // Request notification permission (Android 13+)
     await Permission.notification.request();
 
-    // Request storage permission (Android < 13)
     final status = await Permission.storage.status;
     if (status.isDenied) {
       await Permission.storage.request();
@@ -102,8 +90,6 @@ class _SplashScreenState extends State<SplashScreen>
     final agreementAccepted = TokenService.isAgreementAccepted();
     final onboardingComplete = TokenService.isOnboardingComplete();
 
-    // Returning user whose local mirror still needs a first pull
-    // (e.g. fresh install or login on another device) — rebuild it now.
     if (isLoggedIn && TokenService.needsInitialSync()) {
       await context.read<AppProvider>().runInitialSync();
       if (!mounted) return;
@@ -148,7 +134,6 @@ class _SplashScreenState extends State<SplashScreen>
           children: [
             const Spacer(),
 
-            // ─── Animated Logo ──────────────────────────────────
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
@@ -183,7 +168,6 @@ class _SplashScreenState extends State<SplashScreen>
 
             SizedBox(height: AppSizes.lg),
 
-            // ─── Animated Title ─────────────────────────────────
             SlideTransition(
               position: _slideAnimation,
               child: FadeTransition(
@@ -201,7 +185,6 @@ class _SplashScreenState extends State<SplashScreen>
 
             SizedBox(height: AppSizes.sm),
 
-            // ─── Subtitle ───────────────────────────────────────
             FadeTransition(
               opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(
@@ -219,7 +202,6 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
 
-            // ─── Last Login Display ─────────────────────────────
             if (_lastLoginTime != null)
               Padding(
                 padding: EdgeInsets.only(top: AppSizes.lg),
@@ -253,7 +235,6 @@ class _SplashScreenState extends State<SplashScreen>
 
             const Spacer(),
 
-            // ─── Loading Indicator ──────────────────────────────
             FadeTransition(
               opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(

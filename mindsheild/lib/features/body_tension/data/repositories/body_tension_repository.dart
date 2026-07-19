@@ -5,8 +5,6 @@ import '../datasources/body_tension_local_datasource.dart';
 import '../datasources/body_tension_remote_datasource.dart';
 import '../models/body_tension_model.dart';
 
-/// Body tension repository — offline-first bridge between the data sources
-/// and the domain layer.
 class BodyTensionRepository extends OfflineFirstRepository<BodyTensionModel> {
   final BodyTensionRemoteDataSource _remoteDataSource;
   final BodyTensionLocalDataSource _localDataSource;
@@ -27,7 +25,6 @@ class BodyTensionRepository extends OfflineFirstRepository<BodyTensionModel> {
   Future<BodyTensionModel> pushCreate(BodyTensionModel item) async =>
       (await _remoteDataSource.createBodyTension(bodyTension: item)).data;
 
-  /// Create a new body tension map entry (offline-first).
   Result<WriteResult<BodyTensionModel>> createBodyTension({
     required BodyTensionModel bodyTension,
   }) {
@@ -37,7 +34,6 @@ class BodyTensionRepository extends OfflineFirstRepository<BodyTensionModel> {
     );
   }
 
-  /// List body tension map entries (offline-first).
   Result<List<BodyTensionModel>> listBodyTensions({
     int page = 1,
     int pageSize = 20,

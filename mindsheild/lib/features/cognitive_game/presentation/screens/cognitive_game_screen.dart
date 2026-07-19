@@ -7,11 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/persian_date_formatter.dart';
 import '../view_models/cognitive_game_view_model.dart';
 
-/// Cognitive Errors Game screen — drag & drop game for identifying
-/// cognitive errors in workplace scenarios.
-///
-/// User reads a scenario, then selects the correct cognitive error type
-/// from answer options. Score is tracked and submitted to backend.
 class CognitiveGameScreen extends StatefulWidget {
   const CognitiveGameScreen({super.key});
 
@@ -74,7 +69,6 @@ class _CognitiveGameScreenState extends State<CognitiveGameScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Progress indicator
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -107,7 +101,6 @@ class _CognitiveGameScreenState extends State<CognitiveGameScreen>
           ),
           SizedBox(height: AppSizes.md),
 
-          // Scenario card
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(AppSizes.lg),
@@ -151,7 +144,6 @@ class _CognitiveGameScreenState extends State<CognitiveGameScreen>
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Answer options
           Text(
             AppStrings.cognitiveErrorTypes,
             style: PersianFonts.Vazir.copyWith(
@@ -162,7 +154,6 @@ class _CognitiveGameScreenState extends State<CognitiveGameScreen>
           ),
           SizedBox(height: AppSizes.md),
 
-          // Answer options as tappable cards
           ...scenario.answerOptions.map((option) {
             return _AnswerOption(
               option: option,
@@ -177,7 +168,6 @@ class _CognitiveGameScreenState extends State<CognitiveGameScreen>
             );
           }),
 
-          // Feedback after answer
           if (vm.selectedAnswer != null) ...[
             SizedBox(height: AppSizes.lg),
             _buildFeedbackCard(vm),
@@ -383,7 +373,6 @@ class _CognitiveGameScreenState extends State<CognitiveGameScreen>
   }
 }
 
-/// Answer option card widget.
 class _AnswerOption extends StatelessWidget {
   final String option;
   final bool isSelected;
@@ -471,7 +460,6 @@ class _AnswerOption extends StatelessWidget {
   }
 }
 
-/// History card for a single game result.
 class _GameHistoryCard extends StatelessWidget {
   final dynamic entry;
 

@@ -5,10 +5,6 @@ import '../../../../core/services/token_service.dart';
 import '../../data/models/emotion_interaction_model.dart';
 import '../../data/repositories/emotion_triangle_repository.dart';
 
-/// Emotion Triangle ViewModel — manages emotion triangle screen state.
-///
-/// Follows the Single Responsibility Principle: only handles emotion
-/// triangle logic. UI observes this provider and reacts to state changes.
 class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
   final EmotionTriangleRepository _repository;
 
@@ -21,13 +17,11 @@ class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
 
   bool get isLoading => _isLoading;
 
-  /// Backwards-compatible alias so screens can keep binding to `isSaving`.
   bool get isSaving => isSubmitting;
   String? get errorMessage => _errorMessage;
   String? get lastClickedSide => _lastClickedSide;
   List<EmotionInteractionModel> get interactions => _interactions;
 
-  /// Get the current day number from registration date.
   int get _currentDayNumber {
     final registrationDate = WeekCalculator.parseStoredDate(
       TokenService.getRegistrationDate(),
@@ -35,12 +29,10 @@ class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
     return WeekCalculator.currentDayNumber(registrationDate);
   }
 
-  /// Initialize by loading interaction history.
   Future<void> init() async {
     await loadInteractions();
   }
 
-  /// Load interaction history from API.
   Future<void> loadInteractions() async {
     _isLoading = true;
     _errorMessage = null;
@@ -50,7 +42,6 @@ class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
 
     result.fold(
       (failure) {
-        // Keep any previously loaded interactions on a failed refresh.
         _errorMessage = failure.message;
       },
       (data) {
@@ -62,10 +53,6 @@ class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
     notifyListeners();
   }
 
-  /// Record an interaction when user taps a triangle side.
-  ///
-  /// [side] is one of: 'thought', 'body', 'behavior'.
-  /// Returns the side clicked for navigation decisions.
   Future<String?> recordInteraction(String side) async {
     _lastClickedSide = side;
     notifyListeners();
@@ -83,7 +70,6 @@ class EmotionTriangleViewModel extends ChangeNotifier with SubmissionFlow {
       action: () => _repository.createInteraction(interaction: interaction),
       onSuccess: (outcome) {
         final saved = outcome.data;
-        // Show the confirmed record immediately (dedupe by id).
         _interactions = [
           saved,
           ..._interactions.where((e) => e.id != saved.id),

@@ -1,10 +1,3 @@
-// Weekly media content model matching the backend API contract.
-//
-// Parses the JSON response from weekly-media endpoints.
-// Follows the Single Responsibility Principle — each model
-// is responsible only for its own JSON parsing.
-
-/// Weekly media content model.
 class WeeklyMediaModel {
   final String id;
   final int weekNumber;
@@ -44,7 +37,6 @@ class WeeklyMediaModel {
     );
   }
 
-  /// Get the full URL for this media file.
   String? get fileUrl =>
       storagePath != null ? 'http://10.0.2.2:8080/uploads/$storagePath' : null;
 }

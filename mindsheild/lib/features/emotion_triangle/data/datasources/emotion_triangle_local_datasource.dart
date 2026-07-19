@@ -1,10 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/emotion_interaction_model.dart';
 
-/// Local SQLite mirror + outbox for emotion triangle interactions.
-///
-/// Owns its typed table schema and row mapping while inheriting the shared
-/// CRUD/sync logic from [SyncableLocalDataSource] (DRY, typed-per-feature).
 class EmotionTriangleLocalDataSource
     extends SyncableLocalDataSource<EmotionInteractionModel> {
   @override

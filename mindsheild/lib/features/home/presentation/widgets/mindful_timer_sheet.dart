@@ -5,10 +5,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 
-/// Mindful timer bottom sheet.
-///
-/// Provides a calming meditation timer with preset durations
-/// and a breathing-pulse animation while the timer is running.
 class MindfulTimerSheet extends StatefulWidget {
   const MindfulTimerSheet({super.key});
 
@@ -151,7 +147,6 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle
           Container(
             width: 40,
             height: 4,
@@ -162,7 +157,6 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Title
           Text(
             AppStrings.mindfulTimer,
             style: PersianFonts.Vazir.copyWith(
@@ -181,11 +175,9 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
           ),
           SizedBox(height: AppSizes.xl),
 
-          // Timer display with breathing pulse
           _buildTimerDisplay(),
           SizedBox(height: AppSizes.xl),
 
-          // Duration presets
           if (!_isRunning) ...[
             Text(
               'مدت زمان (دقیقه)',
@@ -222,7 +214,6 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
             SizedBox(height: AppSizes.xl),
           ],
 
-          // Controls
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -276,7 +267,6 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Background circle
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -301,7 +291,6 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
                         : null,
                   ),
                 ),
-                // Progress ring
                 SizedBox(
                   width: 190,
                   height: 190,
@@ -312,7 +301,6 @@ class _MindfulTimerSheetState extends State<MindfulTimerSheet>
                     valueColor: const AlwaysStoppedAnimation(AppColors.primary),
                   ),
                 ),
-                // Time text
                 Text(
                   _formatTime(_remainingSeconds),
                   style: PersianFonts.Vazir.copyWith(

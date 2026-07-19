@@ -3,28 +3,17 @@ import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 
-/// Contract for profile remote operations.
-///
-/// Interface Segregation Principle — the repository depends only
-/// on the methods it needs, not the full HTTP implementation.
 abstract class ProfileRemoteDataSource {
-  /// Fetch the current user's profile.
   Future<UserModel> getProfile();
 
-  /// Update the current user's profile settings.
   Future<UserModel> updateProfile(Map<String, dynamic> data);
 
-  /// Change the current user's password.
   Future<void> changePassword({
     required String oldPassword,
     required String newPassword,
   });
 }
 
-/// Implementation using Dio HTTP client.
-///
-/// Handles all remote profile API calls and response parsing.
-/// Throws [AppException] (mapped by the interceptor) on failures.
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final Dio _dio;
 

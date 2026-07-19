@@ -5,8 +5,6 @@ import '../datasources/mental_must_local_datasource.dart';
 import '../datasources/mental_must_remote_datasource.dart';
 import '../models/mental_must_model.dart';
 
-/// Mental must repository — offline-first bridge between the data sources and
-/// the domain layer. Supports create, update (release) and list.
 class MentalMustRepository extends OfflineFirstRepository<MentalMustModel> {
   final MentalMustRemoteDataSource _remoteDataSource;
   final MentalMustLocalDataSource _localDataSource;
@@ -34,7 +32,6 @@ class MentalMustRepository extends OfflineFirstRepository<MentalMustModel> {
         data: item.toUpdateJson(isReleased: item.isReleased),
       )).data;
 
-  /// Create a new mental must entry (offline-first).
   Result<WriteResult<MentalMustModel>> createMentalMust({
     required MentalMustModel must,
   }) {
@@ -44,7 +41,6 @@ class MentalMustRepository extends OfflineFirstRepository<MentalMustModel> {
     );
   }
 
-  /// Update a mental must entry, e.g. release it (offline-first).
   Result<WriteResult<MentalMustModel>> updateMentalMust({
     required String id,
     required Map<String, dynamic> data,
@@ -71,7 +67,6 @@ class MentalMustRepository extends OfflineFirstRepository<MentalMustModel> {
     );
   }
 
-  /// List mental must entries (offline-first).
   Result<List<MentalMustModel>> listMentalMusts({
     int page = 1,
     int pageSize = 50,

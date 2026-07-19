@@ -1,7 +1,3 @@
-/// Mood tracker model matching the backend API contract.
-///
-/// Represents one before/after mood measurement tied to a micro-activity,
-/// proving the effect of small activities on mood.
 class MoodTrackerModel {
   final String id;
   final String userId;
@@ -27,7 +23,6 @@ class MoodTrackerModel {
     this.createdAt,
   });
 
-  /// Computed delta (after - before) when the backend value is absent.
   int get delta => moodDelta ?? (moodAfter - moodBefore);
 
   factory MoodTrackerModel.fromJson(Map<String, dynamic> json) {
@@ -58,7 +53,6 @@ class MoodTrackerModel {
     };
   }
 
-  /// Serialize to a local SQLite row (typed columns).
   Map<String, dynamic> toDbMap() {
     return {
       'id': id,
@@ -74,7 +68,6 @@ class MoodTrackerModel {
     };
   }
 
-  /// Reconstruct from a local SQLite row.
   factory MoodTrackerModel.fromDbMap(Map<String, dynamic> map) {
     return MoodTrackerModel(
       id: map['id'] as String,

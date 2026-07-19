@@ -1,7 +1,6 @@
 import '../../../../core/database/syncable_local_data_source.dart';
 import '../models/sky_thought_model.dart';
 
-/// Local SQLite mirror + outbox for sky thoughts.
 class SkyThoughtLocalDataSource
     extends SyncableLocalDataSource<SkyThoughtModel> {
   @override

@@ -7,9 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../data/models/mood_tracker_model.dart';
 import '../view_models/mood_tracker_view_model.dart';
 
-/// Mood Tracker screen (Week 7) — guides the user through a before/after
-/// mood measurement around a chosen micro-activity, then persists the record
-/// and shows the delta plus recent history as proof that activity lifts mood.
 class MoodTrackerScreen extends StatefulWidget {
   const MoodTrackerScreen({super.key});
 
@@ -21,7 +18,6 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
   @override
   void initState() {
     super.initState();
-    // Preload history for the trend/proof section.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<MoodTrackerViewModel>().loadHistory();
     });
@@ -65,8 +61,6 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
   }
 }
 
-/// Inline picker shown when the screen is opened without a pre-selected
-/// activity (e.g. directly from the home quick-access tools).
 class _ActivityPicker extends StatelessWidget {
   final MoodTrackerViewModel vm;
 
@@ -108,7 +102,6 @@ class _ActivityPicker extends StatelessWidget {
   }
 }
 
-/// Banner showing the currently selected activity.
 class _SelectedActivityBanner extends StatelessWidget {
   final MoodTrackerViewModel vm;
 
@@ -166,7 +159,6 @@ class _SelectedActivityBanner extends StatelessWidget {
   }
 }
 
-/// Renders the UI for the current phase of the before/after flow.
 class _PhaseContent extends StatelessWidget {
   final MoodTrackerViewModel vm;
 
@@ -202,7 +194,6 @@ class _PhaseContent extends StatelessWidget {
   }
 }
 
-/// A mood measurement step with a 1-10 slider and a primary action button.
 class _MoodStep extends StatelessWidget {
   final String label;
   final int value;
@@ -304,7 +295,6 @@ class _MoodStep extends StatelessWidget {
   }
 }
 
-/// The "performing the activity" step, prompting the user to finish.
 class _DoingStep extends StatelessWidget {
   final MoodTrackerViewModel vm;
 
@@ -347,7 +337,6 @@ class _DoingStep extends StatelessWidget {
   }
 }
 
-/// The result step showing the mood delta and an encouraging message.
 class _ResultStep extends StatelessWidget {
   final MoodTrackerViewModel vm;
 
@@ -422,7 +411,6 @@ class _ResultStep extends StatelessWidget {
   }
 }
 
-/// A small labelled statistic used in the result summary.
 class _MoodStat extends StatelessWidget {
   final String label;
   final String value;
@@ -455,7 +443,6 @@ class _MoodStat extends StatelessWidget {
   }
 }
 
-/// The recent history / trend section shown below the flow.
 class _HistorySection extends StatelessWidget {
   final MoodTrackerViewModel vm;
 
@@ -492,7 +479,6 @@ class _HistorySection extends StatelessWidget {
   }
 }
 
-/// A single history row rendering an activity's before/after delta.
 class _HistoryRow extends StatelessWidget {
   final MoodTrackerModel record;
 

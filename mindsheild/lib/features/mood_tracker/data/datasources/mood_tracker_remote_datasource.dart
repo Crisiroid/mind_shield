@@ -5,21 +5,17 @@ import '../../../../core/sync/write_result.dart';
 import '../../../auth/data/models/auth_response_model.dart';
 import '../models/mood_tracker_model.dart';
 
-/// Contract for mood tracker remote operations.
 abstract class MoodTrackerRemoteDataSource {
-  /// Create a new mood tracker record (before/after an activity).
   Future<WriteResult<MoodTrackerModel>> createMoodTracker({
     required MoodTrackerModel mood,
   });
 
-  /// List mood tracker records for the current user.
   Future<List<MoodTrackerModel>> listMoodTrackers({
     int page = 1,
     int pageSize = 20,
   });
 }
 
-/// Implementation using Dio HTTP client.
 class MoodTrackerRemoteDataSourceImpl implements MoodTrackerRemoteDataSource {
   final Dio _dio;
 

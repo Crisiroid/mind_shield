@@ -6,8 +6,6 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../view_models/mental_must_view_model.dart';
 
-/// Mental Musts Backpack screen — visual backpack with stones
-/// representing mental musts that the user can release.
 class MentalMustScreen extends StatefulWidget {
   const MentalMustScreen({super.key});
 
@@ -62,7 +60,6 @@ class _MentalMustScreenState extends State<MentalMustScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Educational description
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(AppSizes.md),
@@ -105,7 +102,6 @@ class _MentalMustScreenState extends State<MentalMustScreen>
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Input section
           Text(
             AppStrings.addMentalMust,
             style: PersianFonts.Vazir.copyWith(
@@ -152,7 +148,6 @@ class _MentalMustScreenState extends State<MentalMustScreen>
           ),
           SizedBox(height: AppSizes.lg),
 
-          // Active musts as stones
           Text(
             '${AppStrings.activeMusts} (${vm.activeMusts.length})',
             style: PersianFonts.Vazir.copyWith(
@@ -239,7 +234,6 @@ class _MentalMustScreenState extends State<MentalMustScreen>
   }
 }
 
-/// Stone widget representing an active mental must.
 class _MustStone extends StatelessWidget {
   final dynamic must;
   final VoidCallback onRelease;
@@ -265,7 +259,6 @@ class _MustStone extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Stone icon
           Container(
             width: 48,
             height: 48,
@@ -276,7 +269,6 @@ class _MustStone extends StatelessWidget {
             child: Icon(Icons.grain, color: AppColors.warning, size: 28),
           ),
           SizedBox(width: AppSizes.sm),
-          // Must text
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,7 +292,6 @@ class _MustStone extends StatelessWidget {
               ],
             ),
           ),
-          // Release button
           TextButton(
             onPressed: onRelease,
             style: TextButton.styleFrom(
@@ -328,7 +319,6 @@ class _MustStone extends StatelessWidget {
   }
 }
 
-/// Card for a released mental must.
 class _ReleasedMustCard extends StatelessWidget {
   final dynamic must;
 

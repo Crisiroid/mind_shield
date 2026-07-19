@@ -7,10 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../data/models/sky_thought_model.dart';
 import '../view_models/thought_sky_view_model.dart';
 
-/// Thought Sky screen (Week 8) — the user types a negative thought which
-/// turns into a cloud drifting across a sky background; swiping/dragging a
-/// cloud dismisses it (updating the backend). A persistent mantra reminds
-/// the user: "من آسمانم، ابرها در حال عبورند".
 class ThoughtSkyScreen extends StatefulWidget {
   const ThoughtSkyScreen({super.key});
 
@@ -51,7 +47,6 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
       appBar: AppBar(title: const Text(AppStrings.thoughtSkyTitle)),
       body: Column(
         children: [
-          // The sky
           Expanded(
             child: Container(
               width: double.infinity,
@@ -68,7 +63,6 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
               ),
               child: Stack(
                 children: [
-                  // Persistent mantra
                   Align(
                     alignment: const Alignment(0, 0.75),
                     child: Padding(
@@ -86,7 +80,6 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
                     ),
                   ),
 
-                  // Empty-state hint
                   if (!vm.isLoading && vm.clouds.isEmpty)
                     Align(
                       alignment: const Alignment(0, -0.2),
@@ -104,11 +97,9 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
                       ),
                     ),
 
-                  // Loading indicator
                   if (vm.isLoading)
                     const Center(child: CircularProgressIndicator()),
 
-                  // Drifting clouds
                   for (final cloud in vm.clouds)
                     _DriftingCloud(
                       key: ValueKey(cloud.id.isNotEmpty ? cloud.id : cloud),
@@ -120,7 +111,6 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
             ),
           ),
 
-          // Input bar
           _ThoughtInputBar(
             controller: _controller,
             isSaving: vm.isSaving,
@@ -132,8 +122,6 @@ class _ThoughtSkyScreenState extends State<ThoughtSkyScreen> {
   }
 }
 
-/// A single cloud that drifts horizontally across the sky and can be
-/// swiped away to dismiss it.
 class _DriftingCloud extends StatefulWidget {
   final SkyThoughtModel cloud;
   final VoidCallback onSwipe;
@@ -146,7 +134,6 @@ class _DriftingCloud extends StatefulWidget {
 
 class _DriftingCloudState extends State<_DriftingCloud>
     with SingleTickerProviderStateMixin {
-  // Fixed vertical lanes in the upper sky the clouds travel along.
   static const List<double> _lanes = [-0.78, -0.58, -0.38, -0.18, 0.02, 0.22];
 
   late final AnimationController _controller;
@@ -157,10 +144,6 @@ class _DriftingCloudState extends State<_DriftingCloud>
   void initState() {
     super.initState();
 
-    // Derive every visual property from a stable seed tied to the cloud's
-    // identity — never from its position in the list. This keeps each cloud
-    // on the same lane at the same speed even as other clouds are added or
-    // swiped away, so nothing "jumps" when the list changes.
     final seed =
         (widget.cloud.id.isNotEmpty
                 ? widget.cloud.id
@@ -170,13 +153,8 @@ class _DriftingCloudState extends State<_DriftingCloud>
 
     _verticalAlign = _lanes[seed % _lanes.length];
 
-    // Stagger the starting position across the visible sky so freshly added
-    // clouds appear immediately, fully in view, instead of starting off the
-    // right edge and slowly drifting in. Mapped through the x formula below
-    // this range keeps every cloud's initial position on-screen.
     _phaseOffset = 0.28 + (seed % 1000) / 1000 * 0.44;
 
-    // Vary the drift speed a little so clouds don't move in lockstep.
     final seconds = 22 + (seed % 6) * 4;
     _controller = AnimationController(
       vsync: this,
@@ -196,8 +174,6 @@ class _DriftingCloudState extends State<_DriftingCloud>
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
-          // Loop the phase so the cloud continuously enters from the right
-          // (x = 1.3, off-screen) and exits to the left (x = -1.3).
           final phase = (_controller.value + _phaseOffset) % 1.0;
           final x = 1.3 - 2.6 * phase;
           return Align(alignment: Alignment(x, _verticalAlign), child: child);
@@ -213,8 +189,6 @@ class _DriftingCloudState extends State<_DriftingCloud>
   }
 }
 
-/// The visual cloud bubble carrying a thought's text, painted as a soft,
-/// fluffy cloud silhouette rather than a plain rounded box.
 class _CloudBubble extends StatelessWidget {
   final String text;
 
@@ -226,8 +200,6 @@ class _CloudBubble extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 240),
       child: CustomPaint(
         painter: const _CloudPainter(),
-        // Generous padding keeps the text within the fluffy silhouette,
-        // clear of the top bumps and rounded base.
         child: Padding(
           padding: EdgeInsets.fromLTRB(
             AppSizes.xl,
@@ -270,7 +242,6 @@ class _CloudBubble extends StatelessWidget {
   }
 }
 
-/// Paints a soft, multi-lobed cloud silhouette that fills the given size.
 class _CloudPainter extends CustomPainter {
   const _CloudPainter();
 
@@ -279,16 +250,12 @@ class _CloudPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // Build the cloud as the union of a rounded base body plus several
-    // overlapping circular puffs. A non-zero fill merges them into one
-    // smooth silhouette with no internal seams.
     final path = Path()..fillType = PathFillType.nonZero;
 
     final bodyRect = Rect.fromLTWH(w * 0.05, h * 0.34, w * 0.90, h * 0.60);
     path.addRRect(
       RRect.fromRectAndRadius(bodyRect, Radius.circular(bodyRect.height / 2)),
     );
-    // Top fluffy bumps.
     path.addOval(
       Rect.fromCircle(center: Offset(w * 0.30, h * 0.36), radius: h * 0.28),
     );
@@ -298,7 +265,6 @@ class _CloudPainter extends CustomPainter {
     path.addOval(
       Rect.fromCircle(center: Offset(w * 0.72, h * 0.36), radius: h * 0.28),
     );
-    // Side puffs.
     path.addOval(
       Rect.fromCircle(center: Offset(w * 0.14, h * 0.64), radius: h * 0.24),
     );
@@ -306,10 +272,8 @@ class _CloudPainter extends CustomPainter {
       Rect.fromCircle(center: Offset(w * 0.86, h * 0.64), radius: h * 0.24),
     );
 
-    // Soft drop shadow beneath the cloud.
     canvas.drawShadow(path, Colors.black.withValues(alpha: 0.30), 6, false);
 
-    // Fill with a gentle top-to-bottom white -> pale-blue gradient for depth.
     final fill = Paint()
       ..shader = const LinearGradient(
         begin: Alignment.topCenter,
@@ -323,7 +287,6 @@ class _CloudPainter extends CustomPainter {
   bool shouldRepaint(_CloudPainter oldDelegate) => false;
 }
 
-/// The bottom input bar for typing and releasing a new thought.
 class _ThoughtInputBar extends StatelessWidget {
   final TextEditingController controller;
   final bool isSaving;
