@@ -74,6 +74,7 @@ import 'features/profile/data/datasources/profile_remote_datasource.dart';
 import 'features/profile/data/repositories/profile_repository.dart';
 import 'features/profile/presentation/view_models/profile_view_model.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
+import 'core/services/dialog_service.dart';
 import 'core/services/sync_manager.dart';
 import 'core/sync/syncable_repository.dart';
 import 'features/emotion_triangle/data/datasources/emotion_triangle_local_datasource.dart';
@@ -89,8 +90,21 @@ import 'features/mood_tracker/data/datasources/mood_tracker_local_datasource.dar
 import 'features/role_balance/data/datasources/role_value_local_datasource.dart';
 import 'features/thought_sky/data/datasources/sky_thought_local_datasource.dart';
 
-class MindShieldApp extends StatelessWidget {
+class MindShieldApp extends StatefulWidget {
   const MindShieldApp({super.key});
+
+  @override
+  State<MindShieldApp> createState() => _MindShieldAppState();
+}
+
+class _MindShieldAppState extends State<MindShieldApp> {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    DialogService.init(_navigatorKey);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -245,6 +259,7 @@ class MindShieldApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        navigatorKey: _navigatorKey,
         title: AppStrings.appTitle,
         debugShowCheckedModeBanner: false,
 
