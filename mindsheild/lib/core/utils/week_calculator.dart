@@ -1,14 +1,24 @@
 class WeekCalculator {
   WeekCalculator._();
 
+  /// Number of full calendar days that have elapsed since [registrationDate].
+  ///
+  /// Both the registration date and "now" are normalized to local midnight so
+  /// that the value reflects calendar days rather than 24-hour chunks. An
+  /// account created late in the evening therefore rolls over to the next day
+  /// at midnight instead of ~24 hours later.
+  static int _calendarDaysSince(DateTime registrationDate) {
+    final reg = registrationDate.toLocal();
+    final now = DateTime.now();
+    final regMidnight = DateTime(reg.year, reg.month, reg.day);
+    final nowMidnight = DateTime(now.year, now.month, now.day);
+    final days = nowMidnight.difference(regMidnight).inDays;
+    return days < 0 ? 0 : days;
+  }
+
   static int currentWeekIndex(DateTime? registrationDate) {
-    if (registrationDate == null || registrationDate.isAfter(DateTime.now())) {
-      return 0;
-    }
-    final daysSinceRegistration = DateTime.now()
-        .difference(registrationDate)
-        .inDays;
-    final weekIndex = daysSinceRegistration ~/ 7;
+    if (registrationDate == null) return 0;
+    final weekIndex = _calendarDaysSince(registrationDate) ~/ 7;
     return weekIndex.clamp(0, 7);
   }
 
@@ -17,13 +27,8 @@ class WeekCalculator {
   }
 
   static int currentDayIndex(DateTime? registrationDate) {
-    if (registrationDate == null || registrationDate.isAfter(DateTime.now())) {
-      return 0;
-    }
-    final daysSinceRegistration = DateTime.now()
-        .difference(registrationDate)
-        .inDays;
-    return daysSinceRegistration.clamp(0, 55);
+    if (registrationDate == null) return 0;
+    return _calendarDaysSince(registrationDate).clamp(0, 55);
   }
 
   static int currentDayNumber(DateTime? registrationDate) {

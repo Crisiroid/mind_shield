@@ -41,8 +41,6 @@ class NotificationService {
   static Future<void> scheduleDailyNotifications() async {
     await _notifications.cancelAll();
 
-    final tz.TZLocal local = tz.local;
-
     await _notifications.zonedSchedule(
       0,
       'صبح بخیر! ☀️',

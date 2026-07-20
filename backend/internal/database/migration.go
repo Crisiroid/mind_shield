@@ -33,6 +33,7 @@ func AutoMigrate(db *gorm.DB) error {
 		&models.WeeklyReport{},
 
 		&models.WeeklyMediaContent{},
+		&models.UserMediaProgress{},
 
 		&models.AdminUser{},
 		&models.AdminRole{},

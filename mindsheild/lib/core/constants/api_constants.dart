@@ -47,4 +47,9 @@ class ApiConstants {
   static const String reports = '$apiPrefix/reports';
 
   static const String weeklyMedia = '$apiPrefix/media/weekly';
+
+  // User-facing media library + per-user progress tracking (distinct from the
+  // admin-only /media/weekly routes so role-scoped routes never collide).
+  static const String mediaLibrary = '$apiPrefix/media/library';
+  static const String mediaProgress = '$apiPrefix/media/progress';
 }

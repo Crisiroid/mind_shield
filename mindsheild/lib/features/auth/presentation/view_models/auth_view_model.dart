@@ -133,7 +133,18 @@ class AuthViewModel extends ChangeNotifier {
       );
     }
 
-    await TokenService.setAgreementAccepted(tokenData.user.agreementAccepted);
+    // Agreement acceptance is permanent: never downgrade a locally-accepted
+    // agreement back to false just because the server default is false. If the
+    // user already accepted locally but the server has not recorded it yet,
+    // persist it to the backend so it survives reinstalls and other devices.
+    final accepted =
+        tokenData.user.agreementAccepted || TokenService.isAgreementAccepted();
+    await TokenService.setAgreementAccepted(accepted);
+    if (accepted && !tokenData.user.agreementAccepted) {
+      try {
+        await _authRepository.acceptAgreement();
+      } catch (_) {}
+    }
 
     if (tokenData.user.registrationDate != null) {
       await TokenService.setRegistrationDate(

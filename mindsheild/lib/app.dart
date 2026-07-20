@@ -74,6 +74,15 @@ import 'features/profile/data/datasources/profile_remote_datasource.dart';
 import 'features/profile/data/repositories/profile_repository.dart';
 import 'features/profile/presentation/view_models/profile_view_model.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
+import 'features/weekly_content/data/datasources/weekly_content_remote_datasource.dart';
+import 'features/weekly_content/data/datasources/media_progress_remote_datasource.dart';
+import 'features/weekly_content/data/datasources/media_progress_local_datasource.dart';
+import 'features/weekly_content/data/repositories/weekly_content_repository.dart';
+import 'features/weekly_content/data/repositories/media_progress_repository.dart';
+import 'features/weekly_content/presentation/view_models/weekly_content_view_model.dart';
+import 'features/weekly_content/presentation/screens/content_library_screen.dart';
+import 'features/weekly_content/presentation/screens/video_player_screen.dart';
+import 'features/weekly_content/presentation/screens/audio_player_screen.dart';
 import 'core/services/dialog_service.dart';
 import 'core/services/sync_manager.dart';
 import 'core/sync/syncable_repository.dart';
@@ -191,6 +200,14 @@ class _MindShieldAppState extends State<MindShieldApp> {
     final profileDataSource = ProfileRemoteDataSourceImpl();
     final profileRepository = ProfileRepository(profileDataSource);
 
+    final weeklyContentRepository = WeeklyContentRepository(
+      WeeklyContentRemoteDataSourceImpl(),
+    );
+    final mediaProgressRepository = MediaProgressRepository(
+      MediaProgressRemoteDataSourceImpl(),
+      MediaProgressLocalDataSource(),
+    );
+
     final List<SyncableRepository> syncableRepositories = <SyncableRepository>[
       emotionRepository,
       bodyTensionRepository,
@@ -204,6 +221,7 @@ class _MindShieldAppState extends State<MindShieldApp> {
       moodTrackerRepository,
       roleValueRepository,
       skyThoughtRepository,
+      mediaProgressRepository,
     ];
     final syncManager = SyncManager(syncableRepositories);
 
@@ -257,6 +275,12 @@ class _MindShieldAppState extends State<MindShieldApp> {
         ChangeNotifierProvider(
           create: (_) => ProfileViewModel(profileRepository),
         ),
+        ChangeNotifierProvider(
+          create: (_) => WeeklyContentViewModel(
+            weeklyContentRepository,
+            mediaProgressRepository,
+          ),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: _navigatorKey,
@@ -299,6 +323,9 @@ class _MindShieldAppState extends State<MindShieldApp> {
           '/role-balance': (context) => const RoleBalanceScreen(),
           '/thought-sky': (context) => const ThoughtSkyScreen(),
           '/profile': (context) => const ProfileScreen(),
+          '/content-library': (context) => const ContentLibraryScreen(),
+          '/content-video': (context) => const VideoPlayerScreen(),
+          '/content-audio': (context) => const AudioPlayerScreen(),
         },
       ),
     );

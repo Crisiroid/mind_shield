@@ -62,9 +62,11 @@ class HomeViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = AppConfig.isDebug
-        ? await _homeRepository.getAllMedia()
-        : await _homeRepository.getMediaByWeek(weekNumber: _currentWeek);
+    // Home always shows the content published for the user's current week.
+    // (Admin-only "all media" listing is intentionally not used here.)
+    final result = await _homeRepository.getMediaByWeek(
+      weekNumber: _currentWeek,
+    );
 
     result.fold(
       (failure) {
@@ -342,6 +344,16 @@ class HomeViewModel extends ChangeNotifier {
 
   List<ToolItem> getPermanentTools([BuildContext? context]) {
     return [
+      ToolItem(
+        label: 'کتابخانه محتوا',
+        icon: Icons.video_library_outlined,
+        color: const Color(0xFF6C63FF),
+        onTap: () {
+          if (context != null) {
+            Navigator.of(context).pushNamed('/content-library');
+          }
+        },
+      ),
       ToolItem(
         label: 'تایمر آگاهانه',
         icon: Icons.timer_outlined,

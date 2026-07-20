@@ -42,6 +42,11 @@ dependencies:
   flutter_local_notifications: ^17.2.2
   timezone: ^0.9.4
 
+  # Media players (weekly content library)
+  video_player: ^2.9.2
+  chewie: ^1.8.5
+  just_audio: ^0.9.42
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

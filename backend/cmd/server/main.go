@@ -67,6 +67,7 @@ func main() {
 	var weeklyReportRepo interfaces.WeeklyReportRepositoryInterface = repository.NewWeeklyReportRepository(db)
 	var systemLogRepo interfaces.SystemLogRepositoryInterface = repository.NewSystemLogRepository(db)
 	var weeklyMediaContentRepo interfaces.WeeklyMediaContentRepositoryInterface = repository.NewWeeklyMediaContentRepository(db)
+	var userMediaProgressRepo interfaces.UserMediaProgressRepositoryInterface = repository.NewUserMediaProgressRepository(db)
 
 	jwtService := service.NewJWTService(
 		cfg.JWT.Secret,
@@ -98,6 +99,7 @@ func main() {
 	var weeklyReportService interfaces.WeeklyReportServiceInterface = service.NewWeeklyReportService(weeklyReportRepo)
 	var systemLogService interfaces.SystemLogServiceInterface = service.NewSystemLogService(systemLogRepo)
 	var weeklyMediaContentService interfaces.WeeklyMediaContentServiceInterface = service.NewWeeklyMediaContentService(weeklyMediaContentRepo)
+	var userMediaProgressService interfaces.UserMediaProgressServiceInterface = service.NewUserMediaProgressService(userMediaProgressRepo)
 
 	authHandler := handler.NewAuthHandler(authService)
 	userHandler := handler.NewUserHandler(userService)
@@ -121,10 +123,11 @@ func main() {
 	uploadDirectory := config.GetEnv("UPLOAD_DIR", "./uploads")
 	baseURL := config.GetEnv("BASE_URL", "http://localhost:8080")
 	mediaContentHandler := handler.NewWeeklyMediaContentHandler(weeklyMediaContentService, uploadDirectory, baseURL)
+	mediaProgressHandler := handler.NewUserMediaProgressHandler(userMediaProgressService)
 
 	jwtMiddleware := middleware.NewJWTMiddleware(jwtService)
 
-	SetupRoutes(e, authHandler, userHandler, adminHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, jwtMiddleware, uploadDirectory)
+	SetupRoutes(e, authHandler, userHandler, adminHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, mediaProgressHandler, jwtMiddleware, uploadDirectory)
 
 	go func() {
 		addr := ":" + cfg.App.Port

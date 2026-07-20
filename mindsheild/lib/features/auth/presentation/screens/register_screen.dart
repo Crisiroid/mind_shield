@@ -209,7 +209,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           } else if (auth.isAuthenticated) {
             final onboardingComplete = TokenService.isOnboardingComplete();
-            _syncAgreementIfNeeded(auth);
             final appProvider = context.read<AppProvider>();
             await appProvider.runInitialSync();
             if (!mounted) return;
@@ -218,11 +217,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ).pushReplacementNamed(onboardingComplete ? '/home' : '/roadmap');
           }
         });
-  }
-
-  void _syncAgreementIfNeeded(AuthViewModel auth) {
-    if (TokenService.isAgreementAccepted()) {
-      auth.acceptAgreement();
-    }
   }
 }

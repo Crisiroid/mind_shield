@@ -41,4 +41,23 @@ type (
 	WeeklyMediaContentListResponse struct {
 		PaginatedResponse[WeeklyMediaContentResponse]
 	}
+
+	UserMediaProgressUpsertRequest struct {
+		Status          string `json:"status" validate:"required,oneof=not_started in_progress completed"`
+		ProgressSeconds int    `json:"progress_seconds" validate:"min=0"`
+	}
+
+	UserMediaProgressResponse struct {
+		ID              string  `json:"id"`
+		MediaContentID  string  `json:"media_content_id"`
+		Status          string  `json:"status"`
+		ProgressSeconds int     `json:"progress_seconds"`
+		CompletedAt     *string `json:"completed_at,omitempty"`
+		CreatedAt       string  `json:"created_at"`
+		UpdatedAt       string  `json:"updated_at"`
+	}
+
+	UserMediaProgressListResponse struct {
+		PaginatedResponse[UserMediaProgressResponse]
+	}
 )

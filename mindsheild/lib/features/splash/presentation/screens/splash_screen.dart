@@ -7,7 +7,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/providers/app_provider.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/persian_date_formatter.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -29,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     _loadLastLogin();
-    _requestPermissions();
 
     _controller = AnimationController(
       vsync: this,
@@ -67,19 +65,6 @@ class _SplashScreenState extends State<SplashScreen>
     final lastLogin = DateTime.tryParse(TokenService.getLastLogin() ?? '');
     if (lastLogin != null && mounted) {
       setState(() => _lastLoginTime = PersianDateFormatter.dateTime(lastLogin));
-    }
-  }
-
-  Future<void> _requestPermissions() async {
-    await Permission.notification.request();
-
-    final status = await Permission.storage.status;
-    if (status.isDenied) {
-      await Permission.storage.request();
-    }
-
-    if (mounted) {
-      setState(() {});
     }
   }
 

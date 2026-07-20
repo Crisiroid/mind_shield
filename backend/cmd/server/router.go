@@ -30,6 +30,7 @@ func SetupRoutes(
 	mindfulnessHandler *handler.MindfulnessHandler,
 	reportHandler *handler.ReportHandler,
 	mediaContentHandler *handler.WeeklyMediaContentHandler,
+	mediaProgressHandler *handler.UserMediaProgressHandler,
 	jwtMiddleware *middleware.JWTMiddleware,
 	uploadDirectory string,
 ) {
@@ -41,7 +42,7 @@ func SetupRoutes(
 
 	setupAuthRoutes(e, authHandler, adminHandler)
 
-	setupUserRoutes(e, authHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, jwtMiddleware)
+	setupUserRoutes(e, authHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, mediaProgressHandler, jwtMiddleware)
 
 	setupAdminRoutes(e, authHandler, adminHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, jwtMiddleware)
 }
@@ -73,6 +74,7 @@ func setupUserRoutes(
 	mindfulnessHandler *handler.MindfulnessHandler,
 	reportHandler *handler.ReportHandler,
 	mediaContentHandler *handler.WeeklyMediaContentHandler,
+	mediaProgressHandler *handler.UserMediaProgressHandler,
 	jwtMiddleware *middleware.JWTMiddleware,
 ) {
 	userAuth := e.Group("")
@@ -104,7 +106,7 @@ func setupUserRoutes(
 
 	setupUserReportRoutes(userApi, reportHandler)
 
-	setupMediaContentRoutes(userApi, mediaContentHandler)
+	setupMediaContentRoutes(userApi, mediaContentHandler, mediaProgressHandler)
 }
 
 func setupAdminRoutes(
@@ -381,9 +383,18 @@ func publicHealthCheckHandler(c echo.Context) error {
 	})
 }
 
-func setupMediaContentRoutes(g *echo.Group, mediaContentHandler *handler.WeeklyMediaContentHandler) {
-	// Read-only media routes for mobile app users (admin group handles write + read)
-	g.GET("/api/v1/media/weekly/by-week/:week_number", mediaContentHandler.GetMediaContentByWeek)
+func setupMediaContentRoutes(g *echo.Group, mediaContentHandler *handler.WeeklyMediaContentHandler, mediaProgressHandler *handler.UserMediaProgressHandler) {
+	// User-facing media library. These use paths distinct from the admin group
+	// (which registers /api/v1/media/weekly*) so the two role-scoped route sets
+	// never collide on the shared Echo instance. ListMediaContent forces
+	// is_active=true for role "user", so only published content is returned.
+	g.GET("/api/v1/media/library", mediaContentHandler.ListMediaContent)
+	g.GET("/api/v1/media/library/week/:week_number", mediaContentHandler.GetMediaContentByWeek)
+	g.GET("/api/v1/media/library/:id/download", mediaContentHandler.DownloadMediaContent)
+
+	// Per-user watched/progress tracking
+	g.GET("/api/v1/media/progress", mediaProgressHandler.ListMyProgress)
+	g.PUT("/api/v1/media/progress/:media_id", mediaProgressHandler.UpsertProgress)
 }
 
 func setupAdminMediaContentRoutes(g *echo.Group, mediaContentHandler *handler.WeeklyMediaContentHandler) {
