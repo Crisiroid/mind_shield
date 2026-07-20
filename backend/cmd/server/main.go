@@ -124,7 +124,7 @@ func main() {
 
 	jwtMiddleware := middleware.NewJWTMiddleware(jwtService)
 
-	SetupRoutes(e, authHandler, userHandler, adminHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, jwtMiddleware)
+	SetupRoutes(e, authHandler, userHandler, adminHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, jwtMiddleware, uploadDirectory)
 
 	go func() {
 		addr := ":" + cfg.App.Port

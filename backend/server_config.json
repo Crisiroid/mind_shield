@@ -3,13 +3,13 @@
         "ip": "87.107.165.75",
         "user": "root",
         "password": "MVjcy4omb6",
-        "ssh_port": 22,
+        "ssh_port": 9011,
         "os": "linux",
         "arch": "amd64"
     },
     "deployment": {
         "base_path": "/opt/psychology-backend",
-        "binary_path": "/opt/psychology-backend/bin/server",
+        "binary_path": "/opt/psychology-backend/server",
         "env_path": "/opt/psychology-backend/.env",
         "uploads_path": "/opt/psychology-backend/uploads",
         "service_name": "psychology",
@@ -36,7 +36,7 @@
         "expiration": "24h"
     },
     "firewall": {
-        "ssh_port": 22,
+        "ssh_port": 9011,
         "app_port": 8080,
         "tool": "ufw"
     },
@@ -50,7 +50,7 @@
     },
     "technologies": {
         "backend": "Go (Golang)",
-        "framework": "Gin",
+        "framework": "Echo",
         "orm": "GORM",
         "database": "PostgreSQL 15+",
         "auth": "JWT (HS256)",

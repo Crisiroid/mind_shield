@@ -38,6 +38,10 @@ dependencies:
   rename_app: ^1.6.6
   package_info_plus: ^8.3.0
 
+  # Notifications
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

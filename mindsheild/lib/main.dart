@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'app.dart';
 import 'core/services/storage_service.dart';
 import 'core/services/token_service.dart';
+import 'core/services/notification_service.dart';
 import 'core/network/dio_client.dart';
 import 'core/network/api_interceptor.dart';
 import 'core/config/app_config.dart';
@@ -24,6 +25,10 @@ void main() async {
 
   await StorageService.init();
   await TokenService.init();
+
+  // Initialize notification service
+  await NotificationService.init();
+  await NotificationService.scheduleDailyNotifications();
 
   final interceptors = <dynamic>[
     ApiInterceptor(),

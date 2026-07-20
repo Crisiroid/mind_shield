@@ -5,7 +5,7 @@
 | Item                  | Path                                    |
 |-----------------------|-----------------------------------------|
 | Deploy directory      | `/opt/psychology-backend`               |
-| Binary                | `/opt/psychology-backend/bin/server`    |
+| Binary                | `/opt/psychology-backend/server`      |
 | Environment file      | `/opt/psychology-backend/.env`          |
 | Uploads directory     | `/opt/psychology-backend/uploads`       |
 | Systemd service file  | `/etc/systemd/system/psychology.service`|
@@ -116,7 +116,7 @@ Type=simple
 User=root
 Group=root
 WorkingDirectory=/opt/psychology-backend
-ExecStart=/opt/psychology-backend/bin/server
+ExecStart=/opt/psychology-backend/server
 Restart=on-failure
 RestartSec=5
 StandardOutput=journal
@@ -160,7 +160,7 @@ apt update && apt install ufw -y
 
 ### Allow SSH (always do this first!)
 ```bash
-ufw allow 22/tcp
+ufw allow 9011/tcp
 ```
 
 ### Allow the app port
@@ -205,11 +205,12 @@ cd c:\Users\Crisiroid\Desktop\KarlancerProject\Psychology\backend
 $env:GOOS="linux"; $env:GOARCH="amd64"; go build -o bin/server ./cmd/server
 
 # Step 2: Upload binary
-scp -P 22 bin/server root@YOUR_SERVER_IP:/opt/psychology-backend/bin/server
+scp -P 9011 bin/server root@87.107.165.75:/opt/psychology-backend/server
 
 # Step 3: SSH into server and restart
-ssh root@YOUR_SERVER_IP
-chmod +x /opt/psychology-backend/bin/server
+ssh -p 9011 root@87.107.165.75
+systemctl stop psychology
+chmod +x /opt/psychology-backend/server
 systemctl restart psychology
 systemctl status psychology
 ```
@@ -234,8 +235,8 @@ journalctl -u psychology -n 50 --no-pager
 ss -tlnp | grep 8080
 
 # Check binary exists and is executable
-ls -la /opt/psychology-backend/bin/server
-file /opt/psychology-backend/bin/server
+ls -la /opt/psychology-backend/server
+file /opt/psychology-backend/server
 ```
 
 ### Database connection refused
@@ -288,6 +289,8 @@ systemctl start psychology
 | Last 50 lines        | `journalctl -u psychology -n 50 --no-pager`         |
 | Edit env             | `nano /opt/psychology-backend/.env`                  |
 | Edit service file    | `nano /etc/systemd/system/psychology.service`        |
+| Upload binary        | `scp -P 9011 bin/server root@87.107.165.75:/opt/psychology-backend/server` |
+| SSH into server      | `ssh -p 9011 root@87.107.165.75`                    |
 | Check port           | `ss -tlnp \| grep 8080`                             |
 | Firewall status      | `ufw status`                                         |
 | Disk space           | `df -h`                                              |
