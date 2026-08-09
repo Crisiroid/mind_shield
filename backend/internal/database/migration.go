@@ -32,6 +32,9 @@ func AutoMigrate(db *gorm.DB) error {
 		&models.AcceptanceExercise{},
 		&models.WeeklyReport{},
 
+		&models.WeeklyExerciseResponse{},
+		&models.DayProgress{},
+
 		&models.WeeklyMediaContent{},
 		&models.UserMediaProgress{},
 

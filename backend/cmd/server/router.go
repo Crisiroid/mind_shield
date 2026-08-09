@@ -31,6 +31,8 @@ func SetupRoutes(
 	reportHandler *handler.ReportHandler,
 	mediaContentHandler *handler.WeeklyMediaContentHandler,
 	mediaProgressHandler *handler.UserMediaProgressHandler,
+	weeklyExerciseHandler *handler.WeeklyExerciseHandler,
+	dayProgressHandler *handler.DayProgressHandler,
 	jwtMiddleware *middleware.JWTMiddleware,
 	uploadDirectory string,
 ) {
@@ -42,9 +44,9 @@ func SetupRoutes(
 
 	setupAuthRoutes(e, authHandler, adminHandler)
 
-	setupUserRoutes(e, authHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, mediaProgressHandler, jwtMiddleware)
+	setupUserRoutes(e, authHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, mediaProgressHandler, weeklyExerciseHandler, dayProgressHandler, jwtMiddleware)
 
-	setupAdminRoutes(e, authHandler, adminHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, jwtMiddleware)
+	setupAdminRoutes(e, authHandler, adminHandler, userHandler, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler, mediaContentHandler, weeklyExerciseHandler, dayProgressHandler, jwtMiddleware)
 }
 
 func setupAuthRoutes(e *echo.Echo, authHandler *handler.AuthHandler, adminHandler *handler.AdminHandler) {
@@ -75,6 +77,8 @@ func setupUserRoutes(
 	reportHandler *handler.ReportHandler,
 	mediaContentHandler *handler.WeeklyMediaContentHandler,
 	mediaProgressHandler *handler.UserMediaProgressHandler,
+	weeklyExerciseHandler *handler.WeeklyExerciseHandler,
+	dayProgressHandler *handler.DayProgressHandler,
 	jwtMiddleware *middleware.JWTMiddleware,
 ) {
 	userAuth := e.Group("")
@@ -107,6 +111,9 @@ func setupUserRoutes(
 	setupUserReportRoutes(userApi, reportHandler)
 
 	setupMediaContentRoutes(userApi, mediaContentHandler, mediaProgressHandler)
+
+	setupWeeklyExerciseRoutes(userApi, weeklyExerciseHandler)
+	setupDayProgressRoutes(userApi, dayProgressHandler)
 }
 
 func setupAdminRoutes(
@@ -128,6 +135,8 @@ func setupAdminRoutes(
 	mindfulnessHandler *handler.MindfulnessHandler,
 	reportHandler *handler.ReportHandler,
 	mediaContentHandler *handler.WeeklyMediaContentHandler,
+	weeklyExerciseHandler *handler.WeeklyExerciseHandler,
+	dayProgressHandler *handler.DayProgressHandler,
 	jwtMiddleware *middleware.JWTMiddleware,
 ) {
 	adminAuth := e.Group("")
@@ -155,6 +164,9 @@ func setupAdminRoutes(
 	setupAdminDataRoutes(adminApi, calendarHandler, emotionHandler, breathingHandler, cognitiveHandler, mentalMustHandler, negativeThoughtHandler, mindCourtHandler, conflictExerciseHandler, moodTrackerHandler, roleValueHandler, skyThoughtHandler, mindfulnessHandler, reportHandler)
 
 	setupAdminMediaContentRoutes(adminApi, mediaContentHandler)
+
+	setupAdminWeeklyExerciseRoutes(adminApi, weeklyExerciseHandler)
+	setupAdminDayProgressRoutes(adminApi, dayProgressHandler)
 }
 
 func setupCalendarRoutes(g *echo.Group, calendarHandler *handler.CalendarHandler) {
@@ -405,4 +417,32 @@ func setupAdminMediaContentRoutes(g *echo.Group, mediaContentHandler *handler.We
 	g.DELETE("/api/v1/media/weekly/:id", mediaContentHandler.DeleteMediaContent)
 	g.GET("/api/v1/media/weekly/by-week/:week_number", mediaContentHandler.GetMediaContentByWeek)
 	g.GET("/api/v1/media/weekly/:id/download", mediaContentHandler.DownloadMediaContent)
+}
+
+func setupWeeklyExerciseRoutes(g *echo.Group, h *handler.WeeklyExerciseHandler) {
+	g.POST(schemas.RouteWeeklyExerciseResponses, h.CreateWeeklyExerciseResponse)
+	g.GET(schemas.RouteWeeklyExerciseResponseByID, h.GetWeeklyExerciseResponseByID)
+	g.GET(schemas.RouteWeeklyExerciseResponses, h.ListWeeklyExerciseResponses)
+	g.PUT(schemas.RouteWeeklyExerciseResponseByID, h.UpdateWeeklyExerciseResponse)
+	g.DELETE(schemas.RouteWeeklyExerciseResponseByID, h.DeleteWeeklyExerciseResponse)
+	g.GET("/api/v1/weekly-exercises/user/week/:week_number", h.GetByUserAndWeek)
+}
+
+func setupDayProgressRoutes(g *echo.Group, h *handler.DayProgressHandler) {
+	g.POST(schemas.RouteDayProgress, h.CreateDayProgress)
+	g.GET(schemas.RouteDayProgressByID, h.GetDayProgressByID)
+	g.GET(schemas.RouteDayProgress, h.ListDayProgress)
+	g.PUT(schemas.RouteDayProgressByID, h.UpdateDayProgress)
+	g.DELETE(schemas.RouteDayProgressByID, h.DeleteDayProgress)
+	g.GET(schemas.RouteDayProgressSummary, h.GetSummary)
+	g.POST("/api/v1/day-progress/complete", h.MarkDayCompleted)
+}
+
+func setupAdminWeeklyExerciseRoutes(g *echo.Group, h *handler.WeeklyExerciseHandler) {
+	g.GET(schemas.RouteWeeklyExerciseResponses, h.ListWeeklyExerciseResponses)
+}
+
+func setupAdminDayProgressRoutes(g *echo.Group, h *handler.DayProgressHandler) {
+	g.GET(schemas.RouteDayProgress, h.ListDayProgress)
+	g.GET(schemas.RouteDayProgressSummary, h.GetSummary)
 }

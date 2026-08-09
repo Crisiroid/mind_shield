@@ -95,9 +95,15 @@ class HomeViewModel extends ChangeNotifier {
       case 1:
         return [
           ToolItem(
+            label: 'تمرینات هفته اول',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week1'),
+          ),
+          ToolItem(
             label: 'مثلث هیجان',
             icon: Icons.change_history,
-            color: const Color(0xFF6C63FF),
+            color: const Color(0xFF9C27B0),
             onTap: () => Navigator.of(context!).pushNamed('/emotion-triangle'),
           ),
           ToolItem(
@@ -235,6 +241,12 @@ class HomeViewModel extends ChangeNotifier {
 
   List<ToolItem> _getAllTools(BuildContext? context) {
     return [
+      ToolItem(
+        label: 'تمرینات هفته اول',
+        icon: Icons.auto_stories,
+        color: const Color(0xFF6C63FF),
+        onTap: () => Navigator.of(context!).pushNamed('/week1'),
+      ),
       ToolItem(
         label: 'مثلث هیجان',
         icon: Icons.change_history,
@@ -394,7 +406,7 @@ class HomeViewModel extends ChangeNotifier {
   String? getStartExerciseRoute() {
     switch (_currentWeek) {
       case 1:
-        return '/emotion-triangle';
+        return '/week1';
       case 2:
         return '/breathing';
       case 3:

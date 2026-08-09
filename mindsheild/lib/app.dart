@@ -98,6 +98,11 @@ import 'features/conflict_exercise/data/datasources/conflict_exercise_local_data
 import 'features/mood_tracker/data/datasources/mood_tracker_local_datasource.dart';
 import 'features/role_balance/data/datasources/role_value_local_datasource.dart';
 import 'features/thought_sky/data/datasources/sky_thought_local_datasource.dart';
+import 'features/week1_exercise/data/datasources/week1_remote_datasource.dart';
+import 'features/week1_exercise/data/datasources/week1_local_datasource.dart';
+import 'features/week1_exercise/data/repositories/week1_repositories.dart';
+import 'features/week1_exercise/presentation/view_models/week1_view_model.dart';
+import 'features/week1_exercise/presentation/screens/week1_home_screen.dart';
 
 class MindShieldApp extends StatefulWidget {
   const MindShieldApp({super.key});
@@ -197,6 +202,15 @@ class _MindShieldAppState extends State<MindShieldApp> {
       SkyThoughtLocalDataSource(),
     );
 
+    final week1ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final dayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
     final profileDataSource = ProfileRemoteDataSourceImpl();
     final profileRepository = ProfileRepository(profileDataSource);
 
@@ -222,6 +236,8 @@ class _MindShieldAppState extends State<MindShieldApp> {
       roleValueRepository,
       skyThoughtRepository,
       mediaProgressRepository,
+      week1ExerciseRepo,
+      dayProgressRepo,
     ];
     final syncManager = SyncManager(syncableRepositories);
 
@@ -281,6 +297,9 @@ class _MindShieldAppState extends State<MindShieldApp> {
             mediaProgressRepository,
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => Week1ViewModel(week1ExerciseRepo, dayProgressRepo),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: _navigatorKey,
@@ -326,6 +345,7 @@ class _MindShieldAppState extends State<MindShieldApp> {
           '/content-library': (context) => const ContentLibraryScreen(),
           '/content-video': (context) => const VideoPlayerScreen(),
           '/content-audio': (context) => const AudioPlayerScreen(),
+          '/week1': (context) => const Week1HomeScreen(),
         },
       ),
     );

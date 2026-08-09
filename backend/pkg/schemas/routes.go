@@ -73,6 +73,15 @@ const (
 )
 
 const (
+	RouteWeeklyExerciseResponses    = "/api/v1/weekly-exercises"
+	RouteWeeklyExerciseResponseByID = "/api/v1/weekly-exercises/:id"
+
+	RouteDayProgress        = "/api/v1/day-progress"
+	RouteDayProgressByID    = "/api/v1/day-progress/:id"
+	RouteDayProgressSummary = "/api/v1/day-progress/summary"
+)
+
+const (
 	RouteReportsDashboard         = "/api/v1/reports/dashboard"
 	RouteReportsUserActivity      = "/api/v1/reports/user-activity"
 	RouteReportsStressAnalytics   = "/api/v1/reports/stress-analytics"
