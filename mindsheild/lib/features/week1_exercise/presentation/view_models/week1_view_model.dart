@@ -15,6 +15,7 @@ class Week1ViewModel extends ChangeNotifier with SubmissionFlow {
 
   // State
   bool _isLoading = false;
+  bool _isDataLoaded = false;
   String? _errorMessage;
   int _currentDay = 1;
   int _currentStep = 0;
@@ -25,6 +26,7 @@ class Week1ViewModel extends ChangeNotifier with SubmissionFlow {
 
   // Getters
   bool get isLoading => _isLoading;
+  bool get isDataLoaded => _isDataLoaded;
   String? get errorMessage => _errorMessage;
   int get currentDay => _currentDay;
   int get currentStep => _currentStep;
@@ -82,6 +84,7 @@ class Week1ViewModel extends ChangeNotifier with SubmissionFlow {
     _currentProgramDay = WeekCalculator.currentDayNumber(registrationDate);
 
     _isLoading = true;
+    _isDataLoaded = false;
     _errorMessage = null;
     _hasAutoNavigated = false;
     notifyListeners();
@@ -92,10 +95,24 @@ class Week1ViewModel extends ChangeNotifier with SubmissionFlow {
     await progressResult.fold(
       (failure) {
         _dayProgressList = [];
+        print('[Week$weekNumber VM] Failed to load day progress: $failure');
       },
       (data) {
         _dayProgressList = data;
+        print(
+          '[Week$weekNumber VM] Loaded ${data.length} day progress records',
+        );
+        for (final d in data) {
+          print(
+            '[Week$weekNumber VM]   Day ${d.dayNumber}: isCompleted=${d.isCompleted}',
+          );
+        }
       },
+    );
+
+    print('[Week$weekNumber VM] currentProgramDay=$_currentProgramDay');
+    print(
+      '[Week$weekNumber VM] isDayCompleted($_currentProgramDay)=${isDayCompleted(_currentProgramDay)}',
     );
 
     final exerciseResult = await _exerciseRepo.getExercisesByWeek(
@@ -111,6 +128,7 @@ class Week1ViewModel extends ChangeNotifier with SubmissionFlow {
     );
 
     _isLoading = false;
+    _isDataLoaded = true;
     notifyListeners();
   }
 

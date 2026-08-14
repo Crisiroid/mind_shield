@@ -58,15 +58,14 @@ class _Week7HomeScreenState extends State<Week7HomeScreen> {
           // Auto-navigate to today's exercise if not yet completed and unlocked.
           // Uses the VM's flag so auto-nav only fires once per data-load cycle,
           // not again when the user pops back from a day screen.
-          if (!vm.hasAutoNavigated) {
+          // Only run this check after data is fully loaded to avoid race conditions.
+          if (!vm.hasAutoNavigated && vm.isDataLoaded) {
             vm.markAutoNavigated();
-            for (int i = 43; i <= 49; i++) {
-              if (!vm.isDayCompleted(i) && vm.isDayUnlocked(i)) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) _navigateToDay(i);
-                });
-                break;
-              }
+            final pd = vm.currentProgramDay;
+            if (pd >= 43 && pd <= 49 && !vm.isDayCompleted(pd)) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) _navigateToDay(pd);
+              });
             }
           }
 

@@ -55,15 +55,26 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Auto-navigate to the calendar day if it belongs to this week.
-          // Uses the VM's flag so auto-nav only fires once per data-load cycle.
-          if (!vm.hasAutoNavigated) {
+          // Auto-navigate to today's exercise if not yet completed and unlocked.
+          // Uses the VM's flag so auto-nav only fires once per data-load cycle,
+          // not again when the user pops back from a day screen.
+          // Only run this check after data is fully loaded to avoid race conditions.
+          if (!vm.hasAutoNavigated && vm.isDataLoaded) {
             vm.markAutoNavigated();
             final pd = vm.currentProgramDay;
-            if (pd >= 1 && pd <= 7) {
+            final isCompleted = vm.isDayCompleted(pd);
+            print(
+              '[Week1Screen] Auto-nav check: currentProgramDay=$pd, isDayCompleted=$isCompleted, inRange=${pd >= 1 && pd <= 7}',
+            );
+            if (pd >= 1 && pd <= 7 && !isCompleted) {
+              print('[Week1Screen] Navigating to day $pd');
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (mounted) _navigateToDay(pd);
               });
+            } else {
+              print(
+                '[Week1Screen] NOT navigating (day completed or out of range)',
+              );
             }
           }
 

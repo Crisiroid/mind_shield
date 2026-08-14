@@ -15,6 +15,7 @@ class Week6ViewModel extends ChangeNotifier with SubmissionFlow {
 
   // State
   bool _isLoading = false;
+  bool _isDataLoaded = false;
   String? _errorMessage;
   bool _hasAutoNavigated = false;
   int _currentDay = 36;
@@ -25,6 +26,7 @@ class Week6ViewModel extends ChangeNotifier with SubmissionFlow {
 
   // Getters
   bool get isLoading => _isLoading;
+  bool get isDataLoaded => _isDataLoaded;
   String? get errorMessage => _errorMessage;
   bool get hasAutoNavigated => _hasAutoNavigated;
   void markAutoNavigated() {
@@ -160,6 +162,7 @@ class Week6ViewModel extends ChangeNotifier with SubmissionFlow {
     _currentProgramDay = WeekCalculator.currentDayNumber(registrationDate);
 
     _isLoading = true;
+    _isDataLoaded = false;
     _errorMessage = null;
     _hasAutoNavigated = false;
     notifyListeners();
@@ -189,6 +192,7 @@ class Week6ViewModel extends ChangeNotifier with SubmissionFlow {
     );
 
     _isLoading = false;
+    _isDataLoaded = true;
     notifyListeners();
   }
 
