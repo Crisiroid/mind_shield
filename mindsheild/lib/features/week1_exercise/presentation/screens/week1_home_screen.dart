@@ -55,6 +55,18 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          // Auto-navigate to the calendar day if it belongs to this week.
+          // Uses the VM's flag so auto-nav only fires once per data-load cycle.
+          if (!vm.hasAutoNavigated) {
+            vm.markAutoNavigated();
+            final pd = vm.currentProgramDay;
+            if (pd >= 1 && pd <= 7) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) _navigateToDay(pd);
+              });
+            }
+          }
+
           return SingleChildScrollView(
             padding: AppSizes.paddingScreen,
             child: Column(
@@ -87,17 +99,9 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
   }
 
   Widget _buildTodayCard(Week1ViewModel vm) {
-    // Find first incomplete day or show all complete
-    int todayDay = 1;
-    for (int i = 1; i <= 7; i++) {
-      if (!vm.isDayCompleted(i)) {
-        todayDay = i;
-        break;
-      }
-      if (i == 7) todayDay = 7;
-    }
-
-    final allComplete = List.generate(7, (i) => i + 1).every(vm.isDayCompleted);
+    // Use the calendar-based program day, clamped to this week's range.
+    final int todayDay = vm.currentProgramDay.clamp(1, 7);
+    final bool isTodayDone = vm.isDayCompleted(todayDay);
     final titles = [
       'شروع مسیر',
       'فشارها و منابع',
@@ -120,7 +124,7 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            allComplete ? 'تبریک!' : 'تمرین امروز',
+            isTodayDone ? 'تکمیل شده' : 'تمرین امروز',
             style: PersianFonts.Vazir.copyWith(
               fontSize: AppSizes.fontSm,
               color: AppColors.textOnPrimary.withValues(alpha: 0.8),
@@ -128,16 +132,14 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
           ),
           SizedBox(height: AppSizes.xs),
           Text(
-            allComplete
-                ? 'تمرین امروز تکمیل شد.'
-                : 'روز $todayDay: ${titles[todayDay - 1]}',
+            'روز $todayDay: ${titles[todayDay - 1]}',
             style: PersianFonts.Vazir.copyWith(
               fontSize: AppSizes.fontLg,
               fontWeight: FontWeight.bold,
               color: AppColors.textOnPrimary,
             ),
           ),
-          if (!allComplete) ...[
+          if (!isTodayDone) ...[
             SizedBox(height: AppSizes.xs),
             Text(
               'حدود ${durations[todayDay - 1]} دقیقه',
@@ -157,7 +159,7 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
               ),
               onPressed: () => _navigateToDay(todayDay),
               child: Text(
-                allComplete ? 'مرور محتوا' : 'شروع تمرین',
+                isTodayDone ? 'مرور تمرین' : 'شروع تمرین',
                 style: PersianFonts.Vazir.copyWith(fontWeight: FontWeight.bold),
               ),
             ),

@@ -60,3 +60,9 @@ export const listAcceptanceExercises = (params: ListParams) =>
 
 export const listWeeklyReports = (params: ListParams) =>
     api.get<ApiResponse<PaginatedResponse<any>>>('/reports/weekly', { params }).then(r => r.data)
+
+export const listWeeklyExercises = (params: ListParams) =>
+    api.get<ApiResponse<PaginatedResponse<any>>>('/weekly-exercises', { params }).then(r => r.data)
+
+export const listDayProgress = (params: ListParams) =>
+    api.get<ApiResponse<PaginatedResponse<any>>>('/day-progress', { params }).then(r => r.data)

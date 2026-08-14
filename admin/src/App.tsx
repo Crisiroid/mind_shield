@@ -30,6 +30,8 @@ import SkyThoughtsPage from './pages/data/SkyThoughtsPage'
 import MindfulTimersPage from './pages/data/MindfulTimersPage'
 import AcceptancePage from './pages/data/AcceptancePage'
 import WeeklyReportsPage from './pages/data/WeeklyReportsPage'
+import WeeklyExercisesPage from './pages/data/WeeklyExercisesPage'
+import DayProgressPage from './pages/data/DayProgressPage'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { isAuthenticated } = useAuthStore()
@@ -287,6 +289,22 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <WeeklyReportsPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/data/weekly-exercises"
+                element={
+                    <ProtectedRoute>
+                        <WeeklyExercisesPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/data/day-progress"
+                element={
+                    <ProtectedRoute>
+                        <DayProgressPage />
                     </ProtectedRoute>
                 }
             />

@@ -266,11 +266,11 @@ export default function MediaContentPage() {
             <input
               type="number"
               min={1}
-              max={52}
+              max={8}
               value={uploadWeekNumber}
               onChange={e => setUploadWeekNumber(Number(e.target.value))}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="۱ تا ۵۲"
+              placeholder="۱ تا ۸"
             />
           </div>
           <div>

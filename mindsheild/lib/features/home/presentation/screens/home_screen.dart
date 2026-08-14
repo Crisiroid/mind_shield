@@ -6,10 +6,10 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/providers/app_provider.dart';
 import '../../../../core/services/dialog_service.dart';
+import '../../../../core/utils/week_calculator.dart';
+import '../../../../core/services/token_service.dart';
 import '../../../auth/presentation/view_models/auth_view_model.dart';
 import '../view_models/home_view_model.dart';
-import '../widgets/mini_calendar_grid.dart';
-import '../widgets/todays_exercise_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,11 +19,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _hasAutoNavigated = false;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeViewModel>().init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final homeVM = context.read<HomeViewModel>();
+      await homeVM.init();
+
+      // Auto-navigate to today's exercise if not yet completed
+      if (!_hasAutoNavigated && !homeVM.isTodayExerciseDone) {
+        _hasAutoNavigated = true;
+        final route = homeVM.getStartExerciseRoute();
+        if (route != null && mounted) {
+          Navigator.of(context).pushNamed(route);
+        }
+      }
     });
   }
 
@@ -80,41 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProgressCard(homeVM),
+              _buildProgressCalendarCard(homeVM),
 
               SizedBox(height: AppSizes.xl),
 
               Text(
-                AppStrings.todaysContent,
-                style: PersianFonts.Vazir.copyWith(
-                  fontSize: AppSizes.fontXl,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              SizedBox(height: AppSizes.md),
-              TodaysExerciseCard(
-                mediaList: homeVM.weeklyMedia,
-                currentWeek: homeVM.currentWeek,
-                currentDay: homeVM.currentDay,
-                onStartExercise: () {
-                  final route = homeVM.getStartExerciseRoute();
-                  if (route != null) {
-                    Navigator.of(context).pushNamed(route);
-                  }
-                },
-              ),
-
-              SizedBox(height: AppSizes.xl),
-
-              const MiniCalendarGrid(),
-
-              SizedBox(height: AppSizes.xl),
-
-              Text(
-                homeVM.isAllUnlocked
-                    ? '${AppStrings.weekTools} (همه – دیباگ)'
-                    : '${AppStrings.weekTools} ${homeVM.currentWeek}',
+                '${AppStrings.weekTools} ${homeVM.currentWeek}',
                 style: PersianFonts.Vazir.copyWith(
                   fontSize: AppSizes.fontXl,
                   fontWeight: FontWeight.bold,
@@ -145,7 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildProgressCard(HomeViewModel homeVM) {
+  Widget _buildProgressCalendarCard(HomeViewModel homeVM) {
+    final registrationDate = WeekCalculator.parseStoredDate(
+      TokenService.getRegistrationDate(),
+    );
+    final currentDayIndex = WeekCalculator.currentDayIndex(registrationDate);
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(AppSizes.lg),
@@ -167,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Progress header
           Text(
             AppStrings.weeklyProgress,
             style: PersianFonts.Vazir.copyWith(
@@ -237,6 +226,129 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.white70,
             ),
           ),
+
+          // Calendar section
+          SizedBox(height: AppSizes.lg),
+          Divider(color: Colors.white.withValues(alpha: 0.3), height: 1),
+          SizedBox(height: AppSizes.md),
+          Text(
+            AppStrings.calendar56Days,
+            style: PersianFonts.Vazir.copyWith(
+              fontSize: AppSizes.fontMd,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: AppSizes.sm),
+
+          // Day headers (1-7)
+          Row(
+            children: [
+              SizedBox(
+                width: 28,
+                child: Text(
+                  AppStrings.week,
+                  style: PersianFonts.Vazir.copyWith(
+                    fontSize: AppSizes.fontXs,
+                    color: Colors.white60,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(
+                    7,
+                    (i) => Expanded(
+                      child: Center(
+                        child: Text(
+                          '${i + 1}',
+                          style: PersianFonts.Vazir.copyWith(
+                            fontSize: AppSizes.fontXs,
+                            color: Colors.white60,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: AppSizes.xs),
+
+          // 8 weeks x 7 days grid
+          ...List.generate(8, (weekIndex) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: weekIndex < 7 ? 3 : 0),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 28,
+                    child: Text(
+                      '${weekIndex + 1}',
+                      style: PersianFonts.Vazir.copyWith(
+                        fontSize: AppSizes.fontXs,
+                        color: Colors.white60,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(7, (dayIndex) {
+                        final dayNumber = weekIndex * 7 + dayIndex;
+                        final isCurrent = dayNumber == currentDayIndex;
+                        final isPast = dayNumber < currentDayIndex;
+
+                        return Expanded(
+                          child: Center(
+                            child: Container(
+                              width: 26,
+                              height: 26,
+                              decoration: BoxDecoration(
+                                color: isCurrent
+                                    ? Colors.white
+                                    : isPast
+                                    ? Colors.white.withValues(alpha: 0.25)
+                                    : Colors.white.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(5),
+                                border: isCurrent
+                                    ? Border.all(color: Colors.white, width: 2)
+                                    : null,
+                              ),
+                              child: Center(
+                                child: isPast
+                                    ? Icon(
+                                        Icons.check,
+                                        size: 12,
+                                        color: Colors.white,
+                                      )
+                                    : Text(
+                                        '${dayNumber + 1}',
+                                        style: PersianFonts.Vazir.copyWith(
+                                          fontSize: AppSizes.fontXs,
+                                          fontWeight: isCurrent
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          color: isCurrent
+                                              ? AppColors.primary
+                                              : Colors.white.withValues(
+                                                  alpha: isPast ? 1.0 : 0.7,
+                                                ),
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
         ],
       ),
     );

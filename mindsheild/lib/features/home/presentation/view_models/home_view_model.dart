@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
+import '../../../week1_exercise/data/repositories/week1_repositories.dart';
 import '../../data/models/weekly_media_model.dart';
 import '../../data/repositories/home_repository.dart';
 import '../widgets/mindful_timer_sheet.dart';
@@ -23,8 +24,9 @@ class ToolItem {
 
 class HomeViewModel extends ChangeNotifier {
   final HomeRepository _homeRepository;
+  final DayProgressRepository _dayProgressRepository;
 
-  HomeViewModel(this._homeRepository);
+  HomeViewModel(this._homeRepository, this._dayProgressRepository);
 
   bool _isLoadingMedia = false;
   String? _errorMessage;
@@ -32,6 +34,7 @@ class HomeViewModel extends ChangeNotifier {
   int _currentWeek = 1;
   int _currentDay = 1;
   double _progress = 0.0;
+  bool _isTodayExerciseDone = false;
 
   bool get isLoadingMedia => _isLoadingMedia;
   String? get errorMessage => _errorMessage;
@@ -39,11 +42,13 @@ class HomeViewModel extends ChangeNotifier {
   int get currentWeek => _currentWeek;
   int get currentDay => _currentDay;
   double get progress => _progress;
+  bool get isTodayExerciseDone => _isTodayExerciseDone;
 
   bool get isAllUnlocked => AppConfig.isDebug;
 
   Future<void> init() async {
     _loadProgress();
+    await _loadDayProgress();
     await _loadWeeklyMedia();
   }
 
@@ -55,6 +60,22 @@ class HomeViewModel extends ChangeNotifier {
     _currentDay = WeekCalculator.currentDayNumber(registrationDate);
     _progress = WeekCalculator.progressFraction(registrationDate);
     notifyListeners();
+  }
+
+  Future<void> _loadDayProgress() async {
+    // Use local data for the completion check — this is the data saved by
+    // markDayCompleted and is always up-to-date with the user's actions.
+    // (The remote-first readList can overwrite local with stale server data.)
+    _isTodayExerciseDone = await _dayProgressRepository.isDayCompletedLocally(
+      weekNumber: _currentWeek,
+      dayNumber: _currentDay,
+    );
+    notifyListeners();
+
+    // Still fetch full summary for display needs.
+    await _dayProgressRepository.getDayProgressSummary(
+      weekNumber: _currentWeek,
+    );
   }
 
   Future<void> _loadWeeklyMedia() async {
@@ -83,14 +104,12 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> refresh() async {
     _loadProgress();
+    await _loadDayProgress();
     await _loadWeeklyMedia();
   }
 
   List<ToolItem> getCurrentWeekTools(BuildContext? context) {
-    if (AppConfig.isDebug) {
-      return _getAllTools(context);
-    }
-
+    // Show only the current week's daily exercises - no standalone exercises
     switch (_currentWeek) {
       case 1:
         return [
@@ -100,258 +119,73 @@ class HomeViewModel extends ChangeNotifier {
             color: const Color(0xFF6C63FF),
             onTap: () => Navigator.of(context!).pushNamed('/week1'),
           ),
-          ToolItem(
-            label: 'مثلث هیجان',
-            icon: Icons.change_history,
-            color: const Color(0xFF9C27B0),
-            onTap: () => Navigator.of(context!).pushNamed('/emotion-triangle'),
-          ),
-          ToolItem(
-            label: 'نقشه تنش بدنی',
-            icon: Icons.accessibility_new,
-            color: const Color(0xFFFF6584),
-            onTap: () => Navigator.of(context!).pushNamed('/body-tension-map'),
-          ),
-          ToolItem(
-            label: 'ثبت استرس شغلی',
-            icon: Icons.work_outline,
-            color: const Color(0xFFFFC107),
-            onTap: () =>
-                Navigator.of(context!).pushNamed('/stress-registration'),
-          ),
         ];
       case 2:
         return [
           ToolItem(
-            label: 'تنفس آگاهانه',
-            icon: Icons.air,
-            color: const Color(0xFF4CAF50),
-            onTap: () => Navigator.of(context!).pushNamed('/breathing'),
-          ),
-          ToolItem(
-            label: 'انعطاف‌پذیری روانی',
-            icon: Icons.nature,
-            color: const Color(0xFF8BC34A),
-            onTap: () =>
-                Navigator.of(context!).pushNamed('/resilience-education'),
-          ),
-          ToolItem(
-            label: 'نقشه تنش بدنی',
-            icon: Icons.accessibility_new,
-            color: const Color(0xFFFF6584),
-            onTap: () => Navigator.of(context!).pushNamed('/body-tension-map'),
+            label: 'تمرینات هفته دوم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week2'),
           ),
         ];
       case 3:
         return [
           ToolItem(
-            label: 'خطاهای شناختی',
-            icon: Icons.psychology_outlined,
-            color: const Color(0xFF9C27B0),
-            onTap: () => Navigator.of(context!).pushNamed('/cognitive-game'),
-          ),
-          ToolItem(
-            label: 'بایدهای ذهنی',
-            icon: Icons.backpack_outlined,
-            color: const Color(0xFFFF9800),
-            onTap: () => Navigator.of(context!).pushNamed('/mental-musts'),
+            label: 'تمرینات هفته سوم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week3'),
           ),
         ];
       case 4:
         return [
           ToolItem(
-            label: 'رادار افکار منفی',
-            icon: Icons.radar,
-            color: const Color(0xFFE91E63),
-            onTap: () =>
-                Navigator.of(context!).pushNamed('/negative-thought-radar'),
-          ),
-          ToolItem(
-            label: 'سنجش اثر فکر',
-            icon: Icons.trending_down,
-            color: const Color(0xFFFF5722),
-            onTap: () =>
-                Navigator.of(context!).pushNamed('/negative-thought-radar'),
+            label: 'تمرینات هفته چهارم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week4'),
           ),
         ];
       case 5:
         return [
           ToolItem(
-            label: 'دادگاه ذهن',
-            icon: Icons.gavel,
-            color: const Color(0xFF3F51B5),
-            onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
-          ),
-          ToolItem(
-            label: 'فکر جایگزین',
-            icon: Icons.lightbulb_outline,
-            color: const Color(0xFFFFC107),
-            onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
+            label: 'تمرینات هفته پنجم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week5'),
           ),
         ];
       case 6:
         return [
           ToolItem(
-            label: 'تمرین تعارض',
-            icon: Icons.forum,
-            color: const Color(0xFF009688),
-            onTap: () => Navigator.of(context!).pushNamed('/conflict-exercise'),
+            label: 'تمرینات هفته ششم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week6'),
           ),
         ];
       case 7:
         return [
           ToolItem(
-            label: 'چرخه انزوا',
-            icon: Icons.loop,
-            color: const Color(0xFF795548),
-            onTap: () => Navigator.of(context!).pushNamed('/isolation-cycle'),
-          ),
-          ToolItem(
-            label: 'فعالیت‌های خرد',
-            icon: Icons.checklist_outlined,
-            color: const Color(0xFF2196F3),
-            onTap: () => Navigator.of(context!).pushNamed('/micro-activities'),
-          ),
-          ToolItem(
-            label: 'ردیاب خلق',
-            icon: Icons.mood_outlined,
-            color: const Color(0xFF4CAF50),
-            onTap: () => Navigator.of(context!).pushNamed('/mood-tracker'),
+            label: 'تمرینات هفته هفتم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week7'),
           ),
         ];
       case 8:
         return [
           ToolItem(
-            label: 'تعادل نقش‌ها',
-            icon: Icons.balance,
-            color: const Color(0xFF673AB7),
-            onTap: () => Navigator.of(context!).pushNamed('/role-balance'),
-          ),
-          ToolItem(
-            label: 'آسمان افکار',
-            icon: Icons.cloud_outlined,
-            color: const Color(0xFF03A9F4),
-            onTap: () => Navigator.of(context!).pushNamed('/thought-sky'),
+            label: 'تمرینات هفته هشتم',
+            icon: Icons.auto_stories,
+            color: const Color(0xFF6C63FF),
+            onTap: () => Navigator.of(context!).pushNamed('/week8'),
           ),
         ];
       default:
         return [];
     }
-  }
-
-  List<ToolItem> _getAllTools(BuildContext? context) {
-    return [
-      ToolItem(
-        label: 'تمرینات هفته اول',
-        icon: Icons.auto_stories,
-        color: const Color(0xFF6C63FF),
-        onTap: () => Navigator.of(context!).pushNamed('/week1'),
-      ),
-      ToolItem(
-        label: 'مثلث هیجان',
-        icon: Icons.change_history,
-        color: const Color(0xFF6C63FF),
-        onTap: () => Navigator.of(context!).pushNamed('/emotion-triangle'),
-      ),
-      ToolItem(
-        label: 'نقشه تنش بدنی',
-        icon: Icons.accessibility_new,
-        color: const Color(0xFFFF6584),
-        onTap: () => Navigator.of(context!).pushNamed('/body-tension-map'),
-      ),
-      ToolItem(
-        label: 'ثبت استرس شغلی',
-        icon: Icons.work_outline,
-        color: const Color(0xFFFFC107),
-        onTap: () => Navigator.of(context!).pushNamed('/stress-registration'),
-      ),
-      ToolItem(
-        label: 'تنفس آگاهانه',
-        icon: Icons.air,
-        color: const Color(0xFF4CAF50),
-        onTap: () => Navigator.of(context!).pushNamed('/breathing'),
-      ),
-      ToolItem(
-        label: 'انعطاف‌پذیری روانی',
-        icon: Icons.nature,
-        color: const Color(0xFF8BC34A),
-        onTap: () => Navigator.of(context!).pushNamed('/resilience-education'),
-      ),
-      ToolItem(
-        label: 'خطاهای شناختی',
-        icon: Icons.psychology_outlined,
-        color: const Color(0xFF9C27B0),
-        onTap: () => Navigator.of(context!).pushNamed('/cognitive-game'),
-      ),
-      ToolItem(
-        label: 'بایدهای ذهنی',
-        icon: Icons.backpack_outlined,
-        color: const Color(0xFFFF9800),
-        onTap: () => Navigator.of(context!).pushNamed('/mental-musts'),
-      ),
-      ToolItem(
-        label: 'رادار افکار منفی',
-        icon: Icons.radar,
-        color: const Color(0xFFE91E63),
-        onTap: () =>
-            Navigator.of(context!).pushNamed('/negative-thought-radar'),
-      ),
-      ToolItem(
-        label: 'سنجش اثر فکر',
-        icon: Icons.trending_down,
-        color: const Color(0xFFFF5722),
-        onTap: () =>
-            Navigator.of(context!).pushNamed('/negative-thought-radar'),
-      ),
-      ToolItem(
-        label: 'دادگاه ذهن',
-        icon: Icons.gavel,
-        color: const Color(0xFF3F51B5),
-        onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
-      ),
-      ToolItem(
-        label: 'فکر جایگزین',
-        icon: Icons.lightbulb_outline,
-        color: const Color(0xFFFFC107),
-        onTap: () => Navigator.of(context!).pushNamed('/mind-court'),
-      ),
-      ToolItem(
-        label: 'تمرین تعارض',
-        icon: Icons.forum,
-        color: const Color(0xFF009688),
-        onTap: () => Navigator.of(context!).pushNamed('/conflict-exercise'),
-      ),
-      ToolItem(
-        label: 'چرخه انزوا',
-        icon: Icons.loop,
-        color: const Color(0xFF795548),
-        onTap: () => Navigator.of(context!).pushNamed('/isolation-cycle'),
-      ),
-      ToolItem(
-        label: 'فعالیت‌های خرد',
-        icon: Icons.checklist_outlined,
-        color: const Color(0xFF2196F3),
-        onTap: () => Navigator.of(context!).pushNamed('/micro-activities'),
-      ),
-      ToolItem(
-        label: 'ردیاب خلق',
-        icon: Icons.mood_outlined,
-        color: const Color(0xFF4CAF50),
-        onTap: () => Navigator.of(context!).pushNamed('/mood-tracker'),
-      ),
-      ToolItem(
-        label: 'تعادل نقش‌ها',
-        icon: Icons.balance,
-        color: const Color(0xFF673AB7),
-        onTap: () => Navigator.of(context!).pushNamed('/role-balance'),
-      ),
-      ToolItem(
-        label: 'آسمان افکار',
-        icon: Icons.cloud_outlined,
-        color: const Color(0xFF03A9F4),
-        onTap: () => Navigator.of(context!).pushNamed('/thought-sky'),
-      ),
-    ];
   }
 
   List<ToolItem> getPermanentTools([BuildContext? context]) {
@@ -408,19 +242,19 @@ class HomeViewModel extends ChangeNotifier {
       case 1:
         return '/week1';
       case 2:
-        return '/breathing';
+        return '/week2';
       case 3:
-        return '/cognitive-game';
+        return '/week3';
       case 4:
-        return '/negative-thought-radar';
+        return '/week4';
       case 5:
-        return '/mind-court';
+        return '/week5';
       case 6:
-        return '/conflict-exercise';
+        return '/week6';
       case 7:
-        return '/mood-tracker';
+        return '/week7';
       case 8:
-        return '/role-balance';
+        return '/week8';
       default:
         return null;
     }

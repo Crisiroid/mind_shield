@@ -105,9 +105,29 @@ class DayProgressRepository extends OfflineFirstRepository<DayProgressModel> {
 
   Result<List<DayProgressModel>> getDayProgressSummary({
     required int weekNumber,
-  }) {
-    return readList(
-      () => _remoteDataSource.getDayProgressSummary(weekNumber: weekNumber),
+  }) async {
+    // Use LOCAL data as the source of truth for completion status.
+    // The remote summary endpoint returns lightweight objects without real
+    // server IDs, and can be stale. The authoritative completion data is
+    // persisted locally by markDayCompleted.
+    try {
+      final data = await _localDataSource.getAll();
+      final filtered = data.where((d) => d.weekNumber == weekNumber).toList();
+      return Right(filtered);
+    } catch (e) {
+      return Left(mapExceptionToFailure(e));
+    }
+  }
+
+  /// Check if a specific day is completed using local data only (fast, no network).
+  Future<bool> isDayCompletedLocally({
+    required int weekNumber,
+    required int dayNumber,
+  }) async {
+    final all = await _localDataSource.getAll();
+    final match = all.where(
+      (d) => d.weekNumber == weekNumber && d.dayNumber == dayNumber,
     );
+    return match.any((d) => d.isCompleted);
   }
 }

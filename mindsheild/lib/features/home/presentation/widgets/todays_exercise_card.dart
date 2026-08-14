@@ -162,21 +162,21 @@ class TodaysExerciseCard extends StatelessWidget {
   String _getWeekExerciseTitle(int week) {
     switch (week) {
       case 1:
-        return 'مثلث هیجان و نقشه تنش بدنی';
+        return 'شناخت استرس و ترسیم نقشه واکنش';
       case 2:
-        return 'تنفس آگاهانه و انعطاف‌پذیری روانی';
+        return 'توجه به بدن و تنفس';
       case 3:
-        return 'شناسایی خطاهای شناختی و بایدهای ذهنی';
+        return 'شناخت افکار خودکار و الگوهای فکری';
       case 4:
-        return 'ردیابی افکار منفی و سنجش اثر فکر';
+        return 'بررسی شواهد و ساختن فکر متعادل';
       case 5:
-        return 'دادگاه ذهن و فکر جایگزین';
+        return 'فعالیت، انرژی و خلق';
       case 6:
-        return 'سناریوهای تعارض در محیط کار';
+        return 'مشاهده افکار و پذیرش هیجان';
       case 7:
-        return 'ردیاب خلق و فعالیت‌های خرد';
+        return 'حل مسئله گام‌به‌گام';
       case 8:
-        return 'تعادل نقش‌ها و آسمان افکار';
+        return 'تثبیت مهارت‌ها و برنامه ادامه مسیر';
       default:
         return 'تمرین امروز';
     }

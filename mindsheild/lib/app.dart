@@ -103,6 +103,20 @@ import 'features/week1_exercise/data/datasources/week1_local_datasource.dart';
 import 'features/week1_exercise/data/repositories/week1_repositories.dart';
 import 'features/week1_exercise/presentation/view_models/week1_view_model.dart';
 import 'features/week1_exercise/presentation/screens/week1_home_screen.dart';
+import 'features/week2_exercise/presentation/view_models/week2_view_model.dart';
+import 'features/week2_exercise/presentation/screens/week2_home_screen.dart';
+import 'features/week3_exercise/presentation/view_models/week3_view_model.dart';
+import 'features/week3_exercise/presentation/screens/week3_home_screen.dart';
+import 'features/week4_exercise/presentation/view_models/week4_view_model.dart';
+import 'features/week4_exercise/presentation/screens/week4_home_screen.dart';
+import 'features/week5_exercise/presentation/view_models/week5_view_model.dart';
+import 'features/week5_exercise/presentation/screens/week5_home_screen.dart';
+import 'features/week6_exercise/presentation/view_models/week6_view_model.dart';
+import 'features/week6_exercise/presentation/screens/week6_home_screen.dart';
+import 'features/week7_exercise/presentation/view_models/week7_view_model.dart';
+import 'features/week7_exercise/presentation/screens/week7_home_screen.dart';
+import 'features/week8_exercise/presentation/view_models/week8_view_model.dart';
+import 'features/week8_exercise/presentation/screens/week8_home_screen.dart';
 
 class MindShieldApp extends StatefulWidget {
   const MindShieldApp({super.key});
@@ -211,6 +225,69 @@ class _MindShieldAppState extends State<MindShieldApp> {
       DayProgressLocalDataSource(),
     );
 
+    final week2ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week2DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
+    final week3ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week3DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
+    final week4ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week4DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
+    final week5ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week5DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
+    final week6ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week6DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
+    final week7ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week7DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
+    final week8ExerciseRepo = Week1ExerciseRepository(
+      Week1RemoteDataSourceImpl(),
+      WeeklyExerciseLocalDataSource(),
+    );
+    final week8DayProgressRepo = DayProgressRepository(
+      Week1RemoteDataSourceImpl(),
+      DayProgressLocalDataSource(),
+    );
+
     final profileDataSource = ProfileRemoteDataSourceImpl();
     final profileRepository = ProfileRepository(profileDataSource);
 
@@ -238,6 +315,20 @@ class _MindShieldAppState extends State<MindShieldApp> {
       mediaProgressRepository,
       week1ExerciseRepo,
       dayProgressRepo,
+      week2ExerciseRepo,
+      week2DayProgressRepo,
+      week3ExerciseRepo,
+      week3DayProgressRepo,
+      week4ExerciseRepo,
+      week4DayProgressRepo,
+      week5ExerciseRepo,
+      week5DayProgressRepo,
+      week6ExerciseRepo,
+      week6DayProgressRepo,
+      week7ExerciseRepo,
+      week7DayProgressRepo,
+      week8ExerciseRepo,
+      week8DayProgressRepo,
     ];
     final syncManager = SyncManager(syncableRepositories);
 
@@ -247,7 +338,9 @@ class _MindShieldAppState extends State<MindShieldApp> {
           create: (_) => AppProvider(InternetConnection(), syncManager),
         ),
         ChangeNotifierProvider(create: (_) => AuthViewModel(authRepository)),
-        ChangeNotifierProvider(create: (_) => HomeViewModel(homeRepository)),
+        ChangeNotifierProvider(
+          create: (_) => HomeViewModel(homeRepository, dayProgressRepo),
+        ),
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
         ChangeNotifierProvider(
           create: (_) => EmotionTriangleViewModel(emotionRepository),
@@ -300,6 +393,34 @@ class _MindShieldAppState extends State<MindShieldApp> {
         ChangeNotifierProvider(
           create: (_) => Week1ViewModel(week1ExerciseRepo, dayProgressRepo),
         ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week2ViewModel(week2ExerciseRepo, week2DayProgressRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week3ViewModel(week3ExerciseRepo, week3DayProgressRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week4ViewModel(week4ExerciseRepo, week4DayProgressRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week5ViewModel(week5ExerciseRepo, week5DayProgressRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week6ViewModel(week6ExerciseRepo, week6DayProgressRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week7ViewModel(week7ExerciseRepo, week7DayProgressRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              Week8ViewModel(week8ExerciseRepo, week8DayProgressRepo),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: _navigatorKey,
@@ -346,6 +467,13 @@ class _MindShieldAppState extends State<MindShieldApp> {
           '/content-video': (context) => const VideoPlayerScreen(),
           '/content-audio': (context) => const AudioPlayerScreen(),
           '/week1': (context) => const Week1HomeScreen(),
+          '/week2': (context) => const Week2HomeScreen(),
+          '/week3': (context) => const Week3HomeScreen(),
+          '/week4': (context) => const Week4HomeScreen(),
+          '/week5': (context) => const Week5HomeScreen(),
+          '/week6': (context) => const Week6HomeScreen(),
+          '/week7': (context) => const Week7HomeScreen(),
+          '/week8': (context) => const Week8HomeScreen(),
         },
       ),
     );

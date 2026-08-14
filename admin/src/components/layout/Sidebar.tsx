@@ -26,6 +26,8 @@ const menuItems = [
             { name: 'تایمر ذهن‌آگاهی', path: '/data/mindful-timers' },
             { name: 'پذیرش', path: '/data/acceptance' },
             { name: 'گزارش‌های هفتگی', path: '/data/weekly-reports' },
+            { name: 'تمرینات هفتگی', path: '/data/weekly-exercises' },
+            { name: 'پیشرفت روزانه', path: '/data/day-progress' },
         ],
     },
     { name: 'گزارش‌ها', icon: 'BarChart3', path: '/reports' },
