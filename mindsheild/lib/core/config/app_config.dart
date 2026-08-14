@@ -1,7 +1,7 @@
 class AppConfig {
   AppConfig._();
 
-  static const bool isDebug = false;
+  static const bool isDebug = true;
 
   static const int syncRetryDelaySeconds = 30;
   static const int maxSyncRetries = 3;

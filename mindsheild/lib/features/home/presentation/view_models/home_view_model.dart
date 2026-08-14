@@ -109,6 +109,60 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   List<ToolItem> getCurrentWeekTools(BuildContext? context) {
+    // In debug mode, show all weeks so everything is accessible for testing.
+    if (AppConfig.isDebug) {
+      return [
+        ToolItem(
+          label: 'تمرینات هفته اول',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week1'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته دوم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week2'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته سوم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week3'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته چهارم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week4'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته پنجم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week5'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته ششم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week6'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته هفتم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week7'),
+        ),
+        ToolItem(
+          label: 'تمرینات هفته هشتم',
+          icon: Icons.auto_stories,
+          color: const Color(0xFF6C63FF),
+          onTap: () => Navigator.of(context!).pushNamed('/week8'),
+        ),
+      ];
+    }
+
     // Show only the current week's daily exercises - no standalone exercises
     switch (_currentWeek) {
       case 1:

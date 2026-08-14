@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../../../../core/config/app_config.dart';
 import '../../../../core/presentation/submission_flow.dart';
 import '../../../../core/services/token_service.dart';
 import '../../../../core/utils/week_calculator.dart';
@@ -45,6 +46,7 @@ class Week1ViewModel extends ChangeNotifier with SubmissionFlow {
   }
 
   bool isDayUnlocked(int dayNumber) {
+    if (AppConfig.isDebug) return true;
     // Days unlock based on the calendar (registration date), not completion.
     // The user's current program day is determined by how many calendar days
     // have passed since registration.
