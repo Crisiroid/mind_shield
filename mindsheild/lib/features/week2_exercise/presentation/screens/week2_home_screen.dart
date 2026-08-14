@@ -36,7 +36,7 @@ class _Week2HomeScreenState extends State<Week2HomeScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_forward, color: AppColors.textPrimary),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -268,7 +268,7 @@ class _Week2HomeScreenState extends State<Week2HomeScreen> {
                 ),
                 if (isUnlocked)
                   Icon(
-                    Icons.arrow_back_ios,
+                    Icons.arrow_forward_ios,
                     size: 16,
                     color: AppColors.textHint,
                   ),
