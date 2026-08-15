@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#FAFAF7"/>
+  <!-- W7-IMG-01: Five steps of problem solving - staircase -->
+  <!-- Step 1 -->
+  <rect x="40" y="30" width="320" height="48" rx="10" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="72" cy="54" r="16" fill="#6BB5A0" fill-opacity="0.2" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="72" y="59" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">۱</text>
+  <text x="210" y="58" text-anchor="middle" font-size="13" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">تعریف مشکل</text>
+  <line x1="200" y1="78" x2="200" y2="95" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a7)"/>
+  <!-- Step 2 -->
+  <rect x="60" y="95" width="280" height="48" rx="10" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="92" cy="119" r="16" fill="#6BB5A0" fill-opacity="0.2" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="92" y="124" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">۲</text>
+  <text x="220" y="123" text-anchor="middle" font-size="13" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">تولید راه‌حل‌ها</text>
+  <line x1="200" y1="143" x2="200" y2="160" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a7)"/>
+  <!-- Step 3 -->
+  <rect x="80" y="160" width="240" height="48" rx="10" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="112" cy="184" r="16" fill="#6BB5A0" fill-opacity="0.2" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="112" y="189" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">۳</text>
+  <text x="230" y="188" text-anchor="middle" font-size="13" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">ارزیابی</text>
+  <line x1="200" y1="208" x2="200" y2="225" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a7)"/>
+  <!-- Step 4 -->
+  <rect x="100" y="225" width="200" height="48" rx="10" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="132" cy="249" r="16" fill="#6BB5A0" fill-opacity="0.2" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="132" y="254" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">۴</text>
+  <text x="240" y="253" text-anchor="middle" font-size="13" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">انتخاب و برنامه</text>
+  <line x1="200" y1="273" x2="200" y2="290" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a7)"/>
+  <!-- Step 5 -->
+  <rect x="120" y="290" width="160" height="55" rx="12" fill="#D4EDDA" stroke="#4A7A6A" stroke-width="2.5"/>
+  <circle cx="152" cy="317" r="16" fill="#6BB5A0" fill-opacity="0.2" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="152" y="322" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">۵</text>
+  <text x="240" y="322" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">اجرا و مرور</text>
+  <defs><marker id="a7" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6BB5A0"/></marker></defs>
+</svg>

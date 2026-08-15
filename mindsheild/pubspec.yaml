@@ -57,4 +57,12 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/week1/
+    - assets/images/week2/
+    - assets/images/week3/
+    - assets/images/week4/
+    - assets/images/week5/
+    - assets/images/week6/
+    - assets/images/week7/
+    - assets/images/week8/
     - assets/icons/

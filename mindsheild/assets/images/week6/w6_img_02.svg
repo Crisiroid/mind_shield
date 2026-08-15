@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#FAFAF7"/>
+  <!-- W6-IMG-02: Emotion and urge to act - chain flow -->
+  <!-- Step 1 -->
+  <rect x="120" y="25" width="160" height="45" rx="10" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <text x="200" y="52" text-anchor="middle" font-size="13" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">موقعیت</text>
+  <line x1="200" y1="70" x2="200" y2="90" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a62)"/>
+  <!-- Step 2 -->
+  <rect x="90" y="90" width="220" height="45" rx="10" fill="#F5E6D3" stroke="#C4956A" stroke-width="1.8"/>
+  <text x="200" y="117" text-anchor="middle" font-size="13" fill="#8B6914" font-family="sans-serif" font-weight="bold">هیجان و نشانه بدنی</text>
+  <line x1="200" y1="135" x2="200" y2="155" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a62)"/>
+  <!-- Step 3 -->
+  <rect x="100" y="155" width="200" height="45" rx="10" fill="#F5E6D3" stroke="#C4956A" stroke-width="1.8"/>
+  <text x="200" y="182" text-anchor="middle" font-size="13" fill="#8B6914" font-family="sans-serif" font-weight="bold">میل به عمل</text>
+  <line x1="200" y1="200" x2="200" y2="225" stroke="#6BB5A0" stroke-width="2.5" marker-end="url(#a62)"/>
+  <!-- Pause - highlighted -->
+  <rect x="110" y="225" width="180" height="55" rx="14" fill="#D4EDDA" stroke="#4A7A6A" stroke-width="2.5"/>
+  <text x="200" y="250" text-anchor="middle" font-size="15" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">مکث کوتاه</text>
+  <text x="200" y="268" text-anchor="middle" font-size="11" fill="#4A7A6A" font-family="sans-serif">⏸</text>
+  <line x1="200" y1="280" x2="200" y2="300" stroke="#6BB5A0" stroke-width="2" marker-end="url(#a62)"/>
+  <!-- Step 5 -->
+  <rect x="110" y="300" width="180" height="50" rx="12" fill="#D4EDDA" stroke="#4A7A6A" stroke-width="2"/>
+  <text x="200" y="330" text-anchor="middle" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">انتخاب پاسخ</text>
+  <!-- Example -->
+  <text x="200" y="378" text-anchor="middle" font-size="10" fill="#7A9A7A" font-family="sans-serif">خشم ← تنش ← میل به پاسخ سریع ← مکث ← پاسخ سنجیده</text>
+  <defs><marker id="a62" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6BB5A0"/></marker></defs>
+</svg>

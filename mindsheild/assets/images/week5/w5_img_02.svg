@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#FAFAF7"/>
+  <!-- W5-IMG-02: Four types of activity - 4 cards -->
+  <!-- Card 1: Pleasant -->
+  <rect x="30" y="25" width="160" height="80" rx="12" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="65" cy="55" r="18" fill="#6BB5A0" fill-opacity="0.15" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="65" y="61" text-anchor="middle" font-size="16" fill="#4A7A6A">☀</text>
+  <text x="95" y="52" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">لذت‌بخش</text>
+  <text x="95" y="72" font-size="9.5" fill="#4A7A6A" font-family="sans-serif">تجربه خوشایند کوچک</text>
+  <!-- Card 2: Useful -->
+  <rect x="210" y="25" width="160" height="80" rx="12" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="245" cy="55" r="18" fill="#6BB5A0" fill-opacity="0.15" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="245" y="61" text-anchor="middle" font-size="16" fill="#4A7A6A">✓</text>
+  <text x="275" y="52" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">مفید</text>
+  <text x="275" y="72" font-size="9.5" fill="#4A7A6A" font-family="sans-serif">احساس پیشرفت</text>
+  <!-- Card 3: Social -->
+  <rect x="30" y="125" width="160" height="80" rx="12" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="65" cy="155" r="18" fill="#6BB5A0" fill-opacity="0.15" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="65" y="161" text-anchor="middle" font-size="16" fill="#4A7A6A">👥</text>
+  <text x="95" y="152" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">ارتباطی</text>
+  <text x="95" y="172" font-size="9.5" fill="#4A7A6A" font-family="sans-serif">ارتباط سالم با دیگران</text>
+  <!-- Card 4: Meaningful -->
+  <rect x="210" y="125" width="160" height="80" rx="12" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.8"/>
+  <circle cx="245" cy="155" r="18" fill="#6BB5A0" fill-opacity="0.15" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="245" y="161" text-anchor="middle" font-size="16" fill="#4A7A6A">★</text>
+  <text x="275" y="152" font-size="13" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">معنادار</text>
+  <text x="275" y="172" font-size="9.5" fill="#4A7A6A" font-family="sans-serif">هماهنگ با ارزش‌های زندگی</text>
+</svg>
