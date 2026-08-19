@@ -19,7 +19,7 @@ class Day49Screen extends StatefulWidget {
 class _Day49ScreenState extends State<Day49Screen> {
   late PageController _pageController;
   int _currentPage = 0;
-  static const int _totalSteps = 5;
+  static const int _totalSteps = 6;
 
   @override
   void initState() {
@@ -154,11 +154,35 @@ class _Day49ScreenState extends State<Day49Screen> {
                           exerciseType: 'week_7_quiz',
                           data: {'week_7_quiz_score': score},
                         );
-                        _goToPage(3);
+                        _goToPage(4);
                       },
                       endMessage:
                           'آزمون برای مرور محتواست و نمره آن وضعیت روان\u200cشناختی شما را نشان نمی\u200cدهد.',
                       buttonText: 'ادامه',
+                    ),
+                    // D49-04b: Week evaluation
+                    WeekEvaluationPage(
+                      onSubmit: (data) {
+                        context.read<Week7ViewModel>().submitExerciseResponse(
+                          weekNumber: 7,
+                          dayNumber: 49,
+                          exerciseType: 'week_7_evaluation',
+                          data: {
+                            'week_7_clarity_score': data['clarity_score'],
+                            'problem_solving_usability':
+                                data['usefulness_score'],
+                            'week_7_form_rating': data['duration_rating'],
+                            'week_7_significant_distress':
+                                data['significant_distress'],
+                          },
+                        );
+                        _goToPage(5);
+                      },
+                      onHelpNeeded: () {
+                        // Navigate to help section
+                      },
+                      questionTwoText:
+                          'مراحل حل مسئله چقدر قابل استفاده بودند؟',
                     ),
                     // D49-05: Week end
                     _buildWeekEnd(),

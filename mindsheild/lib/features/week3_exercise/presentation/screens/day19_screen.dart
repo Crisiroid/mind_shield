@@ -61,7 +61,7 @@ class _Day19ScreenState extends State<Day19Screen> {
                 padding: AppSizes.paddingScreen,
                 child: Week1Header(
                   dayNumber: 19,
-                  dayTitle: 'ذهن‌خوانی و بایدها',
+                  dayTitle: 'ذهن‌خوانی و بایدهای ذهنی',
                   currentStep: _currentPage,
                   totalSteps: _totalSteps,
                 ),

@@ -95,7 +95,7 @@ class _Day43ScreenState extends State<Day43Screen> {
                           'ابتدا مشخص می\u200cکنیم با چه نوع موضوعی روبه\u200cرو هستیم',
                       bodyText:
                           'حل مسئله زمانی کاربرد دارد که موضوعی نسبتاً مشخص وجود داشته باشد و بتوان برای حداقل بخشی از آن اقدام عملی انجام داد.\n\nبرخی نگرانی\u200cها بیشتر به شکل «اگر اتفاق بدی بیفتد چه؟» ظاهر می\u200cشوند و در حال حاضر اقدام مشخصی برای آن\u200cها وجود ندارد. تلاش مکرر برای حل چنین نگرانی\u200cهایی ممکن است فقط ذهن را درگیرتر کند.',
-                      imageWidget: _buildW7Img01(),
+                      imageWidget: _buildW7Images(),
                       noteText:
                           'بعضی موضوع\u200cها ترکیبی\u200cاند. ممکن است نتوانید کل موضوع را کنترل کنید، اما بخشی از آن قابل اقدام باشد.',
                       cards: const [
@@ -476,48 +476,71 @@ class _Day43ScreenState extends State<Day43Screen> {
     _goToPage(3);
   }
 
-  Widget _buildW7Img01() {
-    return Image.asset(
-      'assets/images/week7/w7_img_01.png',
-      height: 180,
-      errorBuilder: (_, __, ___) => Container(
-        height: 220,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+  Widget _buildW7Images() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // W7-IMG-01: Five steps of problem solving
+        Image.asset(
+          'assets/images/week7/w7_img_01.png',
+          height: 180,
+          errorBuilder: (_, __, ___) => Container(
+            height: 220,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildFlowStep('تعریف مشکل'),
+                const Icon(
+                  Icons.arrow_downward,
+                  size: 18,
+                  color: AppColors.textHint,
+                ),
+                _buildFlowStep('تولید راه\u200cحل\u200cها'),
+                const Icon(
+                  Icons.arrow_downward,
+                  size: 18,
+                  color: AppColors.textHint,
+                ),
+                _buildFlowStep('ارزیابی'),
+                const Icon(
+                  Icons.arrow_downward,
+                  size: 18,
+                  color: AppColors.textHint,
+                ),
+                _buildFlowStep('انتخاب و برنامه'),
+                const Icon(
+                  Icons.arrow_downward,
+                  size: 18,
+                  color: AppColors.textHint,
+                ),
+                _buildFlowStep('اجرا و مرور'),
+              ],
+            ),
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildFlowStep('تعریف مشکل'),
-            const Icon(
-              Icons.arrow_downward,
-              size: 18,
-              color: AppColors.textHint,
+        const SizedBox(height: 12),
+        // W7-IMG-02: Solvable problem vs hypothetical worry
+        Image.asset(
+          'assets/images/week7/w7_img_02.png',
+          height: 220,
+          errorBuilder: (_, __, ___) => Container(
+            height: 80,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.info.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
             ),
-            _buildFlowStep('تولید راه\u200cحل\u200cها'),
-            const Icon(
-              Icons.arrow_downward,
-              size: 18,
-              color: AppColors.textHint,
+            child: const Center(
+              child: Text('W7-IMG-02'),
             ),
-            _buildFlowStep('ارزیابی'),
-            const Icon(
-              Icons.arrow_downward,
-              size: 18,
-              color: AppColors.textHint,
-            ),
-            _buildFlowStep('انتخاب و برنامه'),
-            const Icon(
-              Icons.arrow_downward,
-              size: 18,
-              color: AppColors.textHint,
-            ),
-            _buildFlowStep('اجرا و مرور'),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

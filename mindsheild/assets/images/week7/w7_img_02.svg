@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 420" width="400" height="420">
+  <rect width="400" height="420" fill="#FAFAF7"/>
+  <!-- W7-IMG-02: Solvable Problem vs Hypothetical Worry -->
+  <text x="200" y="30" text-anchor="middle" font-size="14" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">مشکل قابل‌حل یا نگرانی فرضی؟</text>
+  <!-- Left column: Solvable Problem -->
+  <rect x="10" y="50" width="185" height="280" rx="10" fill="#E8F4EE" stroke="#4A7A6A" stroke-width="1.5"/>
+  <circle cx="35" cy="75" r="14" fill="#6BB5A0" fill-opacity="0.3" stroke="#6BB5A0" stroke-width="1.5"/>
+  <text x="35" y="80" text-anchor="middle" font-size="12" fill="#2D6A4A" font-family="sans-serif">✓</text>
+  <text x="100" y="80" text-anchor="middle" font-size="12" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">مشکل قابل‌حل</text>
+  <text x="20" y="110" font-size="10" fill="#4A7A6A" font-family="sans-serif">• اکنون وجود دارد.</text>
+  <text x="20" y="135" font-size="10" fill="#4A7A6A" font-family="sans-serif">• می‌توان آن را نسبتاً</text>
+  <text x="25" y="150" font-size="10" fill="#4A7A6A" font-family="sans-serif">مشخص تعریف کرد.</text>
+  <text x="20" y="175" font-size="10" fill="#4A7A6A" font-family="sans-serif">• حداقل بخشی از آن</text>
+  <text x="25" y="190" font-size="10" fill="#4A7A6A" font-family="sans-serif">تحت کنترل من است.</text>
+  <text x="20" y="215" font-size="10" fill="#4A7A6A" font-family="sans-serif">• می‌توان یک اقدام عملی</text>
+  <text x="25" y="230" font-size="10" fill="#4A7A6A" font-family="sans-serif">برای آن تعیین کرد.</text>
+  <!-- Right column: Hypothetical Worry -->
+  <rect x="205" y="50" width="185" height="280" rx="10" fill="#FFF5F5" stroke="#C47A7A" stroke-width="1.5"/>
+  <circle cx="230" cy="75" r="14" fill="#C47A7A" fill-opacity="0.3" stroke="#C47A7A" stroke-width="1.5"/>
+  <text x="230" y="80" text-anchor="middle" font-size="12" fill="#8B4040" font-family="sans-serif">?</text>
+  <text x="300" y="80" text-anchor="middle" font-size="12" fill="#8B4040" font-family="sans-serif" font-weight="bold">نگرانی فرضی</text>
+  <text x="215" y="110" font-size="10" fill="#8B4040" font-family="sans-serif">• بیشتر درباره «اگر...» است.</text>
+  <text x="215" y="135" font-size="10" fill="#8B4040" font-family="sans-serif">• هنوز اتفاق نیفتاده یا</text>
+  <text x="220" y="150" font-size="10" fill="#8B4040" font-family="sans-serif">بسیار نامشخص است.</text>
+  <text x="215" y="175" font-size="10" fill="#8B4040" font-family="sans-serif">• اقدام روشنی اکنون</text>
+  <text x="220" y="190" font-size="10" fill="#8B4040" font-family="sans-serif">برای آن وجود ندارد.</text>
+  <text x="215" y="215" font-size="10" fill="#8B4040" font-family="sans-serif">• ذهن بارها آن را</text>
+  <text x="220" y="230" font-size="10" fill="#8B4040" font-family="sans-serif">تکرار می‌کند.</text>
+  <!-- Bottom note -->
+  <rect x="10" y="345" width="380" height="60" rx="8" fill="#E8F4EE" stroke="#6BB5A0" stroke-width="1"/>
+  <text x="200" y="370" text-anchor="middle" font-size="9" fill="#4A7A6A" font-family="sans-serif">بعضی موضوع‌ها ترکیبی‌اند؛ ممکن است یک بخش قابل‌حل</text>
+  <text x="200" y="385" text-anchor="middle" font-size="9" fill="#4A7A6A" font-family="sans-serif">و یک بخش خارج از کنترل داشته باشند.</text>
+</svg>

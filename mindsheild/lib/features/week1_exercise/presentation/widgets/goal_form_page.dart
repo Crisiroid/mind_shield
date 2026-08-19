@@ -196,12 +196,14 @@ class _GoalFormPageState extends State<GoalFormPage> {
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                onPressed: () {
-                  widget.onSubmit({
-                    'goal_category': _selectedCategory ?? '',
-                    'goal_text': '',
-                  });
-                },
+                onPressed: _selectedCategory != null
+                    ? () {
+                        widget.onSubmit({
+                          'goal_category': _selectedCategory!,
+                          'goal_text': '',
+                        });
+                      }
+                    : null,
                 child: Text(widget.skipText!),
               ),
             ),

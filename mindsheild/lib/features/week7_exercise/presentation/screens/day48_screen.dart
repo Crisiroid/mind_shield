@@ -5,6 +5,7 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../week1_exercise/presentation/widgets/week1_header.dart';
 import '../../../week1_exercise/presentation/widgets/text_education_page.dart';
+import '../../../week1_exercise/presentation/widgets/stress_slider_page.dart';
 import '../../../week1_exercise/presentation/widgets/multi_choice_quiz_page.dart';
 import '../../../week1_exercise/presentation/widgets/day_end_page.dart';
 import '../../../week1_exercise/presentation/widgets/exit_exercise_dialog.dart';
@@ -26,10 +27,35 @@ class _Day48ScreenState extends State<Day48Screen> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _factCtrl.addListener(_updateCombinedSentence);
+    _needCtrl.addListener(_updateCombinedSentence);
+    _requestCtrl.addListener(_updateCombinedSentence);
+  }
+
+  String _combinedSentence = '';
+
+  void _updateCombinedSentence() {
+    final fact = _factCtrl.text.trim();
+    final need = _needCtrl.text.trim();
+    final request = _requestCtrl.text.trim();
+    if (fact.isNotEmpty && need.isNotEmpty && request.isNotEmpty) {
+      setState(() {
+        _combinedSentence =
+            'وقتی $fact، $need. درخواست من این است که $request.';
+      });
+    } else {
+      setState(() => _combinedSentence = '');
+    }
   }
 
   @override
   void dispose() {
+    _factCtrl.removeListener(_updateCombinedSentence);
+    _needCtrl.removeListener(_updateCombinedSentence);
+    _requestCtrl.removeListener(_updateCombinedSentence);
+    _factCtrl.dispose();
+    _needCtrl.dispose();
+    _requestCtrl.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -73,8 +99,22 @@ class _Day48ScreenState extends State<Day48Screen> {
                   physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: (page) => setState(() => _currentPage = page),
                   children: [
-                    // D48-01: Week summary (no stress slider for day 48)
-                    _buildWeekSummary(),
+                    // D48-01: Stress slider
+                    StressSliderPage(
+                      title: 'استرس امروز',
+                      subtitle: 'میزان استرس کلی امروز از صفر تا ده چقدر است؟',
+                      onSubmit: (score) {
+                        context.read<Week7ViewModel>().submitExerciseResponse(
+                          weekNumber: 7,
+                          dayNumber: 48,
+                          exerciseType: 'daily_stress',
+                          data: {'stress_score': score},
+                        );
+                        _goToPage(1);
+                      },
+                      skipText: 'فعلاً ثبت نمی\u200cکنم',
+                      onSkip: () => _goToPage(1),
+                    ),
                     // D48-02: Three communication styles
                     TextEducationPage(
                       title: 'قاطعانه، نه منفعل و نه پرخاشگرانه',
@@ -101,7 +141,7 @@ class _Day48ScreenState extends State<Day48Screen> {
                           'در محیط کاری، درخواست باید از مسیر مجاز، با رعایت سلسله\u200cمراتب و بدون افشای اطلاعات محرمانه مطرح شود.',
                       primaryButtonText: 'تمرین کنیم',
                       onPrimaryButton: () => _goToPage(2),
-                      imageWidget: _buildStructureCard(),
+                      imageWidget: _buildCommunicationStylesImage(),
                     ),
                     // D48-03: Assertive communication practice
                     _buildAssertiveForm(),
@@ -133,177 +173,35 @@ class _Day48ScreenState extends State<Day48Screen> {
     );
   }
 
-  Widget _buildWeekSummary() {
-    final vm = context.read<Week7ViewModel>();
-    final problem = vm.problemDefinition;
-    final plan = vm.actionPlan;
-
-    return SingleChildScrollView(
-      padding: AppSizes.paddingScreen,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'برنامه حل مسئله شما',
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontXl,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          SizedBox(height: AppSizes.lg),
-          if (problem != null) ...[
-            _buildInfoRow(
-              'مشکل تعریف\u200cشده',
-              problem['problem_description'] ?? '',
-            ),
-            _buildInfoRow('نتیجه موردنظر', problem['desired_outcome'] ?? ''),
-          ],
-          if (plan != null) ...[
-            _buildInfoRow('راه انتخابی', plan['selected_solution'] ?? ''),
-            _buildInfoRow('قدم اول', plan['first_action_step'] ?? ''),
-            _buildInfoRow('زمان اجرا', plan['action_time'] ?? ''),
-            if (plan['anticipated_barrier'] != null)
-              _buildInfoRow('مانع احتمالی', plan['anticipated_barrier'] ?? ''),
-          ],
-          if (problem == null && plan == null)
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(AppSizes.md),
-              decoration: BoxDecoration(
-                color: AppColors.info.withValues(alpha: 0.06),
-                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-              ),
-              child: Text(
-                'هنوز برنامه\u200cای ثبت نشده است. می\u200cتوانید امروز یک مسئله کوچک را به\u200cصورت خلاصه مرور کنید.',
-                style: PersianFonts.Vazir.copyWith(
-                  fontSize: AppSizes.fontSm,
-                  color: AppColors.info,
-                  height: 1.6,
-                ),
-              ),
-            ),
-          SizedBox(height: AppSizes.lg),
-          _buildStatCard(
-            icon: Icons.check_circle_outline,
-            iconColor: AppColors.success,
-            label: 'روزهای تکمیل\u200cشده',
-            value: '${vm.completedDaysCount} از ۷',
-          ),
-          SizedBox(height: AppSizes.sm),
-          _buildStatCard(
-            icon: Icons.lightbulb_outline,
-            iconColor: AppColors.warning,
-            label: 'راه\u200cحل\u200cهای ثبت\u200cشده',
-            value: '${vm.solutions.length}',
-          ),
-          SizedBox(height: AppSizes.sm),
-          _buildStatCard(
-            icon: Icons.assignment,
-            iconColor: AppColors.info,
-            label: 'برنامه اقدام ثبت\u200cشده',
-            value: plan != null ? 'بله' : 'خیر',
-          ),
-          SizedBox(height: AppSizes.xl),
-          SizedBox(
+  Widget _buildCommunicationStylesImage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // W7-IMG-03: Three communication styles
+        Image.asset(
+          'assets/images/week7/w7_img_03.png',
+          height: 180,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => Container(
+            height: 180,
             width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => _goToPage(1),
-              child: const Text('نتیجه را بررسی کنم'),
-            ),
-          ),
-          SizedBox(height: AppSizes.xl),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: AppSizes.sm),
-      padding: EdgeInsets.all(AppSizes.md),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontXs,
-              color: AppColors.textHint,
-            ),
-          ),
-          SizedBox(height: 2),
-          Text(
-            value,
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontSm,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-              height: 1.6,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard({
-    required IconData icon,
-    required Color iconColor,
-    required String label,
-    required String value,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppSizes.md),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
             decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+              color: AppColors.primary.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
             ),
-            child: Icon(icon, color: iconColor, size: 24),
-          ),
-          SizedBox(width: AppSizes.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: PersianFonts.Vazir.copyWith(
-                    fontSize: AppSizes.fontSm,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  value,
-                  style: PersianFonts.Vazir.copyWith(
-                    fontSize: AppSizes.fontLg,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ],
+            alignment: Alignment.center,
+            child: Text(
+              'سه سبک ارتباطی: انفعالی، پرخاشگرانه، قاطعانه',
+              style: PersianFonts.Vazir.copyWith(
+                fontSize: AppSizes.fontSm,
+                color: AppColors.textSecondary,
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+        SizedBox(height: AppSizes.md),
+        _buildStructureCard(),
+      ],
     );
   }
 
@@ -603,9 +501,7 @@ class _Day48ScreenState extends State<Day48Screen> {
             ),
             SizedBox(height: AppSizes.lg),
             // Combined display
-            if (_factCtrl.text.trim().isNotEmpty &&
-                _needCtrl.text.trim().isNotEmpty &&
-                _requestCtrl.text.trim().isNotEmpty)
+            if (_combinedSentence.isNotEmpty)
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(AppSizes.md),
@@ -614,7 +510,7 @@ class _Day48ScreenState extends State<Day48Screen> {
                   borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                 ),
                 child: Text(
-                  'وقتی ${_factCtrl.text.trim()}، ${_needCtrl.text.trim()}. درخواست من این است که ${_requestCtrl.text.trim()}.',
+                  _combinedSentence,
                   style: PersianFonts.Vazir.copyWith(
                     fontSize: AppSizes.fontSm,
                     height: 1.7,
@@ -762,8 +658,6 @@ class _Day48ScreenState extends State<Day48Screen> {
   }
 
   void _submitAssertive() {
-    final assertiveStatement =
-        'وقتی ${_factCtrl.text.trim()}، ${_needCtrl.text.trim()}. درخواست من این است که ${_requestCtrl.text.trim()}.';
     context.read<Week7ViewModel>().submitExerciseResponse(
       weekNumber: 7,
       dayNumber: 48,
@@ -773,7 +667,7 @@ class _Day48ScreenState extends State<Day48Screen> {
         'observable_fact': _factCtrl.text.trim(),
         'need_or_impact': _needCtrl.text.trim(),
         'clear_request': _requestCtrl.text.trim(),
-        'assertive_statement': assertiveStatement,
+        'assertive_statement': _combinedSentence,
       },
     );
     _goToPage(3);

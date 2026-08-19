@@ -20,7 +20,7 @@ class Day16Screen extends StatefulWidget {
 class _Day16ScreenState extends State<Day16Screen> {
   late PageController _pageController;
   int _currentPage = 0;
-  static const int _totalSteps = 4;
+  static const int _totalSteps = 5;
 
   @override
   void initState() {
@@ -116,7 +116,18 @@ class _Day16ScreenState extends State<Day16Screen> {
                       primaryButtonText: 'ادامه',
                       onPrimaryButton: () => _goToPage(2),
                     ),
-                    // D16-03: Belief level quiz (3 questions)
+                    // D16-03: Belief level education + quiz (3 questions)
+                    TextEducationPage(
+                      title: 'چقدر این فکر را باور دارم؟',
+                      bodyText:
+                          'هنگام ثبت یک فکر، می\u200cتوانیم میزان باور خود به آن را از صفر تا ده مشخص کنیم.',
+                      cards: const [
+                        InfoCard(title: 'صفر', text: 'اصلاً باور ندارم.'),
+                        InfoCard(title: 'ده', text: 'کاملاً باور دارم.'),
+                      ],
+                      primaryButtonText: 'ادامه',
+                      onPrimaryButton: () => _goToPage(3),
+                    ),
                     MultiChoiceQuizPage(
                       title: 'چقدر این فکر را باور دارم؟',
                       questions: const [

@@ -178,7 +178,44 @@ class _Day14ScreenState extends State<Day14Screen> {
                             );
                             _goToPage(4);
                           },
-                          onHelpNeeded: () {},
+                          questionTwoText:
+                              'تمرین\u200cهای صوتی چقدر قابل استفاده بودند؟',
+                          onHelpNeeded: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    AppSizes.radiusLg,
+                                  ),
+                                ),
+                                title: Text(
+                                  'راهنما و کمک',
+                                  style: PersianFonts.Vazir.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: Text(
+                                  'انجام تمرین\u200cهای صوتی الزامی نیست. در صورت نیاز از بخش «راهنما و کمک» استفاده کنید.',
+                                  style: PersianFonts.Vazir.copyWith(
+                                    height: 1.7,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text(
+                                      'بستن',
+                                      style: PersianFonts.Vazir.copyWith(
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                         // D14-05: Week end
                         _D14WeekEnd(

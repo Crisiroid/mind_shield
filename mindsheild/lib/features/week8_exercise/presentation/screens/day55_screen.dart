@@ -267,11 +267,23 @@ class _Day55ScreenState extends State<Day55Screen> {
           ),
           SizedBox(height: AppSizes.sm),
           ..._helpPageOptions.map(
-            (opt) => _buildRadioTile(
-              opt,
-              _helpPageReviewed,
-              (v) => setState(() => _helpPageReviewed = v),
-            ),
+            (opt) => _buildRadioTile(opt, _helpPageReviewed, (v) {
+              setState(() => _helpPageReviewed = v);
+              if (v == 'اکنون مشاهده می\u200cکنم.') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'بخش راهنما و کمک به‌زودی اضافه خواهد شد.',
+                      style: PersianFonts.Vazir.copyWith(
+                        fontSize: AppSizes.fontSm,
+                      ),
+                      textDirection: TextDirection.rtl,
+                    ),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
+            }),
           ),
           SizedBox(height: AppSizes.lg),
           // Q4

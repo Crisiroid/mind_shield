@@ -170,7 +170,7 @@ class _Week1HomeScreenState extends State<Week1HomeScreen> {
               ),
               onPressed: () => _navigateToDay(todayDay),
               child: Text(
-                isTodayDone ? 'مرور تمرین' : 'شروع تمرین',
+                isTodayDone ? 'مرور محتوا' : 'شروع تمرین',
                 style: PersianFonts.Vazir.copyWith(fontWeight: FontWeight.bold),
               ),
             ),

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#FAFAF7"/>
+  <!-- W7-IMG-03: Three Communication Styles -->
+  <text x="200" y="30" text-anchor="middle" font-size="14" fill="#4A7A6A" font-family="sans-serif" font-weight="bold">سه شیوه ارتباط</text>
+  <!-- Card 1: Passive -->
+  <rect x="20" y="50" width="360" height="90" rx="10" fill="#F0F0F0" stroke="#999" stroke-width="1.5"/>
+  <circle cx="350" cy="95" r="25" fill="#999" fill-opacity="0.3"/>
+  <text x="350" y="100" text-anchor="middle" font-size="14" fill="#666" font-family="sans-serif">😶</text>
+  <text x="40" y="80" font-size="12" fill="#666" font-family="sans-serif" font-weight="bold">انفعالی</text>
+  <text x="40" y="100" font-size="10" fill="#666" font-family="sans-serif">نیاز یا نظر خود را بیان نمی‌کنم.</text>
+  <!-- Card 2: Aggressive -->
+  <rect x="20" y="155" width="360" height="90" rx="10" fill="#FFF0F0" stroke="#C47A7A" stroke-width="1.5"/>
+  <circle cx="350" cy="200" r="25" fill="#C47A7A" fill-opacity="0.3"/>
+  <text x="350" y="205" text-anchor="middle" font-size="14" fill="#8B4040" font-family="sans-serif">😠</text>
+  <text x="40" y="185" font-size="12" fill="#8B4040" font-family="sans-serif" font-weight="bold">پرخاشگرانه</text>
+  <text x="40" y="205" font-size="10" fill="#8B4040" font-family="sans-serif">نیاز خود را با فشار، حمله یا بی‌احترامی</text>
+  <text x="40" y="220" font-size="10" fill="#8B4040" font-family="sans-serif">بیان می‌کنم.</text>
+  <!-- Card 3: Assertive (highlighted) -->
+  <rect x="20" y="260" width="360" height="110" rx="12" fill="#E8F4EE" stroke="#6BB5A0" stroke-width="2.5"/>
+  <circle cx="350" cy="315" r="25" fill="#6BB5A0" fill-opacity="0.3"/>
+  <text x="350" y="320" text-anchor="middle" font-size="14" fill="#2D6A4A" font-family="sans-serif">😊</text>
+  <text x="40" y="290" font-size="12" fill="#2D6A4A" font-family="sans-serif" font-weight="bold">قاطعانه</text>
+  <text x="40" y="310" font-size="10" fill="#2D6A4A" font-family="sans-serif">نیاز یا درخواست را روشن، محترمانه و</text>
+  <text x="40" y="325" font-size="10" fill="#2D6A4A" font-family="sans-serif">واقع‌بینانه بیان می‌کنم.</text>
+  <text x="40" y="350" font-size="9" fill="#6BB5A0" font-family="sans-serif" font-weight="bold">✓ روش توصیه‌شده</text>
+</svg>

@@ -6,6 +6,7 @@ import '../../../../../core/constants/app_sizes.dart';
 import '../../../week1_exercise/presentation/widgets/week1_header.dart';
 import '../../../week1_exercise/presentation/widgets/multi_choice_quiz_page.dart';
 import '../../../week1_exercise/presentation/widgets/exit_exercise_dialog.dart';
+import '../../../week1_exercise/presentation/widgets/audio_player_page.dart';
 import '../view_models/week8_view_model.dart';
 
 class Day56Screen extends StatefulWidget {
@@ -18,7 +19,7 @@ class Day56Screen extends StatefulWidget {
 class _Day56ScreenState extends State<Day56Screen> {
   late PageController _pageController;
   int _currentPage = 0;
-  static const int _totalSteps = 5;
+  static const int _totalSteps = 6;
 
   @override
   void initState() {
@@ -75,11 +76,29 @@ class _Day56ScreenState extends State<Day56Screen> {
                     Consumer<Week8ViewModel>(
                       builder: (context, vm, _) => _buildWeekSummary(vm),
                     ),
-                    // D56-02: Personal plan card
+                    // D56-02: Audio - Brief review of skills
+                    AudioPlayerPage(
+                      title: 'مرور کوتاه مهارت\u200cها',
+                      instruction:
+                          'برای چند لحظه مسیر هشت هفته گذشته را مرور کنید. شما تمرین کردید فشارها و منابع خود را بشناسید، به بدن و تنفس توجه کنید، افکار خودکار را مشاهده کنید و شواهد آن\u200cها را بررسی نمایید. فعالیت\u200cهای کوچک را برنامه\u200cریزی کردید، هیجان\u200cها را نام\u200cگذاری کردید و پیش از واکنش فوری، مکث ایجاد کردید. همچنین یاد گرفتید یک مشکل را دقیق تعریف و برای آن قدمی قابل اجرا انتخاب کنید. لازم نیست همه این مهارت\u200cها را هم\u200cزمان به کار ببرید. در هر موقعیت، یک مهارت ساده و مناسب کافی است. اگر تمرین\u200cها متوقف شدند، می\u200cتوانید با یک قدم کوچک دوباره آغاز کنید. اگر فشار از توان خودیاری بیشتر شد، استفاده از کمک حرفه\u200cای بخشی از مراقبت از خود است. اکنون برنامه شخصی ادامه مسیر خود را مرور کنید.',
+                      audioAssetPath: 'assets/audio/week8/w8_aud_01.mp3',
+                      skipText: 'عبور از تمرین',
+                      onSkip: () => _goToPage(2),
+                      onSubmit: (status) {
+                        context.read<Week8ViewModel>().submitExerciseResponse(
+                          weekNumber: 8,
+                          dayNumber: 56,
+                          exerciseType: 'skill_review_audio',
+                          data: {'audio_status': status},
+                        );
+                        _goToPage(2);
+                      },
+                    ),
+                    // D56-03: Personal plan card
                     Consumer<Week8ViewModel>(
                       builder: (context, vm, _) => _buildPersonalPlanCard(vm),
                     ),
-                    // D56-03: Course review quiz
+                    // D56-04: Course review quiz
                     MultiChoiceQuizPage(
                       title: 'آزمون مرور دوره',
                       questions: const [
@@ -177,15 +196,15 @@ class _Day56ScreenState extends State<Day56Screen> {
                           exerciseType: 'final_course_quiz',
                           data: {'final_course_quiz_score': score},
                         );
-                        _goToPage(3);
+                        _goToPage(4);
                       },
                       endMessage:
                           'این آزمون فقط برای مرور محتوای آموزشی است و نمره آن نشان\u200cدهنده وضعیت روان\u200cشناختی یا میزان موفقیت درمان نیست.',
                       buttonText: 'ادامه',
                     ),
-                    // D56-04: App experience evaluation
+                    // D56-05: App experience evaluation
                     _buildAppEvaluation(),
-                    // D56-05: Course end
+                    // D56-06: Course end
                     _buildCourseEnd(),
                   ],
                 ),
@@ -257,7 +276,7 @@ class _Day56ScreenState extends State<Day56Screen> {
             Icons.check_circle_outline,
             AppColors.success,
             'هفته\u200cهای تکمیل\u200cشده',
-            '${7 + vm.completedDaysCount ~/ 7} از ۸',
+            '۸ از ۸',
           ),
           SizedBox(height: AppSizes.sm),
           _buildStatCard(
@@ -332,7 +351,7 @@ class _Day56ScreenState extends State<Day56Screen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => _goToPage(1),
+              onPressed: () => _goToPage(2),
               child: const Text('مشاهده برنامه شخصی'),
             ),
           ),
@@ -418,7 +437,7 @@ class _Day56ScreenState extends State<Day56Screen> {
                   exerciseType: 'final_personal_plan',
                   data: {'generated': true},
                 );
-                _goToPage(2);
+                _goToPage(3);
               },
               child: const Text('ذخیره برنامه'),
             ),
@@ -426,13 +445,11 @@ class _Day56ScreenState extends State<Day56Screen> {
           SizedBox(height: AppSizes.sm),
           SizedBox(
             width: double.infinity,
-            child: TextButton(
+            child: OutlinedButton(
               onPressed: () => _goToPage(0),
               child: Text(
-                'بازگشت به خلاصه',
-                style: PersianFonts.Vazir.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+                'ویرایش بخش\u200cها',
+                style: PersianFonts.Vazir.copyWith(color: AppColors.primary),
               ),
             ),
           ),
@@ -785,7 +802,7 @@ class _Day56ScreenState extends State<Day56Screen> {
           SizedBox(
             width: double.infinity,
             child: TextButton(
-              onPressed: () => _goToPage(1),
+              onPressed: () => _goToPage(2),
               child: Text(
                 'مشاهده برنامه ادامه مسیر',
                 style: PersianFonts.Vazir.copyWith(
@@ -1017,6 +1034,6 @@ class _Day56ScreenState extends State<Day56Screen> {
             : null,
       },
     );
-    _goToPage(4);
+    _goToPage(5);
   }
 }

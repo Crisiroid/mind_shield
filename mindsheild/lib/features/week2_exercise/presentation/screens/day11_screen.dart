@@ -106,6 +106,10 @@ class _Day11ScreenState extends State<Day11Screen> {
                       instruction:
                           'در وضعیت راحت قرار بگیرید و اجازه دهید تنفس به شکل طبیعی ادامه پیدا کند.',
                       audioAssetPath: 'assets/audio/week2/w2_aud_03.mp3',
+                      safetyText:
+                          'اگر احساس سرگیجه، تنگی نفس یا ناراحتی کردید، تمرین را متوقف کنید و به تنفس طبیعی بازگردید.',
+                      questionText: 'آیا تمرین را انجام دادید؟',
+                      statusOptions: const ['کامل', 'بخشی', 'انجام ندادم'],
                       skipText: 'عبور از تمرین',
                       onSkip: () => _goToPage(3),
                       onSubmit: (status) {

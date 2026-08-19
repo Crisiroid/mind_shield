@@ -155,9 +155,7 @@ class _Day45ScreenState extends State<Day45Screen> {
   ];
 
   bool get _canSubmitSolutions =>
-      _solution1Ctrl.text.trim().isNotEmpty &&
-      _solution2Ctrl.text.trim().isNotEmpty &&
-      _safetyAcknowledged;
+      _solution1Ctrl.text.trim().isNotEmpty && _safetyAcknowledged;
 
   Widget _buildSolutionForm() {
     final vm = context.read<Week7ViewModel>();

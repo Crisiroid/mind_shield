@@ -124,6 +124,10 @@ class _Day10ScreenState extends State<Day10Screen> {
                       instruction:
                           'می\u200cتوانید نشسته یا درازکشیده باشید. وضعیتی را انتخاب کنید که امن و نسبتاً راحت باشد.',
                       audioAssetPath: 'assets/audio/week2/w2_aud_02.mp3',
+                      safetyText:
+                          'اگر در ناحیه\u200cای احساس ناخوشایندی وجود داشت، می\u200cتوانید توجه را به تماس پاها با زمین یا صداهای محیط بازگردانید.',
+                      questionText: 'چه مقدار از تمرین را انجام دادید؟',
+                      statusOptions: const ['کامل', 'بخشی', 'انجام ندادم'],
                       skipText: 'عبور از تمرین',
                       onSkip: () => _goToPage(3),
                       onSubmit: (status) {

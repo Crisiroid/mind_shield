@@ -6,11 +6,13 @@ import '../../../../../core/constants/app_sizes.dart';
 class WeekEvaluationPage extends StatefulWidget {
   final ValueChanged<Map<String, dynamic>> onSubmit;
   final VoidCallback? onHelpNeeded;
+  final String? questionTwoText;
 
   const WeekEvaluationPage({
     super.key,
     required this.onSubmit,
     this.onHelpNeeded,
+    this.questionTwoText,
   });
 
   @override
@@ -70,7 +72,8 @@ class _WeekEvaluationPageState extends State<WeekEvaluationPage> {
           SizedBox(height: AppSizes.lg),
           // Q2: Usefulness slider
           Text(
-            'تمرین\u200cهای این هفته چقدر برای شما مفید بودند؟',
+            widget.questionTwoText ??
+                'تمرین\u200cهای این هفته چقدر برای شما مفید بودند؟',
             style: PersianFonts.Vazir.copyWith(
               fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w600,

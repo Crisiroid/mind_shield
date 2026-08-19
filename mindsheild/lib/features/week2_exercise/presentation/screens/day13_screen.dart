@@ -5,6 +5,7 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../week1_exercise/presentation/widgets/week1_header.dart';
 import '../../../week1_exercise/presentation/widgets/exit_exercise_dialog.dart';
+import '../../../week1_exercise/presentation/widgets/audio_player_page.dart';
 import '../view_models/week2_view_model.dart';
 
 class Day13Screen extends StatefulWidget {
@@ -97,7 +98,23 @@ class _Day13ScreenState extends State<Day13Screen> {
                       },
                     ),
                     // D13-03: Short practice (reuses W2-AUD-03)
-                    _D13Practice(
+                    AudioPlayerPage(
+                      title: 'مشاهده تنفس در موقعیت روزمره',
+                      instruction:
+                          'تمرین تنفس روز یازدهم را دوباره انجام دهید.',
+                      audioAssetPath: 'assets/audio/week2/w2_aud_03.mp3',
+                      questionText: 'وضعیت تمرین:',
+                      statusOptions: const ['کامل', 'بخشی', 'انجام ندادم'],
+                      skipText: 'عبور از تمرین',
+                      onSkip: () {
+                        context.read<Week2ViewModel>().submitExerciseResponse(
+                          weekNumber: 2,
+                          dayNumber: 13,
+                          exerciseType: 'real_context_breathing',
+                          data: {'status': 'skipped'},
+                        );
+                        _goToPage(3);
+                      },
                       onSubmit: (status) {
                         context.read<Week2ViewModel>().submitExerciseResponse(
                           weekNumber: 2,
@@ -387,258 +404,6 @@ class _D13TensionSliderState extends State<_D13TensionSlider> {
             child: ElevatedButton(
               onPressed: () => widget.onSubmit(_value.toInt()),
               child: Text(widget.submitText),
-            ),
-          ),
-          SizedBox(height: AppSizes.xl),
-        ],
-      ),
-    );
-  }
-}
-
-// D13-03: Practice (reuse W2-AUD-03)
-class _D13Practice extends StatefulWidget {
-  final ValueChanged<String> onSubmit;
-  const _D13Practice({required this.onSubmit});
-
-  @override
-  State<_D13Practice> createState() => _D13PracticeState();
-}
-
-class _D13PracticeState extends State<_D13Practice> {
-  bool _isPlaying = false;
-  String? _status;
-
-  final _statusOptions = ['کامل', 'بخشی', 'انجام ندادم'];
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: AppSizes.paddingScreen,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'مشاهده تنفس در موقعیت روزمره',
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontXl,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          SizedBox(height: AppSizes.md),
-          Text(
-            'تمرین تنفس روز یازدهم را دوباره انجام دهید.',
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontMd,
-              height: 1.7,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          SizedBox(height: AppSizes.xl),
-          // Audio player controls
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(AppSizes.lg),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceVariant,
-              borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      30,
-                      (i) => Container(
-                        width: 3,
-                        height: 10 + (i % 5) * 8.0,
-                        margin: EdgeInsets.symmetric(horizontal: 1.5),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(
-                            alpha: _isPlaying ? 0.6 : 0.3,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: AppSizes.md),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => setState(() => _isPlaying = true),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: AppColors.divider),
-                            ),
-                            child: const Icon(
-                              Icons.replay,
-                              color: AppColors.primary,
-                              size: 22,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            'شروع مجدد',
-                            style: PersianFonts.Vazir.copyWith(
-                              fontSize: AppSizes.fontXs,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: AppSizes.lg),
-                    GestureDetector(
-                      onTap: () => setState(() => _isPlaying = !_isPlaying),
-                      child: Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          _isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: AppColors.textOnPrimary,
-                          size: 32,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: AppSizes.lg),
-                    GestureDetector(
-                      onTap: () => setState(() => _isPlaying = false),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: AppColors.divider),
-                            ),
-                            child: const Icon(
-                              Icons.stop,
-                              color: AppColors.primary,
-                              size: 22,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            'توقف',
-                            style: PersianFonts.Vazir.copyWith(
-                              fontSize: AppSizes.fontXs,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: AppSizes.md),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: () => widget.onSubmit('skipped'),
-              child: Text(
-                'عبور از تمرین',
-                style: PersianFonts.Vazir.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: AppSizes.lg),
-          Text(
-            'وضعیت تمرین:',
-            style: PersianFonts.Vazir.copyWith(
-              fontSize: AppSizes.fontMd,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          SizedBox(height: AppSizes.sm),
-          ..._statusOptions.map((option) {
-            final isSelected = _status == option;
-            return Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(bottom: AppSizes.sm),
-              child: Material(
-                color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.08)
-                    : AppColors.surface,
-                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                child: InkWell(
-                  onTap: () => setState(() => _status = option),
-                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSizes.md,
-                      vertical: AppSizes.sm,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                      border: Border.all(
-                        color: isSelected
-                            ? AppColors.primary
-                            : AppColors.divider,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Radio<String>(
-                          value: option,
-                          groupValue: _status,
-                          onChanged: (v) => setState(() => _status = v),
-                          activeColor: AppColors.primary,
-                        ),
-                        Expanded(
-                          child: Text(
-                            option,
-                            style: PersianFonts.Vazir.copyWith(
-                              fontSize: AppSizes.fontSm,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }),
-          SizedBox(height: AppSizes.lg),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _status != null
-                  ? () => widget.onSubmit(_status!)
-                  : null,
-              child: const Text('ثبت و ادامه'),
             ),
           ),
           SizedBox(height: AppSizes.xl),

@@ -309,13 +309,6 @@ class _Day20ScreenState extends State<Day20Screen> {
     context.read<Week3ViewModel>().submitExerciseResponse(
       weekNumber: 3,
       dayNumber: 20,
-      exerciseType: 'daily_stress',
-      data: {'stress_score': _emotionIntensity.toInt()},
-    );
-
-    context.read<Week3ViewModel>().submitExerciseResponse(
-      weekNumber: 3,
-      dayNumber: 20,
       exerciseType: 'thought_record',
       data: {
         'situation': _situationCtrl.text,

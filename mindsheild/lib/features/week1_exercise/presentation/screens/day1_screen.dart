@@ -133,6 +133,7 @@ class _Day1ScreenState extends State<Day1Screen> {
                     _D1Page03(onContinue: () => _goToPage(3)),
                     // D1-04: Personal goal
                     GoalFormPage(
+                      skipText: 'فقط حوزه هدف را ثبت می\u200cکنم',
                       onSubmit: (data) {
                         final vm = context.read<Week1ViewModel>();
                         vm.submitExerciseResponse(

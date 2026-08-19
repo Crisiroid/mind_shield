@@ -74,19 +74,26 @@ class Week2ViewModel extends ChangeNotifier with SubmissionFlow {
   }
 
   int? get lastTensionScore {
+    // Prefer tension_before entries from day 13 (real-context breathing)
     final tensionEntries = _exerciseResponses
-        .where(
-          (e) =>
-              e.exerciseType == 'real_context_breathing' ||
-              e.exerciseType == 'daily_stress',
-        )
+        .where((e) => e.exerciseType == 'tension_before')
         .toList();
-    if (tensionEntries.isEmpty) return null;
+    if (tensionEntries.isNotEmpty) {
+      try {
+        final last = tensionEntries.last;
+        final data = jsonDecode(last.responseData) as Map<String, dynamic>;
+        return (data['tension_before'] as num?)?.toInt();
+      } catch (_) {}
+    }
+    // Fall back to the most recent daily_stress score
+    final stressEntries = _exerciseResponses
+        .where((e) => e.exerciseType == 'daily_stress')
+        .toList();
+    if (stressEntries.isEmpty) return null;
     try {
-      final last = tensionEntries.last;
+      final last = stressEntries.last;
       final data = jsonDecode(last.responseData) as Map<String, dynamic>;
-      return (data['tension_before'] as num?)?.toInt() ??
-          (data['stress_score'] as num?)?.toInt();
+      return (data['stress_score'] as num?)?.toInt();
     } catch (_) {
       return null;
     }
