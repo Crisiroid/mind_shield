@@ -408,6 +408,7 @@ class _Day48ScreenState extends State<Day48Screen> {
               controller: _factCtrl,
               maxLength: 150,
               maxLines: 2,
+              onChanged: (_) => setState(() {}),
               decoration: InputDecoration(
                 hintText: 'واقعیت...',
                 hintStyle: PersianFonts.Vazir.copyWith(
@@ -446,6 +447,7 @@ class _Day48ScreenState extends State<Day48Screen> {
               controller: _needCtrl,
               maxLength: 150,
               maxLines: 2,
+              onChanged: (_) => setState(() {}),
               decoration: InputDecoration(
                 hintText: 'نیاز یا پیامد...',
                 hintStyle: PersianFonts.Vazir.copyWith(
@@ -484,6 +486,7 @@ class _Day48ScreenState extends State<Day48Screen> {
               controller: _requestCtrl,
               maxLength: 150,
               maxLines: 2,
+              onChanged: (_) => setState(() {}),
               decoration: InputDecoration(
                 hintText: 'درخواست...',
                 hintStyle: PersianFonts.Vazir.copyWith(

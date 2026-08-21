@@ -97,9 +97,9 @@ class _Day3ScreenState extends State<Day3Screen> {
                           'هنگامی که اتفاقی رخ می\u200cدهد، معمولاً فقط یک واکنش ایجاد نمی\u200cشود. افکار، هیجانات، بدن و رفتار بر یکدیگر اثر می\u200cگذارند.\n\nبرای شناخت بهتر تجربه، می\u200cتوان آن را به پنج بخش تقسیم کرد.',
                       imageWidget: Image.asset(
                         'assets/images/week1/w1_img_03.png',
-                        height: 180,
+                        height: 380,
                         errorBuilder: (_, __, ___) => Container(
-                          height: 180,
+                          height: 380,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: AppColors.primary.withValues(alpha: 0.05),

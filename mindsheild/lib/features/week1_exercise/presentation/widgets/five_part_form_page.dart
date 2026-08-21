@@ -161,6 +161,7 @@ class _FivePartFormPageState extends State<FivePartFormPage> {
       controller: ctrl,
       maxLength: 200,
       maxLines: 2,
+      onChanged: (_) => setState(() {}),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: PersianFonts.Vazir.copyWith(

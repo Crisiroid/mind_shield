@@ -318,6 +318,7 @@ class _Day47ScreenState extends State<Day47Screen> {
             controller: _firstStepCtrl,
             maxLength: 150,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'قدم اول...',
               hintStyle: PersianFonts.Vazir.copyWith(

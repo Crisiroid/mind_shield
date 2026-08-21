@@ -248,6 +248,7 @@ class _Day45ScreenState extends State<Day45Screen> {
             controller: _solution1Ctrl,
             maxLength: 150,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'راه\u200cحل اول...',
               hintStyle: PersianFonts.Vazir.copyWith(
@@ -286,6 +287,7 @@ class _Day45ScreenState extends State<Day45Screen> {
             controller: _solution2Ctrl,
             maxLength: 150,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'راه\u200cحل دوم...',
               hintStyle: PersianFonts.Vazir.copyWith(
@@ -324,6 +326,7 @@ class _Day45ScreenState extends State<Day45Screen> {
             controller: _solution3Ctrl,
             maxLength: 150,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'راه\u200cحل سوم...',
               hintStyle: PersianFonts.Vazir.copyWith(

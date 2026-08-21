@@ -266,6 +266,7 @@ class _Day44ScreenState extends State<Day44Screen> {
             controller: _problemDescCtrl,
             maxLength: 200,
             maxLines: 3,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'فقط واقعیت\u200cهای اصلی و قابل مشاهده را بنویسید.',
               hintStyle: PersianFonts.Vazir.copyWith(
@@ -324,6 +325,7 @@ class _Day44ScreenState extends State<Day44Screen> {
             controller: _desiredOutcomeCtrl,
             maxLength: 150,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'نتیجه موردنظر...',
               hintStyle: PersianFonts.Vazir.copyWith(
@@ -363,6 +365,7 @@ class _Day44ScreenState extends State<Day44Screen> {
             controller: _controllableCtrl,
             maxLength: 150,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'بخش قابل کنترل...',
               hintStyle: PersianFonts.Vazir.copyWith(

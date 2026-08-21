@@ -192,6 +192,7 @@ class _Day20ScreenState extends State<Day20Screen> {
             controller: _situationCtrl,
             maxLength: 200,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'فقط اتفاق قابل مشاهده را بنویسید.',
               hintStyle: PersianFonts.Vazir.copyWith(
@@ -214,6 +215,7 @@ class _Day20ScreenState extends State<Day20Screen> {
             controller: _thoughtCtrl,
             maxLength: 200,
             maxLines: 2,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               hintText: 'فکر خود را با همان کلماتی که آمد بنویسید.',
               hintStyle: PersianFonts.Vazir.copyWith(
