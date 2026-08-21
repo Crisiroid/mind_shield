@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../errors/exceptions.dart';
 import '../network/dio_client.dart';
 import 'storage_service.dart';
 

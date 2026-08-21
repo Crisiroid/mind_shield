@@ -1,7 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://192.168.1.101:8080';
+  static const String baseUrl = 'http://87.107.165.75:8080';
 
   static const int connectTimeout = 15000;
   static const int receiveTimeout = 15000;

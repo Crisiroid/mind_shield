@@ -6,7 +6,6 @@ import '../../../../../core/constants/app_sizes.dart';
 import '../../../week1_exercise/presentation/widgets/week1_header.dart';
 import '../../../week1_exercise/presentation/widgets/text_education_page.dart';
 import '../../../week1_exercise/presentation/widgets/stress_slider_page.dart';
-import '../../../week1_exercise/presentation/widgets/day_end_page.dart';
 import '../../../week1_exercise/presentation/widgets/exit_exercise_dialog.dart';
 import '../view_models/week5_view_model.dart';
 

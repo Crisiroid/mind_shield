@@ -5,7 +5,6 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../view_models/week1_view_model.dart';
 import '../widgets/week1_header.dart';
-import '../widgets/text_education_page.dart';
 import '../widgets/multi_choice_quiz_page.dart';
 import '../widgets/week_summary_page.dart';
 import '../widgets/week_evaluation_page.dart';

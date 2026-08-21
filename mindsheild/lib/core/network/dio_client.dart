@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import '../constants/api_constants.dart';
-import '../errors/exceptions.dart';
 
 class DioClient {
   DioClient._();

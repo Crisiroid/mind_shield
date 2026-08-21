@@ -141,7 +141,6 @@ class _Day38ScreenState extends State<Day38Screen> {
   String? _thoughtCategory;
   final _thoughtTextCtrl = TextEditingController();
   String? _distancingExperience;
-  bool _showDistancingPhrase = false;
 
   final _categoryOptions = [
     'نگرانی درباره آینده',

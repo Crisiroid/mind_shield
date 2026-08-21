@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:persian_fonts/persian_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../week1_exercise/presentation/widgets/week1_header.dart';
