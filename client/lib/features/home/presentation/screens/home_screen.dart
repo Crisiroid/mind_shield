@@ -73,6 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(width: AppSizes.sm),
           IconButton(
+            icon: const Icon(Icons.help_outline, color: AppColors.info),
+            tooltip: AppStrings.help,
+            onPressed: () => Navigator.of(context).pushNamed('/help'),
+          ),
+          IconButton(
             icon: const Icon(Icons.person_outline, color: AppColors.primary),
             tooltip: AppStrings.profile,
             onPressed: () => Navigator.of(context).pushNamed('/profile'),

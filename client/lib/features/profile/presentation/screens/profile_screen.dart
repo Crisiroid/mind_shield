@@ -50,6 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: AppSizes.md),
                     _buildSecurityCard(vm),
                     SizedBox(height: AppSizes.md),
+                    _buildHelpAboutCard(),
+                    SizedBox(height: AppSizes.md),
                     _buildDeviceInfoCard(vm),
                     SizedBox(height: AppSizes.xl),
                   ],
@@ -191,6 +193,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: Icons.info_outline,
           label: AppStrings.appVersionLabel,
           value: user.appVersion ?? AppStrings.notAvailable,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHelpAboutCard() {
+    return _ProfileCard(
+      title: AppStrings.helpAndAbout,
+      icon: Icons.help_outline,
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppColors.info.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.help_outline,
+              color: AppColors.info,
+              size: 20,
+            ),
+          ),
+          title: Text(
+            AppStrings.helpAndAbout,
+            style: PersianFonts.Vazir.copyWith(
+              fontSize: AppSizes.fontMd,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          trailing: const Icon(
+            Icons.chevron_left,
+            color: AppColors.textSecondary,
+          ),
+          onTap: () => Navigator.of(context).pushNamed('/help'),
         ),
       ],
     );

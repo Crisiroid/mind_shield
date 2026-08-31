@@ -537,4 +537,30 @@ class AppStrings {
   static const String profileUpdated = 'پروفایل با موفقیت بروزرسانی شد';
   static const String notAvailable = 'نامشخص';
   static const String timeFormat = 'HH:mm';
+
+  // Help & About
+  static const String helpAndAbout = 'راهنما و درباره برنامه';
+  static const String aboutApp = 'درباره سپر روان';
+  static const String aboutAppDescription =
+      'سپر روان یک برنامه جامع سلامت روان است که بر اساس اصول روان‌شناسی شناختی-رفتاری (CBT) طراحی شده است. این برنامه با هدف کمک به کاهش استرس، مدیریت هیجانات و بهبود کیفیت زندگی کاری طراحی شده است.';
+  static const String aboutFeature1 = '۸ هفته برنامه ساختاریافته';
+  static const String aboutFeature2 = 'تمرینات علمی مبتنی بر CBT';
+  static const String aboutFeature3 = 'ردیابی پیشرفت و گزارش‌گیری';
+  static const String creators = 'سازندگان برنامه';
+  static const String creator1 = 'علی فتحی آشتیانی';
+  static const String creator1Role = 'توسعه‌دهنده و طراح سیستم';
+  static const String creator2 = 'دکتر مجتبی تاشکه';
+  static const String creator2Role = 'مشاور و متخصص روان‌شناسی';
+  static const String appFeatures = 'ویژگی‌های برنامه';
+  static const String feature1 = 'مثلث هیجان و خودآگاهی';
+  static const String feature2 = 'تنفس آگاهانه و آرام‌سازی';
+  static const String feature3 = 'شناسایی خطاهای شناختی';
+  static const String feature4 = 'مدیریت استرس و تنش بدنی';
+  static const String feature5 = 'ردیابی خلق و فعالیت‌ها';
+  static const String feature6 = 'تعادل نقش‌های زندگی';
+  static const String needHelp = 'نیاز به راهنمایی دارید؟';
+  static const String contactSupport =
+      'در صورت داشتن هرگونه سوال یا مشکل، می‌توانید با تیم پشتیبانی ما در ارتباط باشید. ما آماده کمک به شما هستیم.';
+  static const String emailSupport = 'پشتیبانی ایمیل';
+  static const String help = 'راهنما';
 }

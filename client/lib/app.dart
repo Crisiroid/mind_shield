@@ -74,6 +74,7 @@ import 'features/profile/data/datasources/profile_remote_datasource.dart';
 import 'features/profile/data/repositories/profile_repository.dart';
 import 'features/profile/presentation/view_models/profile_view_model.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
+import 'features/profile/presentation/screens/help_screen.dart';
 import 'features/weekly_content/data/datasources/weekly_content_remote_datasource.dart';
 import 'features/weekly_content/data/datasources/media_progress_remote_datasource.dart';
 import 'features/weekly_content/data/datasources/media_progress_local_datasource.dart';
@@ -463,6 +464,7 @@ class _MindShieldAppState extends State<MindShieldApp> {
           '/role-balance': (context) => const RoleBalanceScreen(),
           '/thought-sky': (context) => const ThoughtSkyScreen(),
           '/profile': (context) => const ProfileScreen(),
+          '/help': (context) => const HelpScreen(),
           '/content-library': (context) => const ContentLibraryScreen(),
           '/content-video': (context) => const VideoPlayerScreen(),
           '/content-audio': (context) => const AudioPlayerScreen(),
