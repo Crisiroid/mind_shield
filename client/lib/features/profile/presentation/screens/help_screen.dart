@@ -147,34 +147,79 @@ class HelpScreen extends StatelessWidget {
             color: AppColors.info.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(AppSizes.radiusMd),
           ),
-          child: Row(
-            children: [
-              Icon(Icons.email_outlined, color: AppColors.info, size: 24),
-              SizedBox(width: AppSizes.sm),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppStrings.emailSupport,
-                      style: PersianFonts.Vazir.copyWith(
-                        fontSize: AppSizes.fontSm,
-                        color: AppColors.textSecondary,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Row(
+              children: [
+                Icon(Icons.email_outlined, color: AppColors.info, size: 24),
+                SizedBox(width: AppSizes.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppStrings.emailSupport,
+                        style: PersianFonts.Vazir.copyWith(
+                          fontSize: AppSizes.fontSm,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'support@mindsheild.app',
-                      style: PersianFonts.Vazir.copyWith(
-                        fontSize: AppSizes.fontMd,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.info,
+                      SizedBox(height: 4),
+                      Text(
+                        AppStrings.supportEmail,
+                        textDirection: TextDirection.ltr,
+                        style: PersianFonts.Vazir.copyWith(
+                          fontSize: AppSizes.fontMd,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.info,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: AppSizes.sm),
+        Container(
+          padding: EdgeInsets.all(AppSizes.md),
+          decoration: BoxDecoration(
+            color: AppColors.success.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+          ),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Row(
+              children: [
+                Icon(Icons.phone_outlined, color: AppColors.success, size: 24),
+                SizedBox(width: AppSizes.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppStrings.phoneSupport,
+                        style: PersianFonts.Vazir.copyWith(
+                          fontSize: AppSizes.fontSm,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        AppStrings.supportPhone,
+                        textDirection: TextDirection.ltr,
+                        style: PersianFonts.Vazir.copyWith(
+                          fontSize: AppSizes.fontMd,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.success,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

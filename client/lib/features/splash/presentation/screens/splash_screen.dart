@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    Future.delayed(const Duration(milliseconds: 2800), _navigate);
+    Future.delayed(const Duration(seconds: 4), _navigate);
   }
 
   Future<void> _loadLastLogin() async {
@@ -99,6 +99,27 @@ class _SplashScreenState extends State<SplashScreen>
     }
 
     Navigator.of(context).pushReplacementNamed(route);
+  }
+
+  Widget _buildCreatorRow(String name, String role) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.person_outline,
+          size: 12,
+          color: AppColors.textHint.withValues(alpha: 0.5),
+        ),
+        SizedBox(width: 4),
+        Text(
+          '$name — $role',
+          style: PersianFonts.Vazir.copyWith(
+            fontSize: AppSizes.fontXs,
+            color: AppColors.textHint.withValues(alpha: 0.5),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -237,7 +258,53 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
 
-            SizedBox(height: AppSizes.xxl),
+            SizedBox(height: AppSizes.xl),
+
+            FadeTransition(
+              opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: _controller,
+                  curve: const Interval(0.7, 1.0, curve: Curves.easeOut),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          AppColors.textHint.withValues(alpha: 0.4),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: AppSizes.sm),
+                  Text(
+                    AppStrings.creators,
+                    style: PersianFonts.Vazir.copyWith(
+                      fontSize: AppSizes.fontXs,
+                      color: AppColors.textHint.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  SizedBox(height: AppSizes.xs),
+                  _buildCreatorRow(
+                    AppStrings.creator1,
+                    AppStrings.creator1Role,
+                  ),
+                  SizedBox(height: 4),
+                  _buildCreatorRow(
+                    AppStrings.creator2,
+                    AppStrings.creator2Role,
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: AppSizes.lg),
           ],
         ),
       ),

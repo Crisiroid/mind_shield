@@ -547,10 +547,10 @@ class AppStrings {
   static const String aboutFeature2 = 'تمرینات علمی مبتنی بر CBT';
   static const String aboutFeature3 = 'ردیابی پیشرفت و گزارش‌گیری';
   static const String creators = 'سازندگان برنامه';
-  static const String creator1 = 'علی فتحی آشتیانی';
-  static const String creator1Role = 'توسعه‌دهنده و طراح سیستم';
+  static const String creator1 = 'دکتر علی فتحی آشتیانی';
+  static const String creator1Role = 'متخصص روانشناسی بالینی';
   static const String creator2 = 'دکتر مجتبی تاشکه';
-  static const String creator2Role = 'مشاور و متخصص روان‌شناسی';
+  static const String creator2Role = 'متخصص روانشناسی بالینی';
   static const String appFeatures = 'ویژگی‌های برنامه';
   static const String feature1 = 'مثلث هیجان و خودآگاهی';
   static const String feature2 = 'تنفس آگاهانه و آرام‌سازی';
@@ -562,5 +562,8 @@ class AppStrings {
   static const String contactSupport =
       'در صورت داشتن هرگونه سوال یا مشکل، می‌توانید با تیم پشتیبانی ما در ارتباط باشید. ما آماده کمک به شما هستیم.';
   static const String emailSupport = 'پشتیبانی ایمیل';
+  static const String phoneSupport = 'پشتیبانی تلفنی';
+  static const String supportEmail = 'm.tashke@proton.me';
+  static const String supportPhone = '+98 990 191 3252';
   static const String help = 'راهنما';
 }
