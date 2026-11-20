@@ -15,7 +15,7 @@ configurations.all {
 android {
     namespace = "com.crisiroid.mindshield"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "29.0.13599879"
+    ndkVersion = providers.gradleProperty("appNdkVersion").get()
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId = "com.crisiroid.mindshield"
-        minSdk = 21
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

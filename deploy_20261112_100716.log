@@ -1,0 +1,147 @@
+﻿[10:07:16][STEP] Psychology deployment started (IsUpdate = False)
+[10:07:16][INFO] Log file: C:\Users\Crisiroid\Desktop\KarlancerProject\Backup\Psychology\deploy_20261112_100716.log
+[10:07:16][INFO] Checking local tools (go, node, npm, tar)...
+[10:07:16][OK] go + node + npm + tar found.
+[10:07:18][OK] Posh-SSH module loaded.
+[10:07:18][INFO] Checking that 87.248.153.76 is reachable on port 9011...
+[10:07:18][OK] Server is reachable.
+[10:07:18][STEP] STEP 1/6 - Building admin panel (Vite) + backend (Go, linux/amd64)
+[10:07:18][INFO] Running 'npm ci'...
+[10:07:58][REMOTE]   | 
+[10:07:58][REMOTE]   | added 253 packages, and audited 254 packages in 39s
+[10:07:58][REMOTE]   | 
+[10:07:58][REMOTE]   | 37 packages are looking for funding
+[10:07:58][REMOTE]   |   run `npm fund` for details
+[10:07:58][REMOTE]   | 
+[10:07:58][REMOTE]   | found 0 vulnerabilities
+[10:07:58][INFO] Running 'npm run build' (vite --base=/admin/)...
+[10:07:58][REMOTE]   | 
+[10:07:58][REMOTE]   | > psychology-admin-panel@1.0.0 build
+[10:07:58][REMOTE]   | > tsc && vite build
+[10:07:58][REMOTE]   | 
+[10:08:02][REMOTE]   | [36mvite v5.4.21 [32mbuilding for production...[36m[39m
+[10:08:02][REMOTE]   | transforming...
+[10:08:05][REMOTE]   | [32mΓ£ô[39m 963 modules transformed.
+[10:08:07][REMOTE]   | rendering chunks...
+[10:08:07][REMOTE]   | computing gzip size...
+[10:08:07][REMOTE]   | [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.74 kB[22m[1m[22m[2m Γöé gzip:   0.45 kB[22m
+[10:08:07][REMOTE]   | [2mdist/[22m[35massets/index-BhQtoLYu.css  [39m[1m[2m 35.01 kB[22m[1m[22m[2m Γöé gzip:   6.45 kB[22m
+[10:08:07][REMOTE]   | [2mdist/[22m[36massets/index-BU6Zli1R.js   [39m[1m[33m919.93 kB[39m[22m[2m Γöé gzip: 252.30 kB[22m
+[10:08:07][REMOTE]   | [32mΓ£ô built in 5.65s[39m
+[10:08:07][OK] Admin panel built successfully.
+[10:08:07][INFO] Cross-compiling Go backend for linux/amd64 (this can take a few minutes)...
+[10:08:33][OK] Backend binary built successfully.
+[10:08:33][STEP] STEP 2/6 - Packaging artifacts
+[10:08:33][INFO] Staging backend (binary + go.mod/go.sum + .env.example, excluding .env/uploads)...
+[10:08:34][INFO] Creating backend archive...
+[10:08:34][INFO] Creating admin panel archive...
+[10:08:35][OK] All artifacts packaged.
+[10:08:35][STEP] STEP 3/6 - Generating server-side deploy script
+[10:08:35][OK] Server script generated (C:\Users\CRISIR~1\AppData\Local\Temp\psychology_deploy_20261112100716\psychology_deploy.sh).
+[10:08:35][STEP] STEP 4/6 - Connecting to server and uploading artifacts
+[10:08:35][INFO] Opening SSH session to root@87.248.153.76:9011...
+[10:08:37][OK] SSH session established.
+[10:08:38][INFO] Uploading psychology_backend_dist.tar.gz (11.6 MB) -> /tmp/ ...
+[10:09:00][OK] Uploaded psychology_backend_dist.tar.gz
+[10:09:00][INFO] Uploading psychology_admin_dist.tar.gz (0.2 MB) -> /tmp/ ...
+[10:09:01][OK] Uploaded psychology_admin_dist.tar.gz
+[10:09:01][INFO] Uploading psychology_deploy.sh (0.0 MB) -> /tmp/ ...
+[10:09:02][OK] Uploaded psychology_deploy.sh
+[10:09:02][INFO] Marking server script executable (owner-only; contains generated secrets)...
+[10:09:03][STEP] STEP 5/6 - Running server-side deployment
+[10:09:03][INFO] Phase 1/6: installing system packages + creating app user...
+[10:10:14][REMOTE]   | [remote][system] Updating apt package index...
+[10:10:14][REMOTE]   | [remote][system] Installing required system packages (nginx, rsync, curl, ufw, fail2ban, postgresql client...)...
+[10:10:14][REMOTE]   | [remote][system] System packages installed.
+[10:10:14][REMOTE]   | [remote][system] Creating dedicated system user 'psychology' (no login shell)...
+[10:10:14][OK] Phase 'system' completed.
+[10:10:14][INFO] Phase 2/6: deploying backend (binary + database provisioning)...
+[10:10:17][REMOTE]   | [remote][backend] Extracting backend archive...
+[10:10:17][REMOTE]   | [remote][backend] Syncing backend into /opt/psychology/backend (uploads & .env preserved)...
+[10:10:17][REMOTE]   | [remote][backend] Ensuring PostgreSQL server is installed and running...
+[10:10:17][REMOTE]   | [remote][backend] PostgreSQL role 'psychology_app' created.
+[10:10:17][REMOTE]   | [remote][backend] Database 'psychology_app' created.
+[10:10:17][REMOTE]   | [remote][backend] Database 'psychology_app' provisioned for role 'psychology_app'.
+[10:10:17][REMOTE]   | [remote][backend] Generating production .env (dev .env was excluded from upload)...
+[10:10:17][REMOTE]   | [remote][backend] Production .env written (chmod 600).
+[10:10:17][REMOTE]   | [remote][backend] Setting ownership and secret-file permissions...
+[10:10:17][REMOTE]   | [remote][backend] Backend deployed (schema migrations run automatically via GORM on service start).
+[10:10:17][OK] Phase 'backend' completed.
+[10:10:17][INFO] Phase 3/6: deploying admin panel...
+[10:10:18][REMOTE]   | [remote][admin] Extracting admin panel archive...
+[10:10:18][REMOTE]   | [remote][admin] Syncing admin panel into /var/www/psychology-admin...
+[10:10:18][REMOTE]   | [remote][admin] Admin panel deployed.
+[10:10:18][OK] Phase 'admin' completed.
+[10:10:18][INFO] Phase 4/6: writing systemd + nginx configuration...
+[10:10:18][REMOTE]   | [remote][config] Writing systemd service (psychology-backend)...
+[10:10:18][REMOTE]   | [remote][config] Writing nginx websocket map...
+[10:10:18][REMOTE]   | [remote][config] Writing nginx site config...
+[10:10:18][REMOTE]   | [remote][config] Testing nginx configuration...
+[10:10:18][REMOTE]   | [remote][config] Configuration written.
+[10:10:18][REMOTE]   ! nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+[10:10:18][OK] Phase 'config' completed.
+[10:10:18][INFO] Phase 5/6: firewall (ufw) + fail2ban...
+[10:10:21][REMOTE]   | [remote][security] Configuring UFW firewall (allow SSH:9011, 80, 443)...
+[10:10:21][REMOTE]   | [remote][security]   ufw: Status: active
+[10:10:21][REMOTE]   | [remote][security]   ufw: 
+[10:10:21][REMOTE]   | [remote][security]   ufw: To                         Action      From
+[10:10:21][REMOTE]   | [remote][security]   ufw: --                         ------      ----
+[10:10:21][REMOTE]   | [remote][security]   ufw: 9011/tcp                   ALLOW       Anywhere
+[10:10:21][REMOTE]   | [remote][security]   ufw: 80/tcp                     ALLOW       Anywhere
+[10:10:21][REMOTE]   | [remote][security]   ufw: 443/tcp                    ALLOW       Anywhere
+[10:10:21][REMOTE]   | [remote][security]   ufw: 9011/tcp (v6)              ALLOW       Anywhere (v6)
+[10:10:21][REMOTE]   | [remote][security]   ufw: 80/tcp (v6)                ALLOW       Anywhere (v6)
+[10:10:21][REMOTE]   | [remote][security]   ufw: 443/tcp (v6)               ALLOW       Anywhere (v6)
+[10:10:21][REMOTE]   | [remote][security]   ufw: 
+[10:10:21][REMOTE]   | [remote][security] Enabling fail2ban (SSH brute-force protection)...
+[10:10:21][REMOTE]   | [remote][security] Security phase done.
+[10:10:21][OK] Phase 'security' completed.
+[10:10:21][INFO] Phase 6/6: starting services + health check...
+[10:11:25][REMOTE]   | [remote][start] Reloading systemd + (re)starting backend service...
+[10:11:25][REMOTE]   | [remote][start] Restarting nginx...
+[10:11:25][REMOTE]   | [remote][start] Waiting for backend to come up (first start also runs GORM AutoMigrate)...
+[10:11:25][REMOTE]   | [remote][start] ERROR: backend health check FAILED. Last service logs:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:                 FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:                 WHERE a.attnum > 0 -- hide internal columns
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:                 AND NOT a.attisdropped -- hide deleted columns
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:                 AND b.relname = 'user_media_progress'
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [1.128ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.465ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.737ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.653ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'user_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.501ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'media_content_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.749ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.558ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'progress_seconds') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.924ms] [rows:0] SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'user_media_progress' AND column_name = 'completed_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'user_media_progress' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [1.120ms] [rows:1] SELECT count(*) FROM pg_indexes WHERE tablename = 'user_media_progress' AND indexname = 'idx_user_media_progress' AND schemaname = CURRENT_SCHEMA()
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [1.396ms] [rows:1] SELECT count(*) FROM information_schema.tables WHERE table_schema = 'admin_panel' AND table_name = 'admin_users' AND table_type = 'BASE TABLE'
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]:
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 C:/Users/Crisiroid/Desktop/KarlancerProject/Backup/Psychology/backend/internal/database/migration.go:13 ERROR: schema "admin_panel" does not exist (SQLSTATE 3F000)
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: [0.607ms] [rows:0] CREATE TABLE "admin_panel"."admin_users" ("id" uuid DEFAULT gen_random_uuid(),"created_at" timestamptz,"updated_at" timestamptz,"username" varchar(50) NOT NULL,"email" varchar(100) NOT NULL,"password_hash" varchar(255) NOT NULL,"full_name" varchar(100),"role_id" uuid DEFAULT null,"is_active" boolean DEFAULT true,"last_login" text,"refresh_token" varchar(500),"refresh_token_expiry" timestamptz,PRIMARY KEY ("id"))
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 server[13024]: 2026/11/12 06:41:20 Failed to run migrations: ERROR: schema "admin_panel" does not exist (SQLSTATE 3F000)
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 systemd[1]: psychology-backend.service: Main process exited, code=exited, status=1/FAILURE
+[10:11:25][REMOTE]   | [remote][start]   Nov 12 06:41:20 fastcreate-196768 systemd[1]: psychology-backend.service: Failed with result 'exit-code'.
+[10:11:25][ERROR] Remote command failed (exit 1): Phase 6/6: starting services + health check...
+[10:11:25][ERROR] Deployment FAILED. Full log: C:\Users\Crisiroid\Desktop\KarlancerProject\Backup\Psychology\deploy_20261112_100716.log
